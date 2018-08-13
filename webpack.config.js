@@ -74,7 +74,7 @@ let webpackConfig = {
                 options: {
                     cacheDirectory: true,
                     presets: ['env', 'react'],
-                    plugins: ['syntax-dynamic-import', 'react-hot-loader/babel']
+                    plugins: ['transform-class-properties', ["import", [{ libraryName: "antd-mobile", style: "css" }, { libraryName: "antd", style: "css" }]], 'syntax-dynamic-import', 'react-hot-loader/babel']
                 }
             },
             {
@@ -111,6 +111,7 @@ let webpackConfig = {
     ],
     devServer: {
         contentBase: path.resolve(__dirname, 'build'),
+        host: '0.0.0.0',
         port: 9000,
         open: true,
         inline: true,

@@ -32,5 +32,6 @@ module.exports = {
         ],
         "no-console": "off",
         "react/display-name": [0],
+        "no-unused-vars": [1]
     }
 };
