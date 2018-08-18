@@ -38,6 +38,7 @@ let resolveAlias = allDirs.reduce((previous, current) => {
 
 let webpackConfig = {
     mode: 'development',
+    devtool: 'source-map',
     entry: path.resolve(__dirname, 'app', 'index.js'),
     output: {
         path: path.resolve(__dirname, 'build'),
@@ -74,7 +75,12 @@ let webpackConfig = {
                 options: {
                     cacheDirectory: true,
                     presets: ['env', 'react'],
-                    plugins: ['transform-class-properties', ["import", [{ libraryName: "antd-mobile", style: "css" }, { libraryName: "antd", style: "css" }]], 'syntax-dynamic-import', 'react-hot-loader/babel']
+                    plugins: [
+                        'transform-runtime',
+                        'transform-class-properties', 
+                        ["import", [{ libraryName: "antd-mobile", style: "css" }, { libraryName: "antd", style: "css" }]], 
+                        'syntax-dynamic-import', 
+                        'react-hot-loader/babel']
                 }
             },
             {
@@ -111,7 +117,7 @@ let webpackConfig = {
     ],
     devServer: {
         contentBase: path.resolve(__dirname, 'build'),
-        host: '0.0.0.0',
+        host: '127.0.0.1',
         port: 9000,
         open: true,
         inline: true,

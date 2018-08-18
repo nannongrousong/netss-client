@@ -14,19 +14,19 @@ class App extends Component {
                         <Route
                             path='/comp1'
                             component={Loadable({
-                                loader: () => import('./component/comp1'),
+                                loader: () => import('./pages/comp1'),
                                 loading: Loading,
                             })} />
                         <Route
                             path='/comp2'
                             component={Loadable({
-                                loader: () => import('./component/comp2'),
+                                loader: () => import('./pages/comp2'),
                                 loading: Loading,
                             })} />
                         <Route
                             path='/comp3'
                             component={Loadable({
-                                loader: () => import('./component/comp3'),
+                                loader: () => import('./pages/comp3'),
                                 loading: Loading,
                             })} />
                     </Switch>
@@ -38,6 +38,5 @@ class App extends Component {
 
 
 ReactDOM.render(<App />, document.getElementById('app'));
-
 
 module.hot && module.hot.accept();
