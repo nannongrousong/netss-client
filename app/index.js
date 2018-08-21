@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import Loadable from 'react-loadable';
 
-import Loading from './component/loading';
+import Routers from 'ROUTER';
 
 class App extends Component {
     render() {
@@ -11,24 +10,15 @@ class App extends Component {
             <BrowserRouter>
                 <div>
                     <Switch>
-                        <Route
-                            path='/comp1'
-                            component={Loadable({
-                                loader: () => import('./pages/comp1'),
-                                loading: Loading,
-                            })} />
-                        <Route
-                            path='/comp2'
-                            component={Loadable({
-                                loader: () => import('./pages/comp2'),
-                                loading: Loading,
-                            })} />
-                        <Route
-                            path='/comp3'
-                            component={Loadable({
-                                loader: () => import('./pages/comp3'),
-                                loading: Loading,
-                            })} />
+                        {
+                            Routers.map((routerItem, index) => {
+                                const { path, component } = routerItem;
+                                return <Route
+                                    key={index}
+                                    path={path}
+                                    component={component} />;
+                            })
+                        }
                     </Switch>
                 </div>
             </BrowserRouter>
