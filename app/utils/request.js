@@ -1,4 +1,5 @@
 export default (url, params, isPost = false) => {
+    url = '/api' + url;
     params = new URLSearchParams(params);
     if(isPost) {
         return fetch(url, {

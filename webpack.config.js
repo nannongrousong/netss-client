@@ -3,6 +3,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+
 const fs = require('fs');
 
 const rootPath = path.resolve(__dirname, 'app');
@@ -39,7 +40,7 @@ let resolveAlias = allDirs.reduce((previous, current) => {
 let webpackConfig = {
     mode: 'development',
     devtool: 'source-map',
-    entry: path.resolve(__dirname, 'app', 'index.js'),
+    entry: ['webpack-hot-middleware/client', path.resolve(__dirname, 'app', 'index.js')],
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: '[name].[hash].js',
@@ -118,15 +119,15 @@ let webpackConfig = {
     devServer: {
         contentBase: path.resolve(__dirname, 'build'),
         host: '127.0.0.1',
-        port: 9000,
+        port: 9002,
         open: true,
         inline: true,
         hot: true,
         historyApiFallback: true,
-        overlay: true
+        overlay: true,
+        stats: 'errors-only'
     }
 }
 
 webpackConfig.resolve.alias = resolveAlias;
-
 module.exports = webpackConfig;
