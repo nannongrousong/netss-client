@@ -6,12 +6,14 @@ const app = express();
 const config = require('./webpack.config.js');
 const compiler = webpack(config);
 const webpackHotMiddleware = require('webpack-hot-middleware');
-const httpProxyMiddleware = require('http-proxy-middleware');
 const path = require('path');
 
+// use:https://www.npmjs.com/package/connect-history-api-fallback#introduction
 app.use(history({
-    verbose: true,
+    //  whether show log 
+    verbose: false,
     rewrites: [{
+        //  filter http GET where url startwith 'api'
         from: /^\/api\//,
         to: (context) => (context.parsedUrl.pathname)
     }]
@@ -33,9 +35,11 @@ const { mode } = argObj;
 
 if (mode == 'proxy') {
     // proxy
+    const httpProxyMiddleware = require('http-proxy-middleware');
     app.use('/api', httpProxyMiddleware({
         target: 'http://alpha.zxx.admin',
-        changeOrigin: true
+        changeOrigin: true,
+        //  pathRewrite: { '^/api': '/' }
     }));
 } else {
     //  mock

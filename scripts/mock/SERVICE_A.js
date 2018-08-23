@@ -7,7 +7,7 @@ module.exports = {
         res.send({
             Code: 0,
             Desc: '成功',
-            Data: '服务AOK!'
+            Data: '服务AAAAOK!'
         })
     }
 };
