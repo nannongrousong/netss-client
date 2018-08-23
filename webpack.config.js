@@ -3,7 +3,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-
 const fs = require('fs');
 
 const rootPath = path.resolve(__dirname, 'app');
@@ -20,26 +19,17 @@ const recurReadDir = (rootPath) => {
     return dirs;
 }
 
-/*
-const envArgs = JSON.parse(process.env.npm_config_argv).original;
-console.log(11111111111111111111111111, envArgs);
-
-
-var _ = process.argv.splice(2);
-console.log('传入参数：',_);
-
-*/
-
-
 let allDirs = recurReadDir(rootPath);
 let resolveAlias = allDirs.reduce((previous, current) => {
     previous[current.substring(rootPath.length + 1).replace('\\', '_').toUpperCase()] = current;
     return previous;
 }, {});
 
+const { NODE_ENV } = process.env;
+
 let webpackConfig = {
-    mode: 'development',
-    devtool: 'source-map',
+    mode: NODE_ENV,
+    devtool: NODE_ENV == 'development' ? 'source-map' : '',
     entry: ['webpack-hot-middleware/client', path.resolve(__dirname, 'app', 'index.js')],
     output: {
         path: path.resolve(__dirname, 'build'),
@@ -78,9 +68,9 @@ let webpackConfig = {
                     presets: ['env', 'react'],
                     plugins: [
                         'transform-runtime',
-                        'transform-class-properties', 
-                        ["import", [{ libraryName: "antd-mobile", style: "css" }, { libraryName: "antd", style: "css" }]], 
-                        'syntax-dynamic-import', 
+                        'transform-class-properties',
+                        ["import", [{ libraryName: "antd-mobile", style: "css" }, { libraryName: "antd", style: "css" }]],
+                        'syntax-dynamic-import',
                         'react-hot-loader/babel']
                 }
             },
@@ -96,9 +86,26 @@ let webpackConfig = {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: {
-                        loader: 'css-loader'
-                    }
+                    use: ['css-loader', {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: [require('autoprefixer')]
+                        }
+                    }]
+                })
+            },
+            {
+                test: /\.less$/,
+                loader: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        'css-loader',
+                        'less-loader', {
+                            loader: 'postcss-loader',
+                            options: {
+                                plugins: [require('autoprefixer')]
+                            }
+                        }]
                 })
             }
         ]
@@ -115,18 +122,7 @@ let webpackConfig = {
             title: '第一个入口'
         }),
         new webpack.HotModuleReplacementPlugin()
-    ],
-    devServer: {
-        contentBase: path.resolve(__dirname, 'build'),
-        host: '127.0.0.1',
-        port: 9002,
-        open: true,
-        inline: true,
-        hot: true,
-        historyApiFallback: true,
-        overlay: true,
-        stats: 'errors-only'
-    }
+    ]
 }
 
 webpackConfig.resolve.alias = resolveAlias;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AliyunUpload from 'COMPONENT/AliyunUpload';
 
-import 'STYLES/page1.css';
+import 'STYLES/page1.less';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { serviceAPostData, serviceAGetData } from 'SERVICE/SERVICE_A';
