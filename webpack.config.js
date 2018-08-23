@@ -34,7 +34,8 @@ let webpackConfig = {
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: '[name].[hash].js',
-        publicPath: '/'
+        //  cdn http://cdn.your.com/static
+        publicPath: '/' 
     },
     resolve: {
         extensions: ['.js', '.css', '.json'],

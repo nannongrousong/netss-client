@@ -19,6 +19,9 @@ if (env == 'development') {
     const compiler = webpack(webpackConfig);
     const webpackHotMiddleware = require('webpack-hot-middleware');
     const path = require('path');
+    const open = require('opn');
+    const port = 9000;
+
 
     // use:https://www.npmjs.com/package/connect-history-api-fallback#introduction
     app.use(history({
@@ -36,7 +39,11 @@ if (env == 'development') {
         stats: 'errors-only'
     }));
 
-    app.use(webpackHotMiddleware(compiler));
+    app.use(webpackHotMiddleware(compiler, {
+        log: false,
+        quiet: true,
+        noInfo: true
+    }));
 
     if (mode == 'proxy') {
         // proxy
@@ -52,8 +59,9 @@ if (env == 'development') {
         apiMocker(app, path.resolve(__dirname, 'scripts/mock/index.js'));
     }
 
-    app.listen(9000, () => {
-        console.log('server is running at 9000!\n');
+    app.listen(port, () => {
+        console.log(`server is running at ${port}!\n`);
+        open(`http://localhost:${port}`);
     });
 } else {
     //  build directly
