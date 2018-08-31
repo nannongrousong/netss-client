@@ -7,11 +7,11 @@ let argObj = argvs.reduce((prev, curr) => {
 }, {});
 
 const webpack = require('webpack');
-const projectConfig = require('./project.config');
+const projectConfig = require('../project.config');
 const { port, dev, prod } = projectConfig;
 const { mode, env = dev } = argObj;
 process.env.NODE_ENV = env;
-const webpackConfig = require('./webpack.config');
+const webpackConfig = require('../webpack.config');
 
 if (env == dev) {
     const express = require('express');
@@ -57,7 +57,7 @@ if (env == dev) {
     } else {
         //  mock
         const apiMocker = require('webpack-api-mocker');
-        apiMocker(app, path.resolve(__dirname, 'scripts/mock/index.js'));
+        apiMocker(app, path.resolve(__dirname, 'mock/index.js'));
     }
 
     app.listen(port, () => {

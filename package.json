@@ -5,12 +5,11 @@
   "scripts": {
     "start": "webpack-cli",
     "dev": "webpack-dev-server",
-    "start-proxy": "node server.js mode=proxy",
-    "start-mock": "node server.js mode=mock",
-    "build": "node server.js env=production",
-    "test": "node mode=proxy"
+    "start-proxy": "node scripts/server.js mode=proxy",
+    "start-mock": "node scripts/server.js mode=mock",
+    "build": "node scripts/server.js env=production"
   },
-  "author": "",
+  "author": "yuanwansong@hotmail.com",
   "license": "ISC",
   "devDependencies": {
     "ant-design-pro": "^1.4.4",

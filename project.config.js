@@ -6,13 +6,13 @@ module.exports = {
         name: 'admin',
         entry: 'src/admin/index.js',
         title: '后台登录',
-        template: 'src/index.html',
+        template: 'src/common/index.html',
         favicon: 'src/admin/favicon.ico'
     }, {
         name: 'app',
         entry: 'src/app/index.js',
         title: 'XX管理系统',
-        template: 'src/index.html',
+        template: 'src/common/index.html',
         favicon: 'src/app/favicon.ico'
     }]
 }

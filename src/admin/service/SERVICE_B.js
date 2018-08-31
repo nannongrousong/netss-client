@@ -1,4 +1,4 @@
-import request from 'ADMIN_UTILS/request';
+import request from 'COMMON_UTILS/request';
 
 export const serviceBPostData = (params) => request('/SERVICE_B/POST_DATA', params, true);
 

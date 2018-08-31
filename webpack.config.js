@@ -94,7 +94,7 @@ let webpackConfig = {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: ['css-loader', {
+                    use: ['css-loader?importLoaders=1', {
                         loader: 'postcss-loader',
                         options: {
                             plugins: [require('autoprefixer')]
@@ -107,7 +107,7 @@ let webpackConfig = {
                 loader: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
-                        'css-loader',
+                        'css-loader?importLoaders=2',
                         'less-loader', {
                             loader: 'postcss-loader',
                             options: {
@@ -115,7 +115,15 @@ let webpackConfig = {
                             }
                         }]
                 })
-            }
+            },
+            {
+                test: /\.(png|svg|jpe?g|gif)$/, 
+                loader: 'file-loader'
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/, 
+                loader: 'file-loader'
+            },
         ]
     },
     plugins: [

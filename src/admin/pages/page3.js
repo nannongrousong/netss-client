@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import 'ADMIN_STYLES/page3.css';
 import { Link } from 'react-router-dom';
 
 export default class extends Component {
