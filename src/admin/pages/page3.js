@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'STYLES/page2.css';
+import 'ADMIN_STYLES/page3.css';
 import { Link } from 'react-router-dom';
 
 export default class extends Component {
@@ -7,7 +7,7 @@ export default class extends Component {
         return (
             <div>
                 <Link to='/page1' >page1</Link>
-                <Link to='/page3' >page3</Link>
+                <Link to='/page2' >page2</Link>
             </div>
         );
     }

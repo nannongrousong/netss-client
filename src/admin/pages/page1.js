@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import AliyunUpload from 'COMPONENT/AliyunUpload';
+import AliyunUpload from 'ADMIN_COMPONENT/AliyunUpload';
 
-import 'STYLES/page1.less';
+import 'ADMIN_STYLES/page1.less';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
-import { serviceAPostData, serviceAGetData } from 'SERVICE/SERVICE_A';
-import { serviceBPostData, serviceBGetData } from 'SERVICE/SERVICE_B';
+import { serviceAPostData, serviceAGetData } from 'ADMIN_SERVICE/SERVICE_A';
+import { serviceBPostData, serviceBGetData } from 'ADMIN_SERVICE/SERVICE_B';
 
 export default class extends Component {
     handleClick1 = () => {

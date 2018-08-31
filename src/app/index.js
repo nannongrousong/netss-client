@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
-import Routers from 'ROUTER';
+import Routers from 'APP_ROUTER';
+const preRouter = '/app';
 
 class App extends Component {
     render() {
@@ -15,7 +16,7 @@ class App extends Component {
                                 const { path, component } = routerItem;
                                 return <Route
                                     key={index}
-                                    path={path}
+                                    path={`${preRouter}${path}`}
                                     component={component} />;
                             })
                         }

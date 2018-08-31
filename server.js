@@ -5,13 +5,15 @@ let argObj = argvs.reduce((prev, curr) => {
     prev[k] = v;
     return prev;
 }, {});
-const { mode, env = 'development' } = argObj;
-process.env.NODE_ENV = env;
 
 const webpack = require('webpack');
-const webpackConfig = require('./webpack.config.js');
+const projectConfig = require('./project.config');
+const { port, dev, prod } = projectConfig;
+const { mode, env = dev } = argObj;
+process.env.NODE_ENV = env;
+const webpackConfig = require('./webpack.config');
 
-if (env == 'development') {
+if (env == dev) {
     const express = require('express');
     const webpackDevMiddleware = require('webpack-dev-middleware');
     const history = require('connect-history-api-fallback');
@@ -20,8 +22,6 @@ if (env == 'development') {
     const webpackHotMiddleware = require('webpack-hot-middleware');
     const path = require('path');
     const open = require('opn');
-    const port = 9000;
-
 
     // use:https://www.npmjs.com/package/connect-history-api-fallback#introduction
     app.use(history({
@@ -31,7 +31,12 @@ if (env == 'development') {
             //  filter http GET where url startwith 'api'
             from: /^\/api\//,
             to: (context) => (context.parsedUrl.pathname)
-        }]
+        }, ...projectConfig.entries.map((item) => {
+            return {
+                from: new RegExp(`^\/${item.name}\/`),
+                to: `/${item.name}.html`
+            }
+        })]
     }));
 
     app.use(webpackDevMiddleware(compiler, {
@@ -40,6 +45,7 @@ if (env == 'development') {
     }));
 
     app.use(webpackHotMiddleware(compiler, {
+        warn: false,
         log: false,
         quiet: true,
         noInfo: true

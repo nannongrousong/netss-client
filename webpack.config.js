@@ -4,8 +4,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const fs = require('fs');
+const projectConfig = require('./project.config');
+const { NODE_ENV } = process.env;
+const { dev, prod, entries } = projectConfig;
 
-const rootPath = path.resolve(__dirname, 'app');
+const rootPath = path.resolve(__dirname, 'src');
 const recurReadDir = (rootPath) => {
     let dirs = [];
     let presentPathFiles = fs.readdirSync(rootPath);
@@ -20,26 +23,29 @@ const recurReadDir = (rootPath) => {
 }
 
 let allDirs = recurReadDir(rootPath);
-let resolveAlias = allDirs.reduce((previous, current) => {
+let webpackAlias = allDirs.reduce((previous, current) => {
     previous[current.substring(rootPath.length + 1).replace('\\', '_').toUpperCase()] = current;
     return previous;
 }, {});
 
-const { NODE_ENV } = process.env;
+let webpackEntry = entries.reduce((previous, current) => {
+    previous[current.name] = ['webpack-hot-middleware/client', path.resolve(__dirname, current.entry)];
+    return previous;
+}, {});
 
 let webpackConfig = {
     mode: NODE_ENV,
-    devtool: NODE_ENV == 'development' ? 'source-map' : '',
-    entry: ['webpack-hot-middleware/client', path.resolve(__dirname, 'app', 'index.js')],
+    devtool: NODE_ENV == dev ? 'source-map' : '',
+    entry: webpackEntry,
     output: {
-        path: path.resolve(__dirname, 'build'),
+        path: path.resolve(__dirname, 'dist'),
         filename: '[name].[hash].js',
         //  cdn http://cdn.your.com/static
-        publicPath: '/' 
+        publicPath: '/'
     },
     resolve: {
         extensions: ['.js', '.css', '.json'],
-        alias: {}
+        alias: webpackAlias
     },
     optimization: {
         splitChunks: {
@@ -113,18 +119,23 @@ let webpackConfig = {
     },
     plugins: [
         new ExtractTextPlugin('css/[name].[hash].css'),
-        new CleanWebpackPlugin(['build/bundle.*.js', 'build/vendor.*.js'], {
+        new CleanWebpackPlugin(['dist/bundle.*.js', 'dist/vendor.*.js'], {
             verbose: true,
             dry: false
         }),
-        new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, 'app', 'index.html'),
-            inject: true,
-            title: '第一个入口'
+        ...entries.map((item) => {
+            return new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, item.template),
+                inject: true,
+                title: item.title,
+                filename: item.name + '.html',
+                chunks: [item.name, 'vendor'],
+                chunksSortMode: "none",
+                favicon: path.resolve(__dirname, item.favicon)
+            });
         }),
         new webpack.HotModuleReplacementPlugin()
     ]
 }
 
-webpackConfig.resolve.alias = resolveAlias;
 module.exports = webpackConfig;

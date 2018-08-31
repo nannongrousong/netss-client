@@ -1,4 +1,4 @@
-import request from 'UTILS/request';
+import request from 'APP_UTILS/request';
 
 export const serviceAPostData = (params) => request('/SERVICE_A/POST_DATA', params, true);
 

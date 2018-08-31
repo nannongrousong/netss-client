@@ -1,11 +1,11 @@
 import Loadable from 'react-loadable';
-import Loading from 'COMPONENT/loading';
+import Loading from 'ADMIN_COMPONENT/loading';
 
 
 export default [{
-    path: '/page3',
+    path: '/page2',
     component: Loadable({
-        loader: () => import('PAGES/page3'),
+        loader: () => import('ADMIN_PAGES/page2'),
         loading: Loading
     })
 }];
