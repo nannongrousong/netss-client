@@ -44,12 +44,7 @@ if (env == dev) {
         stats: 'errors-only'
     }));
 
-    app.use(webpackHotMiddleware(compiler, {
-        warn: false,
-        log: false,
-        quiet: true,
-        noInfo: true
-    }));
+    app.use(webpackHotMiddleware(compiler));
 
     if (mode == 'proxy') {
         // proxy

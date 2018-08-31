@@ -29,7 +29,7 @@ let webpackAlias = allDirs.reduce((previous, current) => {
 }, {});
 
 let webpackEntry = entries.reduce((previous, current) => {
-    previous[current.name] = ['webpack-hot-middleware/client', path.resolve(__dirname, current.entry)];
+    previous[current.name] = ['webpack-hot-middleware/client?quiet=true', path.resolve(__dirname, current.entry)];
     return previous;
 }, {});
 
@@ -72,10 +72,11 @@ let webpackConfig = {
                 exclude: /node_modules/,
                 options: {
                     cacheDirectory: true,
-                    presets: ['env', 'react'],
+                    presets: ['env', 'react', 'stage-0'],
                     plugins: [
+                        //  'transform-decorators-legacy',
                         'transform-runtime',
-                        'transform-class-properties',
+                        //  'transform-class-properties',
                         ["import", [{ libraryName: "antd-mobile", style: "css" }, { libraryName: "antd", style: "css" }]],
                         'syntax-dynamic-import',
                         'react-hot-loader/babel']
