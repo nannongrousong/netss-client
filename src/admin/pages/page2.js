@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import 'ADMIN_STYLES/page2.less';
 
 export default class extends Component {
     render() {

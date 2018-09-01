@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { serviceAPostData, serviceAGetData } from 'ADMIN_SERVICE/SERVICE_A';
 import { serviceBPostData, serviceBGetData } from 'ADMIN_SERVICE/SERVICE_B';
+import 'ADMIN_STYLES/page1.less';
 
 export default class extends Component {
     handleClick1 = () => {
@@ -66,7 +67,6 @@ export default class extends Component {
                 <Button onClick={this.handleClick3}>服务B POST</Button>
                 <Button onClick={this.handleClick4}>服务B GET</Button>
                 <Button onClick={this.handleClick5}>ZXX VCODE</Button>
-                <AliyunUpload />
             </div>
         );
     }

@@ -1,5 +1,5 @@
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
@@ -49,9 +49,10 @@ let webpackConfig = {
     },
     optimization: {
         splitChunks: {
+            chunks: 'all',
             cacheGroups: {
                 commons: {
-                    test: /[\\/]node_modules[\\/]/,
+                    test: /node_modules/,
                     name: "vendor",
                     chunks: "all"
                 }
@@ -74,9 +75,7 @@ let webpackConfig = {
                     cacheDirectory: true,
                     presets: ['env', 'react', 'stage-0'],
                     plugins: [
-                        //  'transform-decorators-legacy',
                         'transform-runtime',
-                        //  'transform-class-properties',
                         ["import", [{ libraryName: "antd-mobile", style: "css" }, { libraryName: "antd", style: "css" }]],
                         'syntax-dynamic-import',
                         'react-hot-loader/babel']
@@ -86,48 +85,56 @@ let webpackConfig = {
                 test: /\.(png|jpe?g|gif|svg)$/,
                 loader: 'url-loader',
                 options: {
-                    limit: 13000,
+                    limit: 8192,
                     name: 'images/[name].[hash].[ext]'
                 }
             },
             {
-                test: /\.css$/,
-                loader: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: ['css-loader?importLoaders=1', {
+                test: /\.(css|less)$/,
+                exclude: /node_modules/,
+                use: [
+                    MiniCSSExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 2,
+                            modules: true,
+                            localIdentName: '[name]_[local]_[chunkhash]'
+                        }
+                    },
+                    'less-loader?javascriptEnabled=true',
+                    {
                         loader: 'postcss-loader',
                         options: {
                             plugins: [require('autoprefixer')]
                         }
-                    }]
-                })
+                    }
+                ]
             },
             {
-                test: /\.less$/,
-                loader: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        'css-loader?importLoaders=2',
-                        'less-loader?javascriptEnabled=true', {
-                            loader: 'postcss-loader',
-                            options: {
-                                plugins: [require('autoprefixer')]
-                            }
-                        }]
-                })
+                test: /\.(css|less)$/,
+                include: /node_modules/,
+                use: [
+                    MiniCSSExtractPlugin.loader,
+                    'css-loader?importLoaders=1',
+                    'less-loader?javascriptEnabled=true'
+                ]
             },
             {
-                test: /\.(png|svg|jpe?g|gif)$/, 
+                test: /\.(png|svg|jpe?g|gif)$/,
                 loader: 'file-loader'
             },
             {
-                test: /\.(woff|woff2|eot|ttf|otf)$/, 
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
                 loader: 'file-loader'
             },
         ]
     },
     plugins: [
-        new ExtractTextPlugin('css/[name].[hash].css'),
+        new MiniCSSExtractPlugin({
+            filename: 'css/[name].[hash].css',
+            chunkFilename: 'css/[name].[chunkhash].chunk.css'
+        }),
         new CleanWebpackPlugin(['dist/*'], {
             verbose: true,
             dry: false

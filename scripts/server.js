@@ -42,6 +42,7 @@ if (env == dev) {
     app.use(webpackDevMiddleware(compiler, {
         publicPath: '/',
         stats: 'errors-only'
+        //  stats: 'verbose' // all info
     }));
 
     app.use(webpackHotMiddleware(compiler));
