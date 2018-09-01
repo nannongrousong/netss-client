@@ -24,7 +24,7 @@ const recurReadDir = (rootPath) => {
 
 let allDirs = recurReadDir(rootPath);
 let webpackAlias = allDirs.reduce((previous, current) => {
-    previous[current.substring(rootPath.length + 1).replace('\\', '_').toUpperCase()] = current;
+    previous[current.substring(rootPath.length + 1).replace(/\\/g, '_').toUpperCase()] = current;
     return previous;
 }, {});
 
@@ -108,7 +108,7 @@ let webpackConfig = {
                     fallback: 'style-loader',
                     use: [
                         'css-loader?importLoaders=2',
-                        'less-loader', {
+                        'less-loader?javascriptEnabled=true', {
                             loader: 'postcss-loader',
                             options: {
                                 plugins: [require('autoprefixer')]
