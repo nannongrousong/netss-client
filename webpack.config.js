@@ -128,7 +128,7 @@ let webpackConfig = {
     },
     plugins: [
         new ExtractTextPlugin('css/[name].[hash].css'),
-        new CleanWebpackPlugin(['dist/bundle.*.js', 'dist/vendor.*.js'], {
+        new CleanWebpackPlugin(['dist/*'], {
             verbose: true,
             dry: false
         }),
