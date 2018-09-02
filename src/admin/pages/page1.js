@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import AliyunUpload from 'ADMIN_COMPONENT/AliyunUpload';
 
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
@@ -7,7 +6,11 @@ import { serviceAPostData, serviceAGetData } from 'ADMIN_SERVICE/SERVICE_A';
 import { serviceBPostData, serviceBGetData } from 'ADMIN_SERVICE/SERVICE_B';
 import 'ADMIN_STYLES/page1.less';
 
+const MENU_TYPE = 'SIMPLE';
+
 export default class extends Component {
+    state = { logs: [] };
+
     handleClick1 = () => {
         serviceAPostData({
             a: 1,
@@ -47,14 +50,20 @@ export default class extends Component {
                 AppVer: '1.0.0',
                 TimeStamp: 1534940670,
                 Lang: 'CN',
-                DeviceType: 'web', 
+                DeviceType: 'web',
                 Token: '',
-                Uid: 0, 
-                AppKey: 'ZXXWeb', 
-                Sign: 'd577bb6690944892c19032af313a7656', 
+                Uid: 0,
+                AppKey: 'ZXXWeb',
+                Sign: 'd577bb6690944892c19032af313a7656',
                 Data: '{SPhone: "18000000000"}'
             })
         });
+    }
+
+    handleClick = (e, data) => {
+        this.setState(({ logs }) => ({
+            logs: [`Clicked on menu ${data.item}`, ...logs]
+        }));
     }
 
     render() {

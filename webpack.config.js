@@ -29,7 +29,7 @@ let webpackAlias = allDirs.reduce((previous, current) => {
 }, {});
 
 let webpackEntry = entries.reduce((previous, current) => {
-    previous[current.name] = ['webpack-hot-middleware/client?quiet=true', path.resolve(__dirname, current.entry)];
+    previous[current.name] = ['webpack-hot-middleware/client?quiet=true&reload=true', path.resolve(__dirname, current.entry)];
     return previous;
 }, {});
 
@@ -75,6 +75,7 @@ let webpackConfig = {
                     cacheDirectory: true,
                     presets: ['env', 'react', 'stage-0'],
                     plugins: [
+                        'transform-decorators-legacy',
                         'transform-runtime',
                         ["import", [{ libraryName: "antd-mobile", style: "css" }, { libraryName: "antd", style: "css" }]],
                         'syntax-dynamic-import',
@@ -99,7 +100,7 @@ let webpackConfig = {
                         options: {
                             importLoaders: 2,
                             modules: true,
-                            localIdentName: '[name]_[local]_[chunkhash]'
+                            localIdentName: '[name]_[local]_[hash:base64:5]'
                         }
                     },
                     'less-loader?javascriptEnabled=true',
@@ -119,10 +120,6 @@ let webpackConfig = {
                     'css-loader?importLoaders=1',
                     'less-loader?javascriptEnabled=true'
                 ]
-            },
-            {
-                test: /\.(png|svg|jpe?g|gif)$/,
-                loader: 'file-loader'
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
