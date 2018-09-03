@@ -15,7 +15,6 @@ export default class extends Component {
 
     //  事件绑定不可用async
     handleFileChange = (file, type, index) => {
-        debugger;
         this.getAliyunSTS().then((sts) => {
             if (!sts) {
                 Toast.fail('获取阿里云key失败！');
@@ -31,9 +30,6 @@ export default class extends Component {
                     stsToken: sts.SecurityToken,
                     bucket: 'nannongrousong-app-private'
                 });
-
-                debugger;
-
 
                 client.multipartUpload('file_key' + new Date().getTime(), file[1].file, {
                     partSize: file[1].file.size,
