@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "baseUrl": ".",
+        "paths": {
+            "JUST_FOR_TEST/*": [
+                "./src/admin/*"
+            ]
+        }
+    }
+}

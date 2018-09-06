@@ -8,6 +8,7 @@ const projectConfig = require('./project.config');
 const { NODE_ENV } = process.env;
 const { dev, prod, entries } = projectConfig;
 
+//  webpack alias
 const rootPath = path.resolve(__dirname, 'src');
 const recurReadDir = (rootPath) => {
     let dirs = [];
@@ -91,7 +92,36 @@ let webpackConfig = {
                 }
             },
             {
-                test: /\.(css|less)$/,
+                test: /\.css$/,
+                exclude: /node_modules/,
+                use: [
+                    MiniCSSExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                            modules: true,
+                            localIdentName: '[name]_[local]_[hash:base64:5]'
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: [require('autoprefixer')]
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.css$/,
+                include: /node_modules/,
+                use: [
+                    MiniCSSExtractPlugin.loader,
+                    'css-loader'
+                ]
+            },
+            {
+                test: /\.less$/,
                 exclude: /node_modules/,
                 use: [
                     MiniCSSExtractPlugin.loader,
@@ -113,7 +143,7 @@ let webpackConfig = {
                 ]
             },
             {
-                test: /\.(css|less)$/,
+                test: /\.less$/,
                 include: /node_modules/,
                 use: [
                     MiniCSSExtractPlugin.loader,

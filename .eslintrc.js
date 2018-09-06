@@ -33,6 +33,7 @@ module.exports = {
         "no-console": "off",
         "react/display-name": [0],
         "no-unused-vars": [1],
-        "no-debugger": [1]
+        "no-debugger": [1],
+        "no-class-assign": [0]
     }
 };

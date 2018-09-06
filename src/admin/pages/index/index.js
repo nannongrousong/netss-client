@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { withRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { Layout, Menu, Icon, Tabs, Dropdown } from 'antd';
 import PropTypes from 'prop-types';
 
 import 'COMMON_STYLES_UTILITIES/main.less';
 import logoImg from 'COMMON_IMAGES/logo.jpg';
-import styles from 'ADMIN_STYLES/index.less';
+import styles from './index.less';
 
 import adminRouters from 'ADMIN_ROUTER';
 
@@ -14,8 +14,6 @@ const { Item: MenuItem, SubMenu } = Menu;
 const { TabPane } = Tabs;
 
 
-
-@withRouter
 export default class extends Component {
     static propTypes = {
         history: PropTypes.object
@@ -70,7 +68,7 @@ export default class extends Component {
         );
 
         return (
-            <Layout style={{ height: '100%' }}>
+            <Layout className='h-100'>
                 <Sider
                     collapsed={this.state.collapsed}
                     onCollapse={this.handleCollapse}
@@ -78,7 +76,7 @@ export default class extends Component {
                     {
                         <div className={styles.logo}>
                             <img src={logoImg} />
-                            <span>云盘1</span>
+                            <span className={this.state.collapsed ? 'd-none' : ''}>云盘1</span>
                         </div>
                     }
 
