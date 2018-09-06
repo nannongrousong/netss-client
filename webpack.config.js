@@ -7,6 +7,7 @@ const fs = require('fs');
 const projectConfig = require('./project.config');
 const { NODE_ENV } = process.env;
 const { dev, prod, entries } = projectConfig;
+const pathSep = path.sep;
 
 //  webpack alias
 const rootPath = path.resolve(__dirname, 'src');
@@ -23,11 +24,19 @@ const recurReadDir = (rootPath) => {
     return dirs;
 }
 
+let jsconfigPaths = {};
 let allDirs = recurReadDir(rootPath);
 let webpackAlias = allDirs.reduce((previous, current) => {
-    previous[current.substring(rootPath.length + 1).replace(/\\/g, '_').toUpperCase()] = current;
+    let key = current.substring(rootPath.length + 1).split(pathSep).join('_').toUpperCase();    
+    previous[key] = current;
+    jsconfigPaths[key + '/*'] = [current + pathSep + '*'];
     return previous;
 }, {});
+
+//  write webpack alias into jsconfig.json for vscode intellisense
+let jsconfigContent = require('./jsconfig.json');
+jsconfigContent.compilerOptions.paths = jsconfigPaths;
+fs.writeFileSync(path.resolve(__dirname, 'jsconfig.json'), JSON.stringify(jsconfigContent));
 
 let webpackEntry = entries.reduce((previous, current) => {
     previous[current.name] = ['webpack-hot-middleware/client?quiet=true&reload=true', path.resolve(__dirname, current.entry)];
