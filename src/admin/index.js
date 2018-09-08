@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import Loadable from 'react-loadable';
+import { Switch, Route, Router } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
+import reduxThunk from 'redux-thunk';
 import reduxLogger from 'redux-logger';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-
-import Loadable from 'react-loadable';
 import Loading from 'ADMIN_COMPONENT/loading';
-import createBrowserHistory from 'history/createBrowserHistory';
-
+import { createBrowserHistory } from 'history';
 import reducers from 'ADMIN_REDUCER';
 
-const baseName = '/admin';
-const store = createStore(reducers, applyMiddleware(thunk, reduxLogger)); 
+const basename = '/admin';
+const store = createStore(reducers, applyMiddleware(reduxThunk, reduxLogger));
 
 class App extends Component {
     render() {
@@ -26,11 +24,11 @@ class App extends Component {
         return (
             <LocaleProvider locale={zhCN}>
                 <Provider store={store}>
-                    <BrowserRouter basename={baseName}>
+                    <Router history={createBrowserHistory({ basename })}>
                         <Switch>
                             <Route path='/' component={ADMIN_PAGE} />
                         </Switch>
-                    </BrowserRouter>
+                    </Router>
                 </Provider>
             </LocaleProvider>
         );
