@@ -14,43 +14,31 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        testPatch: () => {
-            dispatch((trig, getState) => {
-                setTimeout(() => {
-                    console.log('1s后添加一条记录！');
-                    trig({
-                        type: ADD_DATA,
-                        record: { key: new Date().getTime(), name: 'test', age: 24 }
-                    });
-                }, 1000);
-            });
-        },
-        listData: () => {
-            dispatch({
-                type: LIST_DATA
-            });
-        },
-        addData: (record) => {
+const mapDispatchToProps = {
+    testRedux: () => (dispatch, getState) => {
+        setTimeout(() => {
+            console.log('1s后添加一条记录！');
             dispatch({
                 type: ADD_DATA,
-                record
+                record: { key: new Date().getTime(), name: 'test', age: 24 }
             });
-        },
-        editData: (record) => {
-            dispatch({
-                type: EDIT_DATA,
-                record
-            });
-        },
-        delData: (key) => {
-            dispatch({
-                type: DEL_DATA,
-                key
-            });
-        }
-    };
+        }, 1000);
+    },
+    listData: () => ({
+        type: LIST_DATA
+    }),
+    addData: (record) => ({
+        type: ADD_DATA,
+        record
+    }),
+    editData: (record) => ({
+        type: EDIT_DATA,
+        record
+    }),
+    delData: (key) => ({
+        type: DEL_DATA,
+        key
+    })
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -66,7 +54,7 @@ export default class extends Component {
                 <Link to='/page3' >page3</Link>
                 <Button onClick={testRedux}>测试redux</Button>
 
-                
+
                 <UserTable
                     dataSource={tableData}
                     {...{

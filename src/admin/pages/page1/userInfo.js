@@ -25,6 +25,7 @@ class UserInfo extends Component {
             if (values.key) {
                 editData(values);
             } else {
+                values.key = new Date().getTime();
                 addData(values);
             }
             closeModal();
