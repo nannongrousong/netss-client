@@ -1,4 +1,4 @@
-import { LIST_DATA, ADD_DATA, EDIT_DATA, DEL_DATA } from 'ADMIN_ACTION/tableData';
+import { LIST_DATA, ADD_DATA, EDIT_DATA, DEL_DATA } from 'ADMIN_ACTIONTYPE/tableData';
 
 const initialState = [{
     key: '1',

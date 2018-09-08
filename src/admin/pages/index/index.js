@@ -1,35 +1,68 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Layout, Menu, Icon, Tabs, Dropdown } from 'antd';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { setMenu } from 'ADMIN_ACTION/menu';
 
 import 'COMMON_STYLES_UTILITIES/main.less';
-import logoImg from 'COMMON_IMAGES/logo.jpg';
 import styles from './index.less';
+import logoImg from 'COMMON_IMAGES/logo.jpg';
 
 import adminRouters from 'ADMIN_ROUTER';
 
 const { Header, Content, Footer, Sider } = Layout;
-const { Item: MenuItem, SubMenu } = Menu;
+const { Item: MenuItem, Divider: MenuDivider, SubMenu } = Menu;
 const { TabPane } = Tabs;
 
+const createMenus = (menu) => {
+    //  有children忽略path参数
+    return menu.map((item) => {
+        const { key, title, icon, path, children } = item;
+        if (children) {
+            return (
+                <SubMenu
+                    key={key}
+                    title={<span><Icon type='user' /><span>{title}</span></span>}>
+                    {createMenus(children)}
+                </SubMenu>
+            );
+        } else {
+            return (
+                <MenuItem key={key} path={path}>
+                    <Icon type={icon} />
+                    <span className='nav-text'>{title}</span>
+                </MenuItem>
+            );
+        }
+    });
+};
 
-export default class extends Component {
+
+class Index extends Component {
     static propTypes = {
-        history: PropTypes.object
+        history: PropTypes.object,
+        setMenu: PropTypes.func,
+        menu: PropTypes.array
     }
 
     state = {
         collapsed: false
     }
 
-    handleCollapse = (collapsed) => {
+    componentDidMount() {
+        const { setMenu } = this.props;
+        setMenu();
+    }
+
+    handleCollapse = () => {
         this.setState({
             collapsed: !this.state.collapsed
         });
     }
 
     handleTabsEdit = (targetKey, action) => {
+
     }
 
     handleTabsChange = (activeKey) => {
@@ -39,10 +72,12 @@ export default class extends Component {
 
     handleMenuClick = ({ item, key, keyPath }) => {
         const { history } = this.props;
-        history.push(key);
+        const { path } = item.props;
+        history.push(path);
     }
 
     handleTabClick = (a, b, c) => {
+
     }
 
     handleTabClose = (type) => {
@@ -50,20 +85,21 @@ export default class extends Component {
     }
 
     render() {
+        const { menu } = this.props;
         const operMenus = (
             <Menu>
-                <Menu.Item key="1" onClick={this.handleTabClose.bind(this, 'present')}>关闭当前</Menu.Item>
-                <Menu.Item key="2" onClick={this.handleTabClose.bind(this, 'other')}>关闭其他</Menu.Item>
-                <Menu.Item key="3" onClick={this.handleTabClose.bind(this, 'all')}>关闭所有</Menu.Item>
+                <MenuItem key="1" onClick={this.handleTabClose.bind(this, 'present')}>关闭当前</MenuItem>
+                <MenuItem key="2" onClick={this.handleTabClose.bind(this, 'other')}>关闭其他</MenuItem>
+                <MenuItem key="3" onClick={this.handleTabClose.bind(this, 'all')}>关闭所有</MenuItem>
             </Menu>
         );
 
         const operMenus2 = (
             <Menu>
-                <Menu.Item key="1" onClick={this.handleTabClose.bind(this, 'present')}><Icon type='user' /> 个人中心</Menu.Item>
-                <Menu.Item key="2" onClick={this.handleTabClose.bind(this, 'other')}><Icon type='setting' /> 个人中心设置</Menu.Item>
-                <Menu.Divider />
-                <Menu.Item key="3" onClick={this.handleTabClose.bind(this, 'all')}><Icon type='logout' /> 退出登录</Menu.Item>
+                <MenuItem key="1" onClick={this.handleTabClose.bind(this, 'present')}><Icon type='user' /> 个人中心</MenuItem>
+                <MenuItem key="2" onClick={this.handleTabClose.bind(this, 'other')}><Icon type='setting' /> 个人中心设置</MenuItem>
+                <MenuDivider />
+                <MenuItem key="3" onClick={this.handleTabClose.bind(this, 'all')}><Icon type='logout' /> 退出登录</MenuItem>
             </Menu>
         );
 
@@ -85,30 +121,7 @@ export default class extends Component {
                         mode='inline'
                         defaultSelectedKeys={['1-2']}
                         onClick={this.handleMenuClick}>
-                        <SubMenu
-                            key='1'
-                            title={<span><Icon type='user' /><span>菜单一</span></span>}>
-                            <MenuItem key='1-1'>
-                                <Icon type='user' />
-                                <span className='nav-text'>菜单1-1</span>
-                            </MenuItem>
-                            <MenuItem key='1-2'>
-                                <Icon type='user' />
-                                <span className='nav-text'>菜单1-2</span>
-                            </MenuItem>
-                        </SubMenu>
-                        <MenuItem key='/page1'>
-                            <Icon type='video-camera' />
-                            <span className='nav-text'>菜单二</span>
-                        </MenuItem>
-                        <MenuItem key='/page2'>
-                            <Icon type='upload' />
-                            <span className='nav-text'>菜单三</span>
-                        </MenuItem>
-                        <MenuItem key='/page3'>
-                            <Icon type='user' />
-                            <span className='nav-text'>菜单四</span>
-                        </MenuItem>
+                        {createMenus(menu)}
                     </Menu>
                 </Sider>
                 <Layout>
@@ -161,10 +174,19 @@ export default class extends Component {
                         </Switch>
                     </Content>
                     <Footer>footer</Footer>
-
-
                 </Layout>
             </Layout>
         );
     }
 }
+
+Index = connect(
+    (state) => ({
+        menu: state.menu
+    }),
+    {
+        setMenu
+    }
+)(Index);
+
+export default Index;

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import UserTable from './userTable';
 
-import { LIST_DATA, ADD_DATA, EDIT_DATA, DEL_DATA } from 'ADMIN_ACTION/tableData';
+import { LIST_DATA, ADD_DATA, EDIT_DATA, DEL_DATA } from 'ADMIN_ACTIONTYPE/tableData';
 
 import { Button } from 'antd';
 
@@ -45,7 +45,7 @@ const mapDispatchToProps = {
 export default class extends Component {
     render() {
         const { tableData, listData, editData, addData, delData, testRedux } = this.props;
-
+        console.log('this.props.history', this.props.history);
         return (
             <div>
                 我现在是在page1
