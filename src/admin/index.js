@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import reduxLogger from 'redux-logger';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 
@@ -13,7 +15,7 @@ import createBrowserHistory from 'history/createBrowserHistory';
 import reducers from 'ADMIN_REDUCER';
 
 const baseName = '/admin';
-const store = createStore(reducers);
+const store = createStore(reducers, applyMiddleware(thunk, reduxLogger)); 
 
 class App extends Component {
     render() {
