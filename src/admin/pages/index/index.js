@@ -3,9 +3,10 @@ import { Switch, Route } from 'react-router-dom';
 import { Layout, Menu, Icon, Tabs, Dropdown } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setNavMenu } from '../../action/navMenu';
-import NavHeader from 'ADMIN_COMPONENT/navHeader';
-import NavSlider from 'ADMIN_COMPONENT/navSlider';
+import { setNavMenu } from 'ADMIN_ACTION/navMenu';
+import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
+import NavSlider from 'ADMIN_COMPONENT_NAVSLIDER';
+import NavFooter from 'ADMIN_COMPONENT_NAVFOOTER';
 
 import 'COMMON_STYLES_UTILITIES/main.less';
 
@@ -123,7 +124,7 @@ class Index extends Component {
                             }
                         </Switch>
                     </Content>
-                    <Footer>footer</Footer>
+                    <NavFooter />
                 </Layout>
             </Layout>
         );
