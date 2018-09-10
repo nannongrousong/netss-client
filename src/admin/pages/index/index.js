@@ -21,8 +21,12 @@ class Index extends Component {
     }
 
     componentDidMount() {
-        const { initNavMenu } = this.props;
-        initNavMenu();
+        debugger;
+        
+        const { setActiveRoute, initNavMenu, history: { location: { pathname } } } = this.props;
+        initNavMenu(() => {
+            setActiveRoute('path', pathname);
+        });
     }
 
     handleCollapse = () => {
@@ -50,15 +54,16 @@ class Index extends Component {
     }
 
     handleMenuClick = ({ key }) => {
+        debugger;
         const { history, setActiveRoute } = this.props;
-        setActiveRoute(key, (path) => {
+        setActiveRoute('key',  key, (path) => {
             history.push(path);
         });
     }
 
     handleTabClick = (tabKey) => {
         const { setActiveRoute, history } = this.props;
-        setActiveRoute(tabKey, (path) => {
+        setActiveRoute('key', tabKey, (path) => {
             history.push(path);
         });
     }

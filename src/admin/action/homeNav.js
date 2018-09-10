@@ -9,22 +9,25 @@ export const setNavTab = () => async (dispatch, getState) => {
     });
 };
 
-export const initNavMenu = () => async (dispatch, getState) => {
+export const initNavMenu = (callBack) => async (dispatch, getState) => {
     let resData = await loadMenu();
     dispatch({
         type: SET_NAV_MENU,
         data: resData
     });
+    if(typeof callBack == 'function') {
+        callBack();
+    }
 };
 
-const getRouteByKey = (key, routes) => {
+const getRouteByField = (fieldKey, fieldValue, routes) => {
     for (let i = 0; i < routes.length; i++) {
-        if (routes[i].key == key) {
+        if (routes[i][fieldKey] == fieldValue) {
             return routes[i];
         }
 
         if (routes[i].children) {
-            let tempRes = getRouteByKey(key, routes[i].children);
+            let tempRes = getRouteByField(fieldKey, fieldValue, routes[i].children);
             if (tempRes) {
                 return tempRes;
             }
@@ -32,31 +35,25 @@ const getRouteByKey = (key, routes) => {
     }
 };
 
-export const setActiveRoute = (routeKey, callBack) => (dispatch, getState) => {
+export const setActiveRoute = (fieldKey, fieldValue, callBack) => (dispatch, getState) => {
     debugger;
 
     let { navTab: oldNavTab, navMenu } = getState().homeNav;
     let navTab = oldNavTab.slice();
-    let path = '';
+    let routeInfo = getRouteByField(fieldKey, fieldValue, navMenu);
 
-    let resTab = navTab.find((tab) => tab.key == routeKey);
+    let { key, path, title } = routeInfo;
+
+    let resTab = navTab.find((tab) => tab.key == key);
 
     if (!resTab) {
-        let routeInfo = getRouteByKey(routeKey, navMenu);
-        path = routeInfo.path;
-        navTab.push({
-            key: routeKey,
-            path,
-            title: routeInfo.title
-        });
-    } else {
-        path = resTab.path;
+        navTab.push(routeInfo);
     }
 
     dispatch({
         type: ACTIVE_ROUTE,
         data: {
-            activeRoute: routeKey,
+            activeRoute: key,
             navTab
         }
     });
