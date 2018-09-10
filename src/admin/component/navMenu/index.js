@@ -7,7 +7,7 @@ const { Item: MenuItem, SubMenu } = Menu;
 const createMenus = (menus) => {
     //  有children忽略path参数
     return menus.map((item) => {
-        const { key, title, icon, path, children } = item;
+        const { key, title, icon, children } = item;
         if (children) {
             return (
                 <SubMenu
@@ -18,7 +18,7 @@ const createMenus = (menus) => {
             );
         } else {
             return (
-                <MenuItem key={key} path={path}>
+                <MenuItem key={key} >
                     <Icon type={icon} />
                     <span className='nav-text'>{title}</span>
                 </MenuItem>
@@ -27,11 +27,11 @@ const createMenus = (menus) => {
     });
 };
 
-const NavMenu = ( { menus, handleMenuClick } ) => (
+const NavMenu = ({ menus, handleMenuClick, activeRoute }) => (
     <Menu
         theme='dark'
         mode='inline'
-        defaultSelectedKeys={['1-2']}
+        selectedKeys={[activeRoute]}
         onClick={handleMenuClick}>
         {createMenus(menus)}
     </Menu>
@@ -39,7 +39,8 @@ const NavMenu = ( { menus, handleMenuClick } ) => (
 
 NavMenu.propTypes = {
     menus: PropTypes.array,
-    handleMenuClick: PropTypes.func
+    handleMenuClick: PropTypes.func,
+    activeRoute: PropTypes.string
 };
 
 export default NavMenu;

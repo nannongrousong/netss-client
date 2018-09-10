@@ -1,35 +1,28 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { Layout, Menu, Icon, Tabs, Dropdown } from 'antd';
+import { Layout } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setNavMenu } from '../../action/homeNav';
+import { Switch, Route } from 'react-router-dom';
+
+import { initNavMenu, setActiveRoute, inActiveRoute } from 'ADMIN_ACTION/homeNav';
 import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
 import NavSlider from 'ADMIN_COMPONENT_NAVSLIDER';
 import NavFooter from 'ADMIN_COMPONENT_NAVFOOTER';
+import NavTab from 'ADMIN_COMPONENT_NAVTAB';
 
 import 'COMMON_STYLES_UTILITIES/main.less';
-
 import adminRouters from 'ADMIN_ROUTER';
 
-const { Content, Footer } = Layout;
-const { Item: MenuItem } = Menu;
-const { TabPane } = Tabs;
+const { Content } = Layout;
 
 class Index extends Component {
-    static propTypes = {
-        history: PropTypes.object,
-        setNavMenu: PropTypes.func,
-        navMenu: PropTypes.array
-    }
-
     state = {
         collapsed: false
     }
 
     componentDidMount() {
-        const { setNavMenu } = this.props;
-        setNavMenu();
+        const { initNavMenu } = this.props;
+        initNavMenu();
     }
 
     handleCollapse = () => {
@@ -39,38 +32,44 @@ class Index extends Component {
     }
 
     handleTabsEdit = (targetKey, action) => {
+        const { inActiveRoute, history } = this.props;
+        //  remove own
+        if (action == 'remove') {
+            inActiveRoute(targetKey, (path) => {
+                history.push(path);
+            });
+        }
 
+        if (action == 'removeOther') {
+            debugger;
+        }
     }
 
     handleTabsChange = (activeKey) => {
-        const { history } = this.props;
-        history.push(activeKey);
+        console.log('handleTabsChange');
     }
 
-    handleMenuClick = ({ item, key, keyPath }) => {
-        const { history } = this.props;
-        const { path } = item.props;
-        history.push(path);
+    handleMenuClick = ({ key }) => {
+        const { history, setActiveRoute } = this.props;
+        setActiveRoute(key, (path) => {
+            history.push(path);
+        });
     }
 
-    handleTabClick = (a, b, c) => {
-
+    handleTabClick = (tabKey) => {
+        const { setActiveRoute, history } = this.props;
+        setActiveRoute(tabKey, (path) => {
+            history.push(path);
+        });
     }
 
     handleTabClose = (type) => {
-        console.log('type', type);
+        console.log('handleTabClose, type', type);
     }
 
     render() {
-        const { navMenu } = this.props;
+        const { navMenu, navTab, activeRoute } = this.props;
         const { collapsed } = this.state;
-        const tabOperMenus = (
-            <Menu>
-                <MenuItem key="1" onClick={this.handleTabClose.bind(this, 'present')}>关闭当前</MenuItem>
-                <MenuItem key="2" onClick={this.handleTabClose.bind(this, 'other')}>关闭其他</MenuItem>
-                <MenuItem key="3" onClick={this.handleTabClose.bind(this, 'all')}>关闭所有</MenuItem>
-            </Menu>
-        );
 
         return (
             <Layout className='h-100'>
@@ -78,69 +77,33 @@ class Index extends Component {
                     collapsed={collapsed}
                     navMenu={navMenu}
                     handleCollapse={this.handleCollapse}
-                    handleMenuClick={this.handleMenuClick} />
+                    handleMenuClick={this.handleMenuClick}
+                    activeRoute={activeRoute} />
 
                 <Layout>
                     <NavHeader
                         collapsed={collapsed}
                         handleCollapse={this.handleCollapse} />
                     <Content>
-                        <Tabs
-                            hideAdd
-                            onTabClick={this.handleTabClick}
-                            tabBarExtraContent={
-                                <Dropdown overlay={tabOperMenus}>
-                                    <a href="#">操作<Icon type="down" /></a>
-                                </Dropdown>
-                            }
-                            onEdit={this.handleTabsEdit}
-                            onChange={this.handleTabsChange}
-                            type='editable-card'>
-                            <TabPane tab='tab1' key='/page1' closable>
-                                这是tab1内容
-                                <Switch>
-                                    {
-                                        adminRouters.map((routerItem, index) => {
-                                            const { path, component } = routerItem;
-                                            return <Route
-                                                key={index}
-                                                path={path}
-                                                component={component} />;
-                                        })
-                                    }
-                                </Switch>
-                            </TabPane>
-                            <TabPane tab='tab2' key='/page2' closable>
-                                这是tab2内容
-                                <Switch>
-                                    {
-                                        adminRouters.map((routerItem, index) => {
-                                            const { path, component } = routerItem;
-                                            return <Route
-                                                key={index}
-                                                path={path}
-                                                component={component} />;
-                                        })
-                                    }
-                                </Switch>
-                            </TabPane>
-                            <TabPane tab='tab3' key='/page3' closable>
-                                这是tab3内容
-                                <Switch>
-                                    {
-                                        adminRouters.map((routerItem, index) => {
-                                            const { path, component } = routerItem;
-                                            return <Route
-                                                key={index}
-                                                path={path}
-                                                component={component} />;
-                                        })
-                                    }
-                                </Switch>
-                            </TabPane>
-                        </Tabs>
-
-
+                        <NavTab
+                            handleTabClose={this.handleTabClose}
+                            handleTabsEdit={this.handleTabsEdit}
+                            handleTabClick={this.handleTabClick}
+                            handleTabsChange={this.handleTabsChange}
+                            navTab={navTab}
+                            activeRoute={activeRoute} >
+                            <Switch>
+                                {
+                                    adminRouters.map((routerItem, index) => {
+                                        const { path, component } = routerItem;
+                                        return <Route
+                                            key={index}
+                                            path={path}
+                                            component={component} />;
+                                    })
+                                }
+                            </Switch>
+                        </NavTab>
                     </Content>
                     <NavFooter />
                 </Layout>
@@ -149,13 +112,26 @@ class Index extends Component {
     }
 }
 
+Index.propTypes = {
+    history: PropTypes.object,
+    initNavMenu: PropTypes.func,
+    setActiveRoute: PropTypes.func,
+    navMenu: PropTypes.array,
+    navTab: PropTypes.array,
+    activeRoute: PropTypes.string,
+    inActiveRoute: PropTypes.func
+};
+
 Index = connect(
     (state) => ({
         navMenu: state.homeNav.navMenu,
-        navTab: state.homeNav.navTab
+        navTab: state.homeNav.navTab,
+        activeRoute: state.homeNav.activeRoute
     }),
     {
-        setNavMenu
+        initNavMenu,
+        setActiveRoute,
+        inActiveRoute
     }
 )(Index);
 

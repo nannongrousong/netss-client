@@ -7,7 +7,7 @@ import NavMenu from 'ADMIN_COMPONENT/navMenu';
 
 const { Sider } = Layout;
 
-const NavSlider = ({ collapsed, navMenu, handleMenuClick, handleCollapse }) => (
+const NavSlider = ({ collapsed, navMenu, handleMenuClick, handleCollapse, activeRoute }) => (
     <Sider
         collapsed={collapsed}
         onCollapse={handleCollapse}
@@ -19,7 +19,10 @@ const NavSlider = ({ collapsed, navMenu, handleMenuClick, handleCollapse }) => (
             </div>
         }
 
-        <NavMenu menus={navMenu} handleMenuClick={handleMenuClick} />
+        <NavMenu
+            menus={navMenu}
+            handleMenuClick={handleMenuClick}
+            activeRoute={activeRoute} />
     </Sider>
 );
 
@@ -27,7 +30,8 @@ NavSlider.propTypes = {
     collapsed: PropTypes.bool,
     navMenu: PropTypes.array,
     handleCollapse: PropTypes.func,
-    handleMenuClick: PropTypes.func
+    handleMenuClick: PropTypes.func,
+    activeRoute: PropTypes.string
 };
 
 export default NavSlider;
