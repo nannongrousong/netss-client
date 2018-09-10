@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AliyunUpload from 'APP_COMPONENT/AliyunUpload';
+import AliyunUpload from 'COMMON_COMPONENT/AliyunUpload';
 
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
