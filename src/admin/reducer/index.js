@@ -1,8 +1,8 @@
 import tableData from 'ADMIN_REDUCER/tableData'; 
-import navMenu from './home';
+import homeNav from './homeNav';
 import { combineReducers }  from 'redux';
 
 export default combineReducers({
     tableData,
-    navMenu
+    homeNav
 });

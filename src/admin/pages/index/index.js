@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { Layout, Menu, Icon, Tabs, Dropdown } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setNavMenu } from 'ADMIN_ACTION/navMenu';
+import { setNavMenu } from '../../action/homeNav';
 import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
 import NavSlider from 'ADMIN_COMPONENT_NAVSLIDER';
 import NavFooter from 'ADMIN_COMPONENT_NAVFOOTER';
@@ -33,7 +33,6 @@ class Index extends Component {
     }
 
     handleCollapse = () => {
-        debugger;
         this.setState({
             collapsed: !this.state.collapsed
         });
@@ -99,30 +98,49 @@ class Index extends Component {
                             type='editable-card'>
                             <TabPane tab='tab1' key='/page1' closable>
                                 这是tab1内容
+                                <Switch>
+                                    {
+                                        adminRouters.map((routerItem, index) => {
+                                            const { path, component } = routerItem;
+                                            return <Route
+                                                key={index}
+                                                path={path}
+                                                component={component} />;
+                                        })
+                                    }
+                                </Switch>
                             </TabPane>
-                            <TabPane tab={
-                                <Dropdown overlay={tabOperMenus} trigger={['contextMenu']}>
-                                    <div style={{ userSelect: 'none', display: 'inline-block' }}>tab2</div>
-                                </Dropdown>
-                            } key='/page2' closable>
+                            <TabPane tab='tab2' key='/page2' closable>
                                 这是tab2内容
+                                <Switch>
+                                    {
+                                        adminRouters.map((routerItem, index) => {
+                                            const { path, component } = routerItem;
+                                            return <Route
+                                                key={index}
+                                                path={path}
+                                                component={component} />;
+                                        })
+                                    }
+                                </Switch>
                             </TabPane>
                             <TabPane tab='tab3' key='/page3' closable>
                                 这是tab3内容
+                                <Switch>
+                                    {
+                                        adminRouters.map((routerItem, index) => {
+                                            const { path, component } = routerItem;
+                                            return <Route
+                                                key={index}
+                                                path={path}
+                                                component={component} />;
+                                        })
+                                    }
+                                </Switch>
                             </TabPane>
                         </Tabs>
 
-                        <Switch>
-                            {
-                                adminRouters.map((routerItem, index) => {
-                                    const { path, component } = routerItem;
-                                    return <Route
-                                        key={index}
-                                        path={path}
-                                        component={component} />;
-                                })
-                            }
-                        </Switch>
+
                     </Content>
                     <NavFooter />
                 </Layout>
@@ -133,7 +151,8 @@ class Index extends Component {
 
 Index = connect(
     (state) => ({
-        navMenu: state.navMenu
+        navMenu: state.homeNav.navMenu,
+        navTab: state.homeNav.navTab
     }),
     {
         setNavMenu

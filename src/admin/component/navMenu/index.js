@@ -27,7 +27,7 @@ const createMenus = (menus) => {
     });
 };
 
-const NavMenus = ( { menus, handleMenuClick } ) => (
+const NavMenu = ( { menus, handleMenuClick } ) => (
     <Menu
         theme='dark'
         mode='inline'
@@ -37,9 +37,9 @@ const NavMenus = ( { menus, handleMenuClick } ) => (
     </Menu>
 );
 
-NavMenus.propTypes = {
+NavMenu.propTypes = {
     menus: PropTypes.array,
     handleMenuClick: PropTypes.func
 };
 
-export default NavMenus;
+export default NavMenu;
