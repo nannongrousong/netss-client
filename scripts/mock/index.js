@@ -1,9 +1,7 @@
-const SERVICE_A  = require('./SERVICE_A');
-const SERVICE_B  = require('./SERVICE_B');
-const Authority  = require('./Authority');
+const Authority_Mgr = require('./Authority_Mgr');
+const Sys_Login = require('./SYS_LOGIN');
 
 module.exports = {
-    ...SERVICE_A,
-    ...SERVICE_B,
-    ...Authority
+    ...Authority_Mgr,
+    ...Sys_Login
 };

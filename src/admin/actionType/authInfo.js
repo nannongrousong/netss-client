@@ -1,0 +1,1 @@
+export const SET_USER_INFO = Symbol('SET_USER_INFO');

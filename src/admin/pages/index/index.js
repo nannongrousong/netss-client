@@ -4,13 +4,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 
-import { initNavMenu, setActiveRoute, inActiveRoute } from 'ADMIN_ACTION/homeNav';
+import { initNavMenu, setActiveTab, closeNavTab, closeOtherNavTab, closeAllNavTab } from 'ADMIN_ACTION/homeNav';
 import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
 import NavSlider from 'ADMIN_COMPONENT_NAVSLIDER';
 import NavFooter from 'ADMIN_COMPONENT_NAVFOOTER';
 import NavTab from 'ADMIN_COMPONENT_NAVTAB';
 
-import 'COMMON_STYLES_UTILITIES/main.less';
 import adminRouters from 'ADMIN_ROUTER';
 
 const { Content } = Layout;
@@ -20,12 +19,12 @@ class Index extends Component {
         collapsed: false
     }
 
+    DO_NOT_HANDLE_TAB_CHANGE = false;
+
     componentDidMount() {
-        debugger;
-        
-        const { setActiveRoute, initNavMenu, history: { location: { pathname } } } = this.props;
+        const { setActiveTab, initNavMenu, history: { location: { pathname } } } = this.props;
         initNavMenu(() => {
-            setActiveRoute('path', pathname);
+            setActiveTab('path', pathname);
         });
     }
 
@@ -36,40 +35,50 @@ class Index extends Component {
     }
 
     handleTabsEdit = (targetKey, action) => {
-        const { inActiveRoute, history } = this.props;
-        //  remove own
+        if(!targetKey) {
+            return;
+        }
+
+        const { closeNavTab, closeOtherNavTab, closeAllNavTab, history } = this.props;
+
         if (action == 'remove') {
-            inActiveRoute(targetKey, (path) => {
-                history.push(path);
+            closeNavTab(targetKey, (path) => {
+                path && history.push(path);
+                this.DO_NOT_HANDLE_TAB_CHANGE = true;
+                setTimeout(() => {
+                    this.DO_NOT_HANDLE_TAB_CHANGE = false;
+                }, 1000);
             });
         }
 
         if (action == 'removeOther') {
-            debugger;
+            closeOtherNavTab(targetKey);
+        }
+
+        if (action == 'removeAll') {
+            closeAllNavTab();
         }
     }
 
-    handleTabsChange = (activeKey) => {
+    handleTabsChange = (tabKey) => {
         console.log('handleTabsChange');
+        if (!this.DO_NOT_HANDLE_TAB_CHANGE) {
+            const { setActiveTab, history } = this.props;
+            setActiveTab('key', tabKey, (path) => {
+                history.push(path);
+            });
+        }
     }
 
     handleMenuClick = ({ key }) => {
-        debugger;
-        const { history, setActiveRoute } = this.props;
-        setActiveRoute('key',  key, (path) => {
+        const { history, setActiveTab } = this.props;
+        setActiveTab('key', key, (path) => {
             history.push(path);
         });
     }
 
     handleTabClick = (tabKey) => {
-        const { setActiveRoute, history } = this.props;
-        setActiveRoute('key', tabKey, (path) => {
-            history.push(path);
-        });
-    }
-
-    handleTabClose = (type) => {
-        console.log('handleTabClose, type', type);
+        console.log('handleTabClick');
     }
 
     render() {
@@ -91,7 +100,6 @@ class Index extends Component {
                         handleCollapse={this.handleCollapse} />
                     <Content>
                         <NavTab
-                            handleTabClose={this.handleTabClose}
                             handleTabsEdit={this.handleTabsEdit}
                             handleTabClick={this.handleTabClick}
                             handleTabsChange={this.handleTabsChange}
@@ -120,11 +128,13 @@ class Index extends Component {
 Index.propTypes = {
     history: PropTypes.object,
     initNavMenu: PropTypes.func,
-    setActiveRoute: PropTypes.func,
+    setActiveTab: PropTypes.func,
     navMenu: PropTypes.array,
     navTab: PropTypes.array,
     activeRoute: PropTypes.string,
-    inActiveRoute: PropTypes.func
+    closeNavTab: PropTypes.func,
+    closeOtherNavTab: PropTypes.func,
+    closeAllNavTab: PropTypes.func
 };
 
 Index = connect(
@@ -135,8 +145,10 @@ Index = connect(
     }),
     {
         initNavMenu,
-        setActiveRoute,
-        inActiveRoute
+        setActiveTab,
+        closeNavTab,
+        closeOtherNavTab,
+        closeAllNavTab
     }
 )(Index);
 

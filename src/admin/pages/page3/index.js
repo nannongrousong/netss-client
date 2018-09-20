@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 export default class extends Component {
     render() {
         return (
             <div>
                 我现在是在page3
-                <Link to='/page1' >page1</Link>
-                <Link to='/page2' >page2</Link>
             </div>
         );
     }

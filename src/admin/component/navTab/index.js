@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Tabs, Dropdown, Icon, Menu } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -7,12 +7,12 @@ const { Item: MenuItem } = Menu;
 
 class NavTab extends Component {
     render() {
-        const { handleTabClose, handleTabsEdit, handleTabClick, handleTabsChange, children, navTab, activeRoute } = this.props;
-        const tabOperMenus = (
+        const { handleTabsEdit, handleTabClick, handleTabsChange, children, navTab, activeRoute } = this.props;
+        const tabOperMenus = (operTabKey) => (
             <Menu>
-                <MenuItem key="1" onClick={handleTabClose.bind(this, 'present')}>关闭当前</MenuItem>
-                <MenuItem key="2" onClick={handleTabClose.bind(this, 'other')}>关闭其他</MenuItem>
-                <MenuItem key="3" onClick={handleTabClose.bind(this, 'all')}>关闭所有</MenuItem>
+                <MenuItem key="1" onClick={handleTabsEdit.bind(this, operTabKey, 'remove')}>关闭当前</MenuItem>
+                <MenuItem key="2" onClick={handleTabsEdit.bind(this, operTabKey, 'removeOther')}>关闭其他</MenuItem>
+                <MenuItem key="3" onClick={handleTabsEdit.bind(this, 'allKey', 'removeAll')}>关闭所有</MenuItem>
             </Menu>
         );
 
@@ -22,7 +22,7 @@ class NavTab extends Component {
                 activeKey={activeRoute}
                 onTabClick={handleTabClick}
                 tabBarExtraContent={
-                    <Dropdown overlay={tabOperMenus}>
+                    <Dropdown overlay={tabOperMenus(activeRoute)}>
                         <a href="#">操作<Icon type="down" /></a>
                     </Dropdown>
                 }
@@ -31,9 +31,12 @@ class NavTab extends Component {
                 type='editable-card'>
                 {
                     navTab.map((tab) => (
-                        <TabPane tab={tab.title} key={tab.key} closable>
-                            <p>{JSON.stringify(tab)}</p>
-                            {children}
+                        <TabPane tab={
+                            <Dropdown overlay={tabOperMenus(tab.key)} trigger={['contextMenu']}>
+                                <div style={{ userSelect: 'none', display: 'inline-block' }}>{tab.title}</div>
+                            </Dropdown>
+                        } key={tab.key} closable>
+                            {tab.key == activeRoute && <Fragment><p>当前tab页信息{JSON.stringify(tab)}</p><div>{children}</div></Fragment>}
                         </TabPane>
                     ))
                 }
@@ -43,7 +46,6 @@ class NavTab extends Component {
 }
 
 NavTab.propTypes = {
-    handleTabClose: PropTypes.func,
     handleTabsEdit: PropTypes.func,
     handleTabClick: PropTypes.func,
     handleTabsChange: PropTypes.func,

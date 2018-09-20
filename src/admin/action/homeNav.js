@@ -1,23 +1,22 @@
-import { SET_NAV_MENU, SET_NAV_TAB, ACTIVE_ROUTE, IN_ACTIVE_ROUTE } from 'ADMIN_ACTIONTYPE/homeNav';
-import { loadMenu } from 'ADMIN_SERVICE/Authority';
+import { SET_NAV_MENU, SET_NAV_TAB, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB } from 'ADMIN_ACTIONTYPE/homeNav';
+import { Load_User_Menus } from 'ADMIN_SERVICE/Authority_Mgr';
 
 export const setNavTab = () => async (dispatch, getState) => {
-    let resData = await loadMenu();
+    let resData = await Load_User_Menus();
     dispatch({
         type: SET_NAV_TAB,
-        data: resData
+        data: resData.data
     });
 };
 
 export const initNavMenu = (callBack) => async (dispatch, getState) => {
-    let resData = await loadMenu();
+    let resData = await Load_User_Menus();
     dispatch({
         type: SET_NAV_MENU,
-        data: resData
+        data: resData.data
     });
-    if(typeof callBack == 'function') {
-        callBack();
-    }
+
+    typeof callBack == 'function' && callBack();
 };
 
 const getRouteByField = (fieldKey, fieldValue, routes) => {
@@ -35,9 +34,7 @@ const getRouteByField = (fieldKey, fieldValue, routes) => {
     }
 };
 
-export const setActiveRoute = (fieldKey, fieldValue, callBack) => (dispatch, getState) => {
-    debugger;
-
+export const setActiveTab = (fieldKey, fieldValue, callBack) => (dispatch, getState) => {
     let { navTab: oldNavTab, navMenu } = getState().homeNav;
     let navTab = oldNavTab.slice();
     let routeInfo = getRouteByField(fieldKey, fieldValue, navMenu);
@@ -51,26 +48,19 @@ export const setActiveRoute = (fieldKey, fieldValue, callBack) => (dispatch, get
     }
 
     dispatch({
-        type: ACTIVE_ROUTE,
+        type: ACTIVE_TAB,
         data: {
             activeRoute: key,
             navTab
         }
     });
 
-    if (typeof callBack == 'function') {
-        callBack(path);
-    }
+    typeof callBack == 'function' && callBack(path);
 };
 
-export const inActiveRoute = (routeKey, callBack) => (dispatch, getState) => {
+export const closeNavTab = (routeKey, callBack) => (dispatch, getState) => {
     let { navTab: oldNavTab } = getState().homeNav;
     let newPath = '';
-
-    //  left only one tab
-    if (oldNavTab.length == 1) {
-        return;
-    }
 
     let activeRoute = '';
     let tabIndex = oldNavTab.findIndex((route) => route.key == routeKey);
@@ -79,21 +69,47 @@ export const inActiveRoute = (routeKey, callBack) => (dispatch, getState) => {
         activeRoute = oldNavTab[tabIndex + 1].key;
         newPath = oldNavTab[tabIndex + 1].path;
     } else {
-        activeRoute = oldNavTab[tabIndex - 1].key;
-        newPath = oldNavTab[tabIndex - 1].path;
+        if (oldNavTab.length == 1) {
+            activeRoute = '';
+            newPath = '';
+        } else {
+            activeRoute = oldNavTab[tabIndex - 1].key;
+            newPath = oldNavTab[tabIndex - 1].path;
+        }
     }
 
     let navTab = [...oldNavTab.slice(0, tabIndex), ...oldNavTab.slice(tabIndex + 1, oldNavTab.length)];
 
     dispatch({
-        type: IN_ACTIVE_ROUTE,
+        type: CLOSE_NAV_TAB,
         data: {
             activeRoute,
             navTab
         }
     });
 
-    if (typeof callBack == 'function') {
-        callBack(newPath);
-    }
+    typeof callBack == 'function' && callBack(newPath);
+};
+
+export const closeOtherNavTab = (routeKey) => (dispatch, getState) => {
+    let { navMenu } = getState().homeNav;
+    let routeInfo = getRouteByField('key', routeKey, navMenu);
+
+    dispatch({
+        type: CLOSE_NAV_OTHER_TAB,
+        data: {
+            activeRoute: routeKey,
+            navTab: [routeInfo]
+        }
+    });
+};
+
+export const closeAllNavTab = () => (dispatch) => {
+    dispatch({
+        type: CLOSE_NAV_ALL_TAB,
+        data: {
+            activeRoute: '',
+            navTab: []
+        }
+    });
 };

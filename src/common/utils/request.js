@@ -18,7 +18,11 @@ export default async (url, params, isPost = false) => {
 
     if (response.ok) {
         let data = await response.json();
-        return data;
+        if(data.code == 0) {
+            return data;
+        } else {
+            throw new Error(data.info);
+        }
     } else {
         throw new Error(`fetch error, url: ${url}, params: ${JSON.stringify(params)}`);
     }

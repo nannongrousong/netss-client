@@ -45,15 +45,11 @@ const mapDispatchToProps = {
 export default class extends Component {
     render() {
         const { tableData, listData, editData, addData, delData, testRedux } = this.props;
-        console.log('this.props.history', this.props.history);
+        //  console.log('this.props.history', this.props.history);
         return (
             <div>
                 我现在是在page1
-                <Link to='/page2' >page2</Link>
-                <br />
-                <Link to='/page3' >page3</Link>
                 <Button onClick={testRedux}>测试redux</Button>
-
 
                 <UserTable
                     dataSource={tableData}
