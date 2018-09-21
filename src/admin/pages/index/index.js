@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { initNavMenu, setActiveTab, closeNavTab, closeOtherNavTab, closeAllNavTab } from 'ADMIN_ACTION/homeNav';
 import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
@@ -15,17 +15,24 @@ import adminRouters from 'ADMIN_ROUTER';
 const { Content } = Layout;
 
 class Index extends Component {
-    state = {
-        collapsed: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            collapsed: false
+        };
+
+        //  非当前激活的tab页右击操作会再出发tabChange事件，但实际上并不需要
+        this.DO_NOT_HANDLE_TAB_CHANGE = false;
+        this.IS_LOGIN = !!sessionStorage.getItem('AUTH_INFO');
     }
 
-    DO_NOT_HANDLE_TAB_CHANGE = false;
-
     componentDidMount() {
-        const { setActiveTab, initNavMenu, history: { location: { pathname } } } = this.props;
-        initNavMenu(() => {
-            setActiveTab('path', pathname);
-        });
+        if (this.IS_LOGIN) {
+            const { setActiveTab, initNavMenu, history: { location: { pathname } } } = this.props;
+            initNavMenu(() => {
+                setActiveTab('path', pathname);
+            });
+        }
     }
 
     handleCollapse = () => {
@@ -35,7 +42,7 @@ class Index extends Component {
     }
 
     handleTabsEdit = (targetKey, action) => {
-        if(!targetKey) {
+        if (!targetKey) {
             return;
         }
 
@@ -86,41 +93,43 @@ class Index extends Component {
         const { collapsed } = this.state;
 
         return (
-            <Layout className='h-100'>
-                <NavSlider
-                    collapsed={collapsed}
-                    navMenu={navMenu}
-                    handleCollapse={this.handleCollapse}
-                    handleMenuClick={this.handleMenuClick}
-                    activeRoute={activeRoute} />
-
-                <Layout>
-                    <NavHeader
+            this.IS_LOGIN ?
+                <Layout className='h-100'>
+                    <NavSlider
                         collapsed={collapsed}
-                        handleCollapse={this.handleCollapse} />
-                    <Content>
-                        <NavTab
-                            handleTabsEdit={this.handleTabsEdit}
-                            handleTabClick={this.handleTabClick}
-                            handleTabsChange={this.handleTabsChange}
-                            navTab={navTab}
-                            activeRoute={activeRoute} >
-                            <Switch>
-                                {
-                                    adminRouters.map((routerItem, index) => {
-                                        const { path, component } = routerItem;
-                                        return <Route
-                                            key={index}
-                                            path={path}
-                                            component={component} />;
-                                    })
-                                }
-                            </Switch>
-                        </NavTab>
-                    </Content>
-                    <NavFooter />
+                        navMenu={navMenu}
+                        handleCollapse={this.handleCollapse}
+                        handleMenuClick={this.handleMenuClick}
+                        activeRoute={activeRoute} />
+
+                    <Layout>
+                        <NavHeader
+                            collapsed={collapsed}
+                            handleCollapse={this.handleCollapse} />
+                        <Content>
+                            <NavTab
+                                handleTabsEdit={this.handleTabsEdit}
+                                handleTabClick={this.handleTabClick}
+                                handleTabsChange={this.handleTabsChange}
+                                navTab={navTab}
+                                activeRoute={activeRoute} >
+                                <Switch>
+                                    {
+                                        adminRouters.map((routerItem, index) => {
+                                            const { path, component } = routerItem;
+                                            return <Route
+                                                key={index}
+                                                path={path}
+                                                component={component} />;
+                                        })
+                                    }
+                                </Switch>
+                            </NavTab>
+                        </Content>
+                        <NavFooter />
+                    </Layout>
                 </Layout>
-            </Layout>
+                : <Redirect to={{ pathname: '/login', state: { from: this.props.history.location.pathname } }}></Redirect>
         );
     }
 }

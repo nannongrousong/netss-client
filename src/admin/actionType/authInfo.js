@@ -1,1 +1,1 @@
-export const SET_USER_INFO = Symbol('SET_USER_INFO');
+export const SET_AUTH_INFO = Symbol('SET_AUTH_INFO');

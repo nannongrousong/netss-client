@@ -50,11 +50,13 @@ if (env == dev) {
     if (mode == 'proxy') {
         // proxy
         const httpProxyMiddleware = require('http-proxy-middleware');
-        app.use('/api', httpProxyMiddleware({
-            target: 'http://alpha.zxx.admin',
-            changeOrigin: true,
-            //  pathRewrite: { '^/api': '/' }
-        }));
+        projectConfig.proxy.forEach((prox) => {
+            app.use(prox.router, httpProxyMiddleware({
+                target: prox.target,
+                changeOrigin: true,
+                pathRewrite: prox.pathRewrite
+            }))
+        });
     } else {
         //  mock
         const apiMocker = require('webpack-api-mocker');

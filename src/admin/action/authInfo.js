@@ -1,18 +1,20 @@
-import { SET_USER_INFO } from 'ADMIN_ACTIONTYPE/authInfo';
+import { SET_AUTH_INFO } from 'ADMIN_ACTIONTYPE/authInfo';
 import { CMS_Login } from 'ADMIN_SERVICE/Sys_Login';
 import { message } from 'antd';
 
-export const loginSys = (userInfo) => async (dispatch, getState) => {
+export const cmsLogin = (userInfo, callBack) => async (dispatch, getState) => {
     try {
         let resData = await CMS_Login(userInfo);
         //  save userinfo into localstorage
-        sessionStorage.setItem('AUTH_INFO', JSON.stringify(resData.data));
+        sessionStorage.setItem('AUTH_INFO', resData.data.token);
         dispatch({
-            type: SET_USER_INFO,
+            type: SET_AUTH_INFO,
             data: resData.data
         });
+
+        typeof callBack == 'function' && callBack();
     } catch (err) {
-        message.error(err.info);
+        message.error(err.message);
         console.log(err);
     }
 };

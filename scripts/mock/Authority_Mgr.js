@@ -20,7 +20,8 @@ module.exports = {
                 key: '1-3',
                 title: 'page3',
                 icon: 'user',
-                path: '/page3'
+                path: '/page3',
+                defaultShow: true
             }]
         }, {
             key: '2',

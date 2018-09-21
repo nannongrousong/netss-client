@@ -14,5 +14,10 @@ module.exports = {
         title: 'XX管理系统',
         template: 'src/common/index.html',
         favicon: 'src/app/favicon.ico'
+    }],
+    proxy: [{
+        router: '/api',
+        target: 'http://localhost:81',
+        pathRewrite: { '^/api': '/' }
     }]
 }
