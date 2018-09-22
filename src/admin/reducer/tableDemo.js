@@ -1,4 +1,4 @@
-import { LIST_DATA, ADD_DATA, EDIT_DATA, DEL_DATA } from '../actionType/tableDemo';
+import { LIST_DATA, ADD_DATA, EDIT_DATA, DEL_DATA } from 'ADMIN_ACTIONTYPE/tableDemo';
 
 const initialState = [{
     key: '1',
@@ -14,60 +14,6 @@ const initialState = [{
     tags: ['student'],
 }, {
     key: '3',
-    name: '广州',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['doctor', 'nurse'],
-},{
-    key: '4',
-    name: '张三',
-    age: 32,
-    address: '北京',
-    tags: ['teacher'],
-}, {
-    key: '5',
-    name: '李四',
-    age: 42,
-    address: '上海',
-    tags: ['student'],
-}, {
-    key: '6',
-    name: '广州',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['doctor', 'nurse'],
-}, {
-    key: '7',
-    name: '张三',
-    age: 32,
-    address: '北京',
-    tags: ['teacher'],
-}, {
-    key: '8',
-    name: '李四',
-    age: 42,
-    address: '上海',
-    tags: ['student'],
-}, {
-    key: '9',
-    name: '广州',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['doctor', 'nurse'],
-}, {
-    key: '10',
-    name: '张三',
-    age: 32,
-    address: '北京',
-    tags: ['teacher'],
-}, {
-    key: '11',
-    name: '李四',
-    age: 42,
-    address: '上海',
-    tags: ['student'],
-}, {
-    key: '12',
     name: '广州',
     age: 32,
     address: 'Sidney No. 1 Lake Park',

@@ -3,6 +3,7 @@ import { Layout } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import styles from 'ADMIN_STYLES/index.less';
 
 import { initNavMenu, setActiveTab, closeNavTab, closeOtherNavTab, closeAllNavTab } from 'ADMIN_ACTION/homeNav';
 import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
@@ -110,7 +111,8 @@ class Index extends Component {
                         <NavHeader
                             collapsed={collapsed}
                             handleCollapse={this.handleCollapse} />
-                        <Content>
+                        <Content
+                            className={styles.content}>
                             <NavTab
                                 handleTabsEdit={this.handleTabsEdit}
                                 handleTabClick={this.handleTabClick}

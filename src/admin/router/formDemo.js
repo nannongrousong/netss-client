@@ -3,9 +3,9 @@ import Loading from 'ADMIN_COMPONENT/loading';
 
 
 export default [{
-    path: '/page2',
+    path: '/formDemo',
     component: Loadable({
-        loader: () => import('ADMIN_PAGES/page2'),
+        loader: () => import('ADMIN_PAGES/formDemo'),
         loading: Loading
     })
 }];

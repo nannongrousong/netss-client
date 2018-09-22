@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { LIST_DATA, ADD_DATA, EDIT_DATA, DEL_DATA } from '../../actionType/tableDemo';
+import { LIST_DATA, ADD_DATA, EDIT_DATA, DEL_DATA } from 'ADMIN_ACTIONTYPE/tableDemo';
 
 import UserTable from './userTable';
 

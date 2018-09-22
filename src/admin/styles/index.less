@@ -19,6 +19,35 @@
     padding: 0;
 }
 
+.content { 
+    height: 100%;
+    overflow: hidden;
+
+    :global{
+        .ant-tabs {
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+
+            .ant-tabs-bar {
+                flex: 1 1 40px;
+                margin: 0;
+            }
+
+            .ant-tabs-content {
+                flex: 1 1 auto;
+                overflow: hidden;
+                height: 100%;
+
+                .ant-tabs-tabpane {
+                    height: 100%;
+                }
+            }
+        }
+    }
+}
+
 .switch-icon {
     line-height: 64px !important;
     font-size: 20px;

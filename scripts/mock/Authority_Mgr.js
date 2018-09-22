@@ -8,14 +8,14 @@ module.exports = {
             icon: 'user',
             children: [{
                 key: '1-1',
-                title: '表格事例',
+                title: '数据表事例',
                 icon: 'user',
                 path: '/tableDemo'
             }, {
                 key: '1-2',
-                title: 'page2',
+                title: '表单事例',
                 icon: 'user',
-                path: '/page2'
+                path: '/formDemo'
             }, {
                 key: '1-3',
                 title: 'page3',
