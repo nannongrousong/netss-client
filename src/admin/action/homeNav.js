@@ -15,7 +15,7 @@ export const setNavTab = () => async (dispatch, getState) => {
     }
 };
 
-export const initNavMenu = (callBack) => async (dispatch, getState) => {
+export const initNavMenu = (initPath, callBack) => async (dispatch, getState) => {
     try {
         let resData = await Load_User_Menus();
         dispatch({
@@ -23,22 +23,41 @@ export const initNavMenu = (callBack) => async (dispatch, getState) => {
             data: resData.data
         });
 
-        typeof callBack == 'function' && callBack();
+        let { navMenu } = getState().homeNav;
+        let routeInfo = null;
+
+        if (initPath == '/index') {
+            routeInfo = getFirstShowPage(navMenu) || _firstValidPath;
+            _firstValidPath = null;
+        } else {
+            routeInfo = getRouteInfo(initPath, navMenu);
+        }
+
+        let activeRoute = routeInfo ? routeInfo.path : '/404';
+
+        dispatch({
+            type: ACTIVE_TAB,
+            data: {
+                activeRoute,
+                navTab: routeInfo ? [routeInfo] : []
+            }
+        });
+
+        typeof callBack == 'function' && callBack(activeRoute);
     } catch (err) {
         message.error(err.message);
         console.log(err);
     }
 };
 
-//  可以通过key或path确定tab。事实上大多数情况下path也可以唯一确定，但导航存在嵌套的情况下，某些菜单不存在path值
-const getRouteByField = (fieldKey, fieldValue, routes) => {
+const getRouteInfo = (path, routes) => {
     for (let i = 0; i < routes.length; i++) {
-        if (routes[i][fieldKey] == fieldValue) {
+        if (routes[i]['path'] == path) {
             return routes[i];
         }
 
         if (routes[i].children) {
-            let tempRes = getRouteByField(fieldKey, fieldValue, routes[i].children);
+            let tempRes = getRouteInfo(path, routes[i].children);
             if (tempRes) {
                 return tempRes;
             }
@@ -47,11 +66,11 @@ const getRouteByField = (fieldKey, fieldValue, routes) => {
 };
 
 //  找第一个显示的tab页，若没有设置，则取第一个有效的path
-let _defaultRes = null;
+let _firstValidPath = null;
 const getFirstShowPage = (routes) => {
     for (let i = 0; i < routes.length; i++) {
-        if (!_defaultRes && routes[i].path) {
-            _defaultRes = routes[i];
+        if (!_firstValidPath && routes[i].path) {
+            _firstValidPath = routes[i];
         }
 
         if (routes[i] && routes[i].defaultShow) {
@@ -67,80 +86,67 @@ const getFirstShowPage = (routes) => {
     }
 };
 
+/**
+ * 
+ * @param {路由路径 path} fieldKey 
+ * @param {回调函数，送出查询到的path供页面跳转} callBack 
+ */
+export const setActiveTab = (tabPath, callBack) => (dispatch, getState) => {
+    let { navTab, navMenu } = getState().homeNav;
+    let routeInfo = getRouteInfo(tabPath, navMenu);
 
-export const setActiveTab = (fieldKey, fieldValue, callBack) => (dispatch, getState) => {
-    let { navTab: oldNavTab, navMenu } = getState().homeNav;
-    let navTab = oldNavTab.slice();
-    let routeInfo = null;
-
-    //  默认首页
-    if (fieldKey == 'path' && fieldValue == '/index') {
-        routeInfo = getFirstShowPage(navMenu) || _defaultRes;
-        _defaultRes= null;
-    } else {
-        routeInfo = getRouteByField(fieldKey, fieldValue, navMenu);
-    }
-
-    let { key, path } = routeInfo;
-
-    let resTab = navTab.find((tab) => tab.key == key);
-
-    if (!resTab) {
-        navTab.push(routeInfo);
-    }
+    let { path } = routeInfo;
+    let resTab = navTab.find((tab) => tab.path == path);
 
     dispatch({
         type: ACTIVE_TAB,
         data: {
-            activeRoute: key,
-            navTab
+            activeRoute: path,
+            navTab: !resTab ? [...navTab, routeInfo] : navTab
         }
     });
 
     typeof callBack == 'function' && callBack(path);
 };
 
-export const closeNavTab = (routeKey, callBack) => (dispatch, getState) => {
-    let { navTab: oldNavTab } = getState().homeNav;
+export const closeNavTab = (tabPath, callBack) => (dispatch, getState) => {
+    let { navTab, activeRoute } = getState().homeNav;
     let newPath = '';
+    let tabIndex = navTab.findIndex((route) => route.path == tabPath);
 
-    let activeRoute = '';
-    let tabIndex = oldNavTab.findIndex((route) => route.key == routeKey);
-    // not the last one
-    if (tabIndex != oldNavTab.length - 1) {
-        activeRoute = oldNavTab[tabIndex + 1].key;
-        newPath = oldNavTab[tabIndex + 1].path;
-    } else {
-        if (oldNavTab.length == 1) {
-            activeRoute = '';
-            newPath = '';
+    //  关闭的是当前激活的
+    if (tabPath == activeRoute) {
+        if (tabIndex == navTab.length - 1) {
+            //  当前激活的是最后一个tab页，取相邻左边一个
+            //  考虑仅剩下一个情况
+            newPath = (navTab.length == 1) ? '' : navTab[tabIndex - 1].path;
         } else {
-            activeRoute = oldNavTab[tabIndex - 1].key;
-            newPath = oldNavTab[tabIndex - 1].path;
+            //  当前激活的非最后一个tab页，取相邻右边一个
+            newPath = navTab[tabIndex + 1].path;
         }
+    } else {
+        newPath = activeRoute;
     }
-
-    let navTab = [...oldNavTab.slice(0, tabIndex), ...oldNavTab.slice(tabIndex + 1, oldNavTab.length)];
 
     dispatch({
         type: CLOSE_NAV_TAB,
         data: {
-            activeRoute,
-            navTab
+            activeRoute: newPath,
+            navTab: [...navTab.slice(0, tabIndex), ...navTab.slice(tabIndex + 1, navTab.length)]
         }
     });
 
     typeof callBack == 'function' && callBack(newPath);
 };
 
-export const closeOtherNavTab = (routeKey) => (dispatch, getState) => {
+export const closeOtherNavTab = (tabPath) => (dispatch, getState) => {
     let { navMenu } = getState().homeNav;
-    let routeInfo = getRouteByField('key', routeKey, navMenu);
+    let routeInfo = getRouteInfo(tabPath, navMenu);
 
     dispatch({
         type: CLOSE_NAV_OTHER_TAB,
         data: {
-            activeRoute: routeKey,
+            activeRoute: tabPath,
             navTab: [routeInfo]
         }
     });

@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Tabs, Dropdown, Icon, Menu } from 'antd';
+import Exception from 'ADMIN_COMPONENT_EXCEPTION';
 import PropTypes from 'prop-types';
 
 const { TabPane } = Tabs;
@@ -16,8 +17,15 @@ class NavTab extends Component {
             </Menu>
         );
 
+
+        console.log('children', children);
+        console.log('navTab', navTab);
+        console.log('activeRoute', activeRoute);
+
         return (
-            <Tabs
+            activeRoute == '/404'
+            ? <Exception type='404' homePath='/admin/index' />
+            : <Tabs
                 hideAdd
                 activeKey={activeRoute}
                 onTabClick={handleTabClick}
@@ -32,11 +40,11 @@ class NavTab extends Component {
                 {
                     navTab.map((tab) => (
                         <TabPane tab={
-                            <Dropdown overlay={tabOperMenus(tab.key)} trigger={['contextMenu']}>
+                            <Dropdown overlay={tabOperMenus(tab.path)} trigger={['contextMenu']}>
                                 <div style={{ userSelect: 'none', display: 'inline-block' }}>{tab.title}</div>
                             </Dropdown>
-                        } key={tab.key} closable>
-                            {tab.key == activeRoute && <Fragment><p>当前tab页信息{JSON.stringify(tab)}</p><div>{children}</div></Fragment>}
+                        } key={tab.path} closable>
+                            {tab.path == activeRoute && <Fragment><p>当前tab页信息{JSON.stringify(tab)}</p><div>{children}</div></Fragment>}
                         </TabPane>
                     ))
                 }

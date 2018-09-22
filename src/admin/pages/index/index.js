@@ -27,10 +27,15 @@ class Index extends Component {
     }
 
     componentDidMount() {
+        //  用户主动刷新了页面
         if (this.IS_LOGIN) {
-            const { setActiveTab, initNavMenu, history: { location: { pathname } } } = this.props;
-            initNavMenu(() => {
-                setActiveTab('path', pathname);
+            const { initNavMenu, history } = this.props;
+            const { location: { pathname } } = history;
+            initNavMenu(pathname, (realPath) => {
+                if (pathname != realPath) {
+                    //  碰到404了
+                    history.push(realPath);
+                }
             });
         }
     }
@@ -41,15 +46,15 @@ class Index extends Component {
         });
     }
 
-    handleTabsEdit = (targetKey, action) => {
-        if (!targetKey) {
+    handleTabsEdit = (targetPath, action) => {
+        if (!targetPath) {
             return;
         }
 
         const { closeNavTab, closeOtherNavTab, closeAllNavTab, history } = this.props;
 
         if (action == 'remove') {
-            closeNavTab(targetKey, (path) => {
+            closeNavTab(targetPath, (path) => {
                 path && history.push(path);
                 this.DO_NOT_HANDLE_TAB_CHANGE = true;
                 setTimeout(() => {
@@ -59,7 +64,7 @@ class Index extends Component {
         }
 
         if (action == 'removeOther') {
-            closeOtherNavTab(targetKey);
+            closeOtherNavTab(targetPath);
         }
 
         if (action == 'removeAll') {
@@ -67,20 +72,19 @@ class Index extends Component {
         }
     }
 
-    handleTabsChange = (tabKey) => {
-        console.log('handleTabsChange');
+    handleTabsChange = (path) => {
         if (!this.DO_NOT_HANDLE_TAB_CHANGE) {
             const { setActiveTab, history } = this.props;
-            setActiveTab('key', tabKey, (path) => {
-                history.push(path);
+            setActiveTab(path, (path2) => {
+                history.push(path2);
             });
         }
     }
 
-    handleMenuClick = ({ key }) => {
+    handleMenuClick = ({ key: path }) => {
         const { history, setActiveTab } = this.props;
-        setActiveTab('key', key, (path) => {
-            history.push(path);
+        setActiveTab(path, (path2) => {
+            history.push(path2);
         });
     }
 
