@@ -130,7 +130,6 @@ class Index extends Component {
                                 </Switch>
                             </NavTab>
                         </Content>
-                        <NavFooter />
                     </Layout>
                 </Layout>
                 : <Redirect to={{ pathname: '/login', state: { from: this.props.history.location.pathname } }}></Redirect>

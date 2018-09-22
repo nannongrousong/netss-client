@@ -3,9 +3,9 @@ import Loading from 'ADMIN_COMPONENT/loading';
 
 
 export default [{
-    path: '/page1',
+    path: '/tableDemo',
     component: Loadable({
-        loader: () => import('ADMIN_PAGES/page1'),
+        loader: () => import('ADMIN_PAGES/tableDemo'),
         loading: Loading
     })
 }];

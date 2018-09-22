@@ -79,7 +79,7 @@ class UserTable extends Component {
 
         return (
             <div>
-                <Button onClick={this.startAddUser}>添加用户</Button>
+                <Button onClick={this.startAddUser} className='mb-16'>添加用户</Button>
                 <Table
                     {...this.props}
                     rowKey={'key'}

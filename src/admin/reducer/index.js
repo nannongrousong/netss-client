@@ -1,11 +1,11 @@
-import tableData from './tableData'; 
+import tableDemo from './tableDemo'; 
 import homeNav from './homeNav';
 import authInfo from './authInfo';
 
 import { combineReducers }  from 'redux';
 
 export default combineReducers({
-    tableData,
+    tableDemo,
     authInfo,
     homeNav
 });

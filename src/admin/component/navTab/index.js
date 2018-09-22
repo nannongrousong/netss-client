@@ -44,7 +44,7 @@ class NavTab extends Component {
                                 <div style={{ userSelect: 'none', display: 'inline-block' }}>{tab.title}</div>
                             </Dropdown>
                         } key={tab.path} closable>
-                            {tab.path == activeRoute && <Fragment><p>当前tab页信息{JSON.stringify(tab)}</p><div>{children}</div></Fragment>}
+                            {tab.path == activeRoute && <div style={{padding: '20px'}}><p>当前tab页信息{JSON.stringify(tab)}</p><div>{children}</div></div>}
                         </TabPane>
                     ))
                 }

@@ -8,9 +8,9 @@ module.exports = {
             icon: 'user',
             children: [{
                 key: '1-1',
-                title: 'page1',
+                title: '表格事例',
                 icon: 'user',
-                path: '/page1'
+                path: '/tableDemo'
             }, {
                 key: '1-2',
                 title: 'page2',
