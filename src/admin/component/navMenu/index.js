@@ -7,8 +7,9 @@ const { Item: MenuItem, SubMenu } = Menu;
 const createMenus = (menus) => {
     //  有children忽略path参数
     return menus.map((item) => {
-        const { key, title, icon, children } = item;
+        const { key, title, icon, children, path } = item;
         if (children) {
+            //  SubMenu无path， key使用item.key
             return (
                 <SubMenu
                     key={key}
@@ -17,8 +18,9 @@ const createMenus = (menus) => {
                 </SubMenu>
             );
         } else {
+            //  MenuItem一定有path且唯一，key使用item.path，避免查找工作
             return (
-                <MenuItem key={key} >
+                <MenuItem key={path} >
                     <Icon type={icon} />
                     <span className='nav-text'>{title}</span>
                 </MenuItem>

@@ -36,7 +36,6 @@ module.exports = {
                 key: '2-2',
                 title: '导航2-2',
                 icon: 'user',
-                path: '/2-2',
                 children: [{
                     key: '2-2-1',
                     title: '导航2-2-1',
