@@ -1,5 +1,5 @@
 import tableDemo from './tableDemo';
 import formDemo from './formDemo';
-import page3Router from './page3';
+import chartDemo from './chartDemo';
 
-export default [...tableDemo, ...formDemo, ...page3Router];
+export default [...tableDemo, ...formDemo, ...chartDemo];

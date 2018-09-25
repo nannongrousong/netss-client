@@ -3,9 +3,9 @@ import Loading from 'ADMIN_COMPONENT/loading';
 
 
 export default [{
-    path: '/page3',
+    path: '/chartDemo',
     component: Loadable({
-        loader: () => import('ADMIN_PAGES/page3'),
+        loader: () => import('ADMIN_PAGES/chartDemo'),
         loading: Loading
     })
 }];
