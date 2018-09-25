@@ -5,11 +5,13 @@ import PropTypes from 'prop-types';
 import { Select } from 'antd';
 import { saveChanges } from 'ADMIN_ACTION/formDemo';
 import createFormField from 'COMMON_UTILS/createFormField';
+import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
+@TabWrapper('formDemo')
 class Index extends Component {
     startSubmit = (e) => {
         e.preventDefault();
@@ -133,6 +135,7 @@ Index = connect(
     }),
     {
         saveChanges
+        
     }
 )(Index);
 

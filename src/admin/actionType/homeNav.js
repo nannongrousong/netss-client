@@ -8,3 +8,6 @@ export const ACTIVE_TAB = Symbol('ACTIVE_TAB');
 export const CLOSE_NAV_TAB = Symbol('CLOSE_NAV_TAB');
 export const CLOSE_NAV_OTHER_TAB = Symbol('CLOSE_NAV_OTHER_TAB');
 export const CLOSE_NAV_ALL_TAB = Symbol('CLOSE_NAV_ALL_TAB');
+
+export const ADD_STORE = Symbol('ADD_STORE');
+export const DEL_STORE = Symbol('DEL_STORE');

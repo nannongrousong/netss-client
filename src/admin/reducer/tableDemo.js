@@ -21,19 +21,15 @@ const initialState = [{
 }];
 
 export default (state = initialState, action = {}) => {
-    let index = action.type == EDIT_DATA && state.findIndex((val) => {
-        return val.key == action.record.key;
-    });
-
     switch (action.type) {
         case LIST_DATA:
             return state;
         case ADD_DATA:
-            return [...state, action.record];
+            return action.data;
         case EDIT_DATA:
-            return [...state.slice(0, index), action.record, ...state.slice(index + 1)];
+            return action.data;
         case DEL_DATA:
-            return state.filter((val) => (val.key != action.key));
+            return action.data;
         default:
             return state;
     }

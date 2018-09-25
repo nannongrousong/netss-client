@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { LIST_DATA, ADD_DATA, EDIT_DATA, DEL_DATA } from 'ADMIN_ACTIONTYPE/tableDemo';
+import { listData, addData, editData, delData } from 'ADMIN_ACTION/tableDemo';
+import { TabWrapper } from 'ADMIN_PAGES_INDEX';
+import PropTypes from 'prop-types';
 
 import UserTable from './userTable';
-
+@TabWrapper('tableDemo')
 class Index extends Component {
     render() {
         const { tableDemo, listData, editData, addData, delData } = this.props;
@@ -20,26 +22,23 @@ class Index extends Component {
     }
 }
 
+Index.propTypes = {
+    tableDemo: PropTypes.object,
+    listData: PropTypes.func,
+    addData: PropTypes.func,
+    editData: PropTypes.func,
+    delData: PropTypes.func
+};
+
 Index = connect(
     (state) => ({
         tableDemo: state.tableDemo
     }),
     {
-        listData: () => ({
-            type: LIST_DATA
-        }),
-        addData: (record) => ({
-            type: ADD_DATA,
-            record
-        }),
-        editData: (record) => ({
-            type: EDIT_DATA,
-            record
-        }),
-        delData: (key) => ({
-            type: DEL_DATA,
-            key
-        })
+        listData,
+        addData,
+        editData,
+        delData
     })(Index);
 
 export default Index;

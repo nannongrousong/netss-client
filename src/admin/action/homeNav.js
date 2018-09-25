@@ -1,4 +1,4 @@
-import { SET_NAV_MENU, SET_NAV_TAB, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB } from 'ADMIN_ACTIONTYPE/homeNav';
+import { SET_NAV_MENU, SET_NAV_TAB, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB, ADD_STORE, DEL_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 import { Load_User_Menus } from 'ADMIN_SERVICE/Authority_Mgr';
 import { message } from 'antd';
 
@@ -136,6 +136,8 @@ export const closeNavTab = (tabPath, callBack) => (dispatch, getState) => {
         }
     });
 
+    delStore(newPath, dispatch, getState);
+
     typeof callBack == 'function' && callBack(newPath);
 };
 
@@ -160,4 +162,28 @@ export const closeAllNavTab = () => (dispatch) => {
             navTab: []
         }
     });
+};
+
+export const addStore = (path, storeName) => (dispatch, getState) => {
+    const { storeMap } = getState().homeNav;
+    if (storeMap[path] == undefined) {
+        dispatch({
+            type: ADD_STORE,
+            data: {
+                storeMap: { ...storeMap, [path]: storeName }
+            }
+        });
+    }
+};
+
+const delStore = (path, dispatch, getState) => {
+    const { storeMap } = getState().homeNav;
+    const storeName = storeMap[path];
+    dispatch({
+        type: DEL_STORE,
+        data: {
+            storeMap: {...storeMap, [path]: undefined}
+        }
+    });
+    console.log('delstore');
 };

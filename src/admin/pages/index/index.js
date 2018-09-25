@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styles from 'ADMIN_STYLES/index.less';
 
-import { initNavMenu, setActiveTab, closeNavTab, closeOtherNavTab, closeAllNavTab } from 'ADMIN_ACTION/homeNav';
+import { initNavMenu, setActiveTab, closeNavTab, closeOtherNavTab, closeAllNavTab, addStore } from 'ADMIN_ACTION/homeNav';
 import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
 import NavSlider from 'ADMIN_COMPONENT_NAVSLIDER';
 import NavFooter from 'ADMIN_COMPONENT_NAVFOOTER';
@@ -165,5 +165,42 @@ Index = connect(
         closeAllNavTab
     }
 )(Index);
-
 export default Index;
+
+
+export const TabWrapper = (storeName) => {
+    return (WrappedComp) => {
+        return connect(
+            (state) => ({
+                storeMap: state.homeNav.storeMap
+            })
+            ,
+            {
+                addStore
+            })(class HOC extends Component {
+                componentDidMount() {
+                    const { addStore, history: { location: { pathname } } } = this.props;
+                    addStore(pathname, storeName);
+                }
+
+                componentWillUnmount() {
+                    //  真正清空store
+                    const { storeMap, history: { location: { pathname } } } = this.props;
+                    if (pathname && !storeMap[pathname] ) {
+                        //  
+                    }
+                    console.log('HOC.componentWillUnmount');
+                }
+
+                render() {
+                    return <WrappedComp {...this.props} />;
+                }
+            });
+    };
+};
+
+
+
+
+
+
