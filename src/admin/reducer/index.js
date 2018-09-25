@@ -1,13 +1,27 @@
-import tableDemo from './tableDemo'; 
+import tableDemo from './tableDemo';
 import formDemo from './formDemo';
 import homeNav from './homeNav';
 import authInfo from './authInfo';
 
-import { combineReducers }  from 'redux';
+import { RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
+import reduceReducers from 'reduce-reducers';
 
-export default combineReducers({
+import { combineReducers } from 'redux';
+
+const commonReducer = (state = {}, action) => {
+    switch (action.type) {
+        case RESET_TAB_STORE:
+            return { ...state, [action.storeName]: undefined };
+        default:
+            return state;
+    }
+};
+
+const combineReducer = combineReducers({
     tableDemo,
     formDemo,
     authInfo,
     homeNav
 });
+
+export default reduceReducers(commonReducer, combineReducer);

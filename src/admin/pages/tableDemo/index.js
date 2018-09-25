@@ -23,7 +23,7 @@ class Index extends Component {
 }
 
 Index.propTypes = {
-    tableDemo: PropTypes.object,
+    tableDemo: PropTypes.array,
     listData: PropTypes.func,
     addData: PropTypes.func,
     editData: PropTypes.func,
