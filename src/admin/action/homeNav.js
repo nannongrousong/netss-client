@@ -110,7 +110,7 @@ export const setActiveTab = (tabPath, callBack) => (dispatch, getState) => {
 };
 
 export const closeNavTab = (tabPath, callBack) => (dispatch, getState) => {
-    let { navTab, activeRoute } = getState().homeNav;
+    let { navTab, activeRoute, storeMap } = getState().homeNav;
     let newPath = '';
     let tabIndex = navTab.findIndex((route) => route.path == tabPath);
 
@@ -136,15 +136,13 @@ export const closeNavTab = (tabPath, callBack) => (dispatch, getState) => {
         }
     });
 
-    debugger;
-
-    delStore(tabPath, dispatch, getState);
+    resetTabStore([storeMap[tabPath]], dispatch);
 
     typeof callBack == 'function' && callBack(newPath);
 };
 
 export const closeOtherNavTab = (tabPath) => (dispatch, getState) => {
-    let { navMenu } = getState().homeNav;
+    let { navMenu, navTab, storeMap } = getState().homeNav;
     let routeInfo = getRouteInfo(tabPath, navMenu);
 
     dispatch({
@@ -154,9 +152,20 @@ export const closeOtherNavTab = (tabPath) => (dispatch, getState) => {
             navTab: [routeInfo]
         }
     });
+
+    let storeNames = [];
+    navTab.forEach((tab) => {
+        if (tab.path != tabPath) {
+            storeNames.push(storeMap[tab.path]);
+        }
+    });
+    resetTabStore(storeNames, dispatch);
 };
 
-export const closeAllNavTab = () => (dispatch) => {
+export const closeAllNavTab = () => (dispatch, getState) => {
+    let { navTab, storeMap } = getState().homeNav;
+    let storeNames = navTab.map((tab) => (storeMap[tab.path]));
+
     dispatch({
         type: CLOSE_NAV_ALL_TAB,
         data: {
@@ -164,6 +173,8 @@ export const closeAllNavTab = () => (dispatch) => {
             navTab: []
         }
     });
+
+    resetTabStore(storeNames, dispatch);
 };
 
 export const addStore = (path, storeName) => (dispatch, getState) => {
@@ -178,11 +189,9 @@ export const addStore = (path, storeName) => (dispatch, getState) => {
     }
 };
 
-const delStore = (path, dispatch, getState) => {
-    const { storeMap } = getState().homeNav;
-    const storeName = storeMap[path];
+const resetTabStore = (storeNames, dispatch) => {
     dispatch({
         type: RESET_TAB_STORE,
-        storeName
+        storeNames
     });
 };
