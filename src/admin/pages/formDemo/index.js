@@ -13,15 +13,22 @@ const { RangePicker } = DatePicker;
 
 @TabWrapper('formDemo')
 class Index extends Component {
-    startSubmit = (e) => {
+    handleFormSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) {
                 return;
             }
 
-            //  
         });
+    }
+
+    handleFormReset = (e) => {
+        e.preventDefault();
+        const { form: { resetFields, setFieldsValue } } = this.props;
+        resetFields();
+        // 手动清空，触发form的onValuesChange事件
+        setFieldsValue({ demoName: '' });
     }
 
     render() {
@@ -52,7 +59,7 @@ class Index extends Component {
 
         return (
             <div>
-                <Form onSubmit={this.startSubmit}>
+                <Form onSubmit={this.handleFormSubmit} onReset={this.handleFormReset}>
                     <Row>
                         <Col span={6}>
                             <FormItem {...formItemLayout} label='姓名'>
@@ -135,7 +142,7 @@ Index = connect(
     }),
     {
         saveChanges
-        
+
     }
 )(Index);
 

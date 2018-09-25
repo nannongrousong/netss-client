@@ -18,9 +18,9 @@ module.exports = {
                 path: '/formDemo'
             }, {
                 key: '1-3',
-                title: 'page3',
+                title: '图表事例',
                 icon: 'user',
-                path: '/page3',
+                path: '/chartDemo',
                 defaultShow: true
             }]
         }, {
