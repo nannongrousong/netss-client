@@ -25,13 +25,12 @@ class UserTable extends Component {
     }
 
     startDelUser = (key) => {
-        const { delData, listData } = this.props;
+        const { delData } = this.props;
         Modal.confirm({
             title: '信息',
             content: '您确定要删除当前选中用户吗？',
             onOk: () => {
                 delData(key);
-                listData();
             }
         });
     }

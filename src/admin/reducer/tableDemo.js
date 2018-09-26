@@ -23,6 +23,7 @@ const initialState = [{
 export default (state = initialState, action = {}) => {
     switch (action.type) {
         case LIST_DATA:
+            //  feat
             return state;
         case ADD_DATA:
             return action.data;

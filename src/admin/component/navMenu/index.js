@@ -13,7 +13,7 @@ const createMenus = (menus) => {
             return (
                 <SubMenu
                     key={key}
-                    title={<span><Icon type='user' /><span>{title}</span></span>}>
+                    title={<span><Icon type={icon} /><span>{title}</span></span>}>
                     {createMenus(children)}
                 </SubMenu>
             );

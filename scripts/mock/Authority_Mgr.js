@@ -4,50 +4,83 @@ module.exports = {
         info: '成功',
         data: [{
             key: '1',
+            type: 'group',
             title: 'Antdesign Demo',
-            icon: 'user',
+            icon: 'star',
             children: [{
                 key: '1-1',
+                type: 'leaf',
                 title: '数据表事例',
-                icon: 'user',
+                icon: 'tag',
                 path: '/demo/table'
             }, {
                 key: '1-2',
+                type: 'leaf',
                 title: '表单事例',
-                icon: 'user',
+                icon: 'tag',
                 path: '/demo/form'
             }, {
                 key: '1-3',
+                type: 'leaf',
                 title: '图表事例',
-                icon: 'user',
+                icon: 'tag',
                 path: '/demo/chart',
                 defaultShow: true
             }]
         }, {
             key: '2',
-            title: '导航2',
-            icon: 'user',
+            type: 'group',
+            title: '系统管理',
+            icon: 'dashboard',
             children: [{
                 key: '2-1',
-                title: '导航2-1',
-                icon: 'user',
-                path: '/2-1'
+                type: 'leaf',
+                title: '菜单配置',
+                icon: 'tag',
+                path: '/sysMgr/menu'
+            }]
+        }]
+    }, 
+    'GET /api/Authority_Mgr/Load_Sys_Menus': {
+        code: 0,
+        info: '成功',
+        data: [{
+            key: '1',
+            type: 'group',
+            title: 'Antdesign Demo',
+            icon: 'star',
+            children: [{
+                key: '1-1',
+                type: 'leaf',
+                title: '数据表事例',
+                icon: 'tag',
+                path: '/demo/table'
             }, {
-                key: '2-2',
-                title: '导航2-2',
-                icon: 'user',
-                children: [{
-                    key: '2-2-1',
-                    title: '导航2-2-1',
-                    icon: 'user',
-                    path: '/2-2-1'
-                }]
-            },]
+                key: '1-2',
+                type: 'leaf',
+                title: '表单事例',
+                icon: 'tag',
+                path: '/demo/form'
+            }, {
+                key: '1-3',
+                type: 'leaf',
+                title: '图表事例',
+                icon: 'tag',
+                path: '/demo/chart',
+                defaultShow: true
+            }]
         }, {
-            key: '3',
-            title: '导航3',
-            icon: 'upload',
-            path: '/3'
+            key: '2',
+            type: 'group',
+            title: '系统管理',
+            icon: 'dashboard',
+            children: [{
+                key: '2-1',
+                type: 'leaf',
+                title: '菜单配置',
+                icon: 'tag',
+                path: '/sysMgr/menu'
+            }]
         }]
     }
 };

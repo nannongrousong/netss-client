@@ -2,9 +2,9 @@ import Loadable from 'react-loadable';
 import Loading from 'ADMIN_COMPONENT/loading';
 
 export default [{
-    path: '/demo/table',
+    path: '/sysMgr/menu',
     component: Loadable({
-        loader: () => import('ADMIN_PAGES_DEMO/table'),
+        loader: () => import('ADMIN_PAGES_SYSMGR/menu'),
         loading: Loading
     })
 }];

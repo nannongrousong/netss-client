@@ -1,5 +1,5 @@
-import tableDemo from './tableDemo';
-import formDemo from './formDemo';
-import chartDemo from './chartDemo';
+import demo from './demo';
+import sysMgr from './sysMgr';
 
-export default [...tableDemo, ...formDemo, ...chartDemo];
+
+export default [...demo, ...sysMgr];

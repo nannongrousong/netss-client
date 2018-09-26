@@ -1,4 +1,4 @@
-import { SET_NAV_MENU, SET_NAV_TAB, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB, ADD_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
+import { SET_NAV_MENU, SET_NAV_TAB, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB, EDIT_TAB_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 import { Load_User_Menus } from 'ADMIN_SERVICE/Authority_Mgr';
 import { message } from 'antd';
 
@@ -136,7 +136,7 @@ export const closeNavTab = (tabPath, callBack) => (dispatch, getState) => {
         }
     });
 
-    resetTabStore([storeMap[tabPath]], dispatch);
+    resetTabStore([storeMap[tabPath].storeName], dispatch);
 
     typeof callBack == 'function' && callBack(newPath);
 };
@@ -156,7 +156,7 @@ export const closeOtherNavTab = (tabPath) => (dispatch, getState) => {
     let storeNames = [];
     navTab.forEach((tab) => {
         if (tab.path != tabPath) {
-            storeNames.push(storeMap[tab.path]);
+            storeNames.push(storeMap[tab.path].storeName);
         }
     });
     resetTabStore(storeNames, dispatch);
@@ -164,7 +164,7 @@ export const closeOtherNavTab = (tabPath) => (dispatch, getState) => {
 
 export const closeAllNavTab = () => (dispatch, getState) => {
     let { navTab, storeMap } = getState().homeNav;
-    let storeNames = navTab.map((tab) => (storeMap[tab.path]));
+    let storeNames = navTab.map((tab) => (storeMap[tab.path].storeName));
 
     dispatch({
         type: CLOSE_NAV_ALL_TAB,
@@ -177,13 +177,13 @@ export const closeAllNavTab = () => (dispatch, getState) => {
     resetTabStore(storeNames, dispatch);
 };
 
-export const addStore = (path, storeName) => (dispatch, getState) => {
+export const editTabStore = (path, storeName) => (dispatch, getState) => {
     const { storeMap } = getState().homeNav;
-    if (storeMap[path] == undefined) {
+    if (!(storeMap[path] && !storeMap[path].firstIn)) {
         dispatch({
-            type: ADD_STORE,
+            type: EDIT_TAB_STORE,
             data: {
-                storeMap: { ...storeMap, [path]: storeName }
+                storeMap: { ...storeMap, [path]: { storeName, firstIn: !storeMap[path] } }
             }
         });
     }

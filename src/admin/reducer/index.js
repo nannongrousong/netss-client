@@ -2,6 +2,7 @@ import tableDemo from './tableDemo';
 import formDemo from './formDemo';
 import homeNav from './homeNav';
 import authInfo from './authInfo';
+import sysMgr from './sysMgr';
 
 import { RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 import reduceReducers from 'reduce-reducers';
@@ -26,7 +27,8 @@ const combineReducer = combineReducers({
     tableDemo,
     formDemo,
     authInfo,
-    homeNav
+    homeNav,
+    sysMgr
 });
 
 export default reduceReducers(commonReducer, combineReducer);

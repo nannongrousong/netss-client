@@ -7,6 +7,10 @@ import PropTypes from 'prop-types';
 import UserTable from './userTable';
 @TabWrapper('tableDemo')
 class Index extends Component {
+    componentDidMount() {
+        const { tabFirstIn } = this.props;
+    }
+
     render() {
         const { tableDemo, listData, editData, addData, delData } = this.props;
         return (

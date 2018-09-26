@@ -9,6 +9,7 @@ export const addData = (record) => (dispatch, getState) => {
 };
 
 export const listData = () => (dispatch, getState) => {
+    //  待改进  请求数据
     dispatch({
         type: LIST_DATA
     });
