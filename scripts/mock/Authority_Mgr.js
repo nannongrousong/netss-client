@@ -4,23 +4,23 @@ module.exports = {
         info: '成功',
         data: [{
             key: '1',
-            title: '导航1',
+            title: 'Antdesign Demo',
             icon: 'user',
             children: [{
                 key: '1-1',
                 title: '数据表事例',
                 icon: 'user',
-                path: '/tableDemo'
+                path: '/demo/table'
             }, {
                 key: '1-2',
                 title: '表单事例',
                 icon: 'user',
-                path: '/formDemo'
+                path: '/demo/form'
             }, {
                 key: '1-3',
                 title: '图表事例',
                 icon: 'user',
-                path: '/chartDemo',
+                path: '/demo/chart',
                 defaultShow: true
             }]
         }, {

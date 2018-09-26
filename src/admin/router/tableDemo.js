@@ -1,11 +1,10 @@
 import Loadable from 'react-loadable';
 import Loading from 'ADMIN_COMPONENT/loading';
 
-
 export default [{
-    path: '/tableDemo',
+    path: '/demo/table',
     component: Loadable({
-        loader: () => import('ADMIN_PAGES/tableDemo'),
+        loader: () => import('ADMIN_PAGES_DEMO/table'),
         loading: Loading
     })
 }];
