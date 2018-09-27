@@ -34,7 +34,7 @@ class InfoModal extends Component {
     }
 
     render() {
-        const { record, closeModal, form: { getFieldDecorator } } = this.props;
+        const { record, closeModal, modalTitle, form: { getFieldDecorator } } = this.props;
 
         const formItemLayout = {
             labelCol: {
@@ -52,7 +52,7 @@ class InfoModal extends Component {
                 onOk={this.saveData}
                 onCancel={closeModal}
                 visible={true}
-                title={record ? '修改' : '新增'}>
+                title={modalTitle}>
                 <Form>
                     {
                         getFieldDecorator(`${fieldPrefix}key`)(
@@ -69,6 +69,16 @@ class InfoModal extends Component {
                             <Input className='d-none' />
                         )
                     }
+
+                    <FormItem
+                        {...formItemLayout}
+                        label='上级导航' >
+                        {
+                            getFieldDecorator(`${fieldPrefix}parentTitle`)(
+                                <Input disabled />
+                            )
+                        }
+                    </FormItem>
 
                     <FormItem
                         {...formItemLayout}

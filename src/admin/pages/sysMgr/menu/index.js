@@ -12,12 +12,13 @@ const { TreeNode } = Tree;
 class Index extends Component {
     state = {
         showModal: false,
-        record: null
+        record: null,
+        modalTitle: ''
     }
 
     componentDidMount() {
-        const { listSysMenu } = this.props;
-        listSysMenu();
+        const { listSysMenu, tabFirstIn } = this.props;
+        tabFirstIn && listSysMenu();
     }
 
     handleSave = () => {
@@ -27,30 +28,51 @@ class Index extends Component {
     editMenu = (item) => {
         this.setState({
             showModal: true,
-            record: item
+            record: {
+                ...item,
+                parentTitle: item.title
+            },
+            modalTitle: '修改',
         });
     }
 
-    addSubMenu = (parentKey) => {
+    addSubMenu = (parentKey, type, modalTitle, parentTitle) => {
         this.setState({
+            modalTitle,
             showModal: true,
             record: {
                 parentKey,
-                type: 'leaf'
+                type,
+                parentTitle
             }
         });
     }
 
     renderTitle = (item) => {
-        const { title, path, key } = item;
+        const { title, path, key, type } = item;
         return (
             <Fragment>
                 <span className='color-cyan'>{title}</span>
-                {path && <span className='ml-16'>{`(链接:${path})`}</span>}
-                <span className='ml-16'>|</span>
-                <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, key)}>添加子菜单</a>
+                {type == 'leaf' && <span className='ml-16'>{`(链接:${path})`}</span>}
+
+                {
+                    ['leaf', 'resource'].includes(type) &&
+                    <Fragment>
+                        <span className='ml-16'>|</span>
+                        <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, key, 'leaf', '添加子菜单', title)}>添加子菜单</a>
+                    </Fragment>
+                }
+
                 <span className='ml-16'>|</span>
                 <a href='#' className='ml-16' onClick={this.editMenu.bind(this, item)}>修改</a>
+
+                {
+                    type == 'leaf' &&
+                    <Fragment>
+                        <span className='ml-16'>|</span>
+                        <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, key, 'resource', '添加功能按钮', title)}>添加功能按钮</a>
+                    </Fragment>
+                }
             </Fragment>
         );
     };
@@ -84,13 +106,13 @@ class Index extends Component {
 
     render() {
         const { sysMenu, editSysMenu, addSysMenu } = this.props;
-        const { showModal, record } = this.state;
+        const { showModal, record, modalTitle } = this.state;
 
         return (
             <div>
                 <Button type='primary' onClick={this.handleSave}>保存</Button>
                 {
-                    sysMenu && <Tree
+                    sysMenu && sysMenu.length > 0 && <Tree
                         defaultExpandAll
                         showLine
                         showIcon >
@@ -100,6 +122,7 @@ class Index extends Component {
 
                 {
                     showModal && <MenuInfo
+                        modalTitle={modalTitle}
                         record={record}
                         closeModal={this.closeModal}
                         editSysMenu={editSysMenu}
@@ -114,7 +137,8 @@ Index.propTypes = {
     sysMenu: PropTypes.array,
     listSysMenu: PropTypes.func,
     editSysMenu: PropTypes.func,
-    addSysMenu: PropTypes.func
+    addSysMenu: PropTypes.func,
+    tabFirstIn: PropTypes.bool
 };
 
 
