@@ -1,29 +1,37 @@
-export default async (url, params, isPost = false) => {
+/**
+ * 发起网络请求
+ * @param {请求地址} url 
+ * @param {请求参数} params
+ * @param {请求类型，默认GET} method
+ */
+export default async (url, params, method = 'GET') => {
     url = '/api' + url;
-    params = new URLSearchParams(params);
-
     let response = null;
-    if (isPost) {
+    let commonOptions = {
+        method,
+        headers: {
+            'authorization': `Bearer ${sessionStorage.getItem('AUTH_INFO')}`
+        }
+    };
+    if (['POST', 'PUT'].includes(method)) {
         response = await fetch(url, {
-            method: 'POST',
+            ...commonOptions,
+            body: JSON.stringify(params),
             headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'authorization': `Bearer ${sessionStorage.getItem('AUTH_INFO')}`
-            },
-            body: params.toString()
-        });
-    } else {
-        response = await fetch(url + '?' + params.toString(), {
-            headers: {
-                'authorization': `Bearer ${sessionStorage.getItem('AUTH_INFO')}`
+                ...commonOptions.headers, 
+                'Content-type': 'application/json; charset=UTF-8'
             }
         });
+    } else if (method == 'DELETE') {
+        response = await fetch(`${url}/${params}`, commonOptions);
+    } else {
+        params = new URLSearchParams(params);
+        response = await fetch(url + '?' + params.toString(), commonOptions);
     }
 
     if (response.ok) {
         let data = await response.json();
-        if (data.code == 0) {
+        if (data.code) {
             return data;
         } else {
             throw new Error(data.info);

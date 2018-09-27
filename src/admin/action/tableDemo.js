@@ -1,38 +1,41 @@
-import { ADD_DATA, LIST_DATA, EDIT_DATA, DEL_DATA } from 'ADMIN_ACTIONTYPE/tableDemo';
+import { SET_DATA } from 'ADMIN_ACTIONTYPE/tableDemo';
+import { addTableData, delTableData, editTableData, listTableData } from 'ADMIN_SERVICE/Demo';
+import { message } from 'antd';
 
-export const addData = (record) => (dispatch, getState) => {
-    let oldList = getState().tableDemo;
+export const addData = (record) => async (dispatch, getState) => {
+    let resData1 = await addTableData(record);
+    let resData2 = await listTableData();
+
     dispatch({
-        type: ADD_DATA,
-        data: [...oldList, record]
+        type: SET_DATA,
+        data: resData2.data
     });
 };
 
-export const listData = () => (dispatch, getState) => {
-    //  待改进  请求数据
+export const listData = () => async (dispatch) => {
+    let resData = await listTableData();
     dispatch({
-        type: LIST_DATA
+        type: SET_DATA,
+        data: resData.data
     });
 };
 
-export const editData = (record) => (dispatch, getState) => {
-    let oldList = getState().tableDemo;
-
-    let index = oldList.findIndex((val) => {
-        return val.key == record.key;
-    });
+export const editData = (record) => async (dispatch) => {
+    let resData1 = await editTableData(record);
+    let resData2 = await listTableData();
 
     dispatch({
-        type: EDIT_DATA,
-        data: [...oldList.slice(0, index), record, ...oldList.slice(index + 1)]
+        type: SET_DATA,
+        data: resData2.data
     });
 };
 
-export const delData = (key) => (dispatch, getState) => {
-    let oldList = getState().tableDemo;
+export const delData = (user_id) => async (dispatch) => {
+    let resData1 = await delTableData(user_id);
+    let resData2 = await listTableData();
 
     dispatch({
-        type: DEL_DATA,
-        data: oldList.filter((val) => (val.key != key))
+        type: SET_DATA,
+        data: resData2.data
     });
 };

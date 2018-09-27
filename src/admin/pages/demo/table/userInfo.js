@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Select } from 'antd';
 import { tagsSource } from 'ADMIN_CONFIG_ENUM/roleTags';
 import createFormField from 'COMMON_UTILS/createFormField';
+import { message } from 'antd';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -22,13 +23,17 @@ class UserInfo extends Component {
             }
 
             const { addData, editData, closeModal } = this.props;
-            if (values.key) {
-                editData(values);
+            if (values.user_id) {
+                editData(values).then(closeModal).catch(err => {
+                    message.error(err.message);
+                    console.log(err);
+                });
             } else {
-                values.key = new Date().getTime();
-                addData(values);
+                addData(values).then(closeModal).catch(err => {
+                    message.error(err.message);
+                    console.log(err);
+                });
             }
-            closeModal();
         });
     }
 
@@ -56,7 +61,7 @@ class UserInfo extends Component {
                     <Form>
                         <FormItem>
                             {
-                                getFieldDecorator('key')(
+                                getFieldDecorator('user_id')(
                                     <Input className='d-none' />
                                 )
                             }
@@ -97,7 +102,7 @@ class UserInfo extends Component {
                             label='标签'>
 
                             {
-                                getFieldDecorator('tags', {
+                                getFieldDecorator('tag', {
 
                                 })(
                                     <Select

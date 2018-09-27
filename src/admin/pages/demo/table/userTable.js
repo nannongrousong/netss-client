@@ -24,13 +24,13 @@ class UserTable extends Component {
         });
     }
 
-    startDelUser = (key) => {
+    startDelUser = (user_id) => {
         const { delData } = this.props;
         Modal.confirm({
             title: '信息',
             content: '您确定要删除当前选中用户吗？',
             onOk: () => {
-                delData(key);
+                delData(user_id);
             }
         });
     }
@@ -58,10 +58,10 @@ class UserTable extends Component {
             dataIndex: 'address'
         }, {
             title: '标签',
-            dataIndex: 'tags',
-            render: tags => (
+            dataIndex: 'tag',
+            render: tag => (
                 <span>
-                    {tags && tags.map(tag => <Tag color='blue' key={tag}>{tagsSource[tag]}</Tag>)}
+                    {tag && tag.map(item => <Tag color='blue' key={item}>{tagsSource[item]}</Tag>)}
                 </span>
             )
         }, {
@@ -71,7 +71,7 @@ class UserTable extends Component {
                 <span>
                     <a href='#' onClick={this.startEditUser.bind(this, record)}>修改</a>
                     <Divider type='vertical' />
-                    <a href='#' onClick={this.startDelUser.bind(this, record.key)}>删除</a>
+                    <a href='#' onClick={this.startDelUser.bind(this, record.user_id)}>删除</a>
                 </span>
             )
         }];
@@ -81,7 +81,7 @@ class UserTable extends Component {
                 <Button onClick={this.startAddUser} className='mb-16'>添加用户</Button>
                 <Table
                     {...this.props}
-                    rowKey={'key'}
+                    rowKey={'user_id'}
                     columns={columns} >
                 </Table>
                 {

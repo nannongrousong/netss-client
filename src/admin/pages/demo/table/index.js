@@ -8,15 +8,16 @@ import UserTable from './userTable';
 @TabWrapper('tableDemo')
 class Index extends Component {
     componentDidMount() {
-        const { tabFirstIn } = this.props;
+        const { tabFirstIn, listData } = this.props;
+        tabFirstIn && listData();
     }
 
     render() {
-        const { tableDemo, listData, editData, addData, delData } = this.props;
+        const { tableDemo: { tableData }, listData, editData, addData, delData } = this.props;
         return (
             <div>
                 <UserTable
-                    dataSource={tableDemo}
+                    dataSource={tableData}
                     {...{
                         listData, editData, addData, delData
                     }}
@@ -27,7 +28,7 @@ class Index extends Component {
 }
 
 Index.propTypes = {
-    tableDemo: PropTypes.array,
+    tableDemo: PropTypes.object,
     listData: PropTypes.func,
     addData: PropTypes.func,
     editData: PropTypes.func,

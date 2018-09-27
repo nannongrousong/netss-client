@@ -1,7 +1,6 @@
 export const tagsSource = {
-    student: '学生',
-    teacher: '教师',
-    worker: '工人',
-    nurse: '护士',
-    doctor: '医生'
+    beautiful: '美丽',
+    handsome: '帅',
+    friendly: '友善',
+    generous: '大方'
 };

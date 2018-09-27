@@ -7,12 +7,12 @@ const { Item: MenuItem, SubMenu } = Menu;
 const createMenus = (menus) => {
     //  有children忽略path参数
     return menus.map((item) => {
-        const { key, title, icon, children, path } = item;
+        const { menu_id, title, icon, children, path } = item;
         if (children) {
             //  SubMenu无path， key使用item.key
             return (
                 <SubMenu
-                    key={key}
+                    key={menu_id}
                     title={<span><Icon type={icon} /><span>{title}</span></span>}>
                     {createMenus(children)}
                 </SubMenu>
