@@ -1,1 +1,1 @@
-export const SET_DATA = Symbol('LIST_DATA');
+export const SET_DATA = Symbol('SET_DATA');

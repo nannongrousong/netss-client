@@ -1,5 +1,5 @@
-import { LIST_SYS_MENU, EDIT_SYS_MENU, ADD_SYS_MENU } from 'ADMIN_ACTIONTYPE/sysMgr';
-import { Load_Sys_Menus } from 'ADMIN_SERVICE/Authority_Mgr';
+import { SET_SYS_MENU } from 'ADMIN_ACTIONTYPE/sysMgr';
+import { Add_Sys_Menu, Del_Sys_Menu, Edit_Sys_Menu, List_Sys_Menu, } from 'ADMIN_SERVICE/Sys_Mgr';
 
 const editMenuInfo = (editedMenu, menus) => {
     for (let i in menus) {
@@ -19,11 +19,13 @@ const addMenuInfo = (addedMenu, menus) => {
         if (menus[i].key == addedMenu.parentKey) {
             delete addedMenu.parentKey;
             //  手动修改 group 节点信息
-            menus[i] = {...menus[i], ...{
-                type: 'group',
-                path: undefined
-            }};
-            
+            menus[i] = {
+                ...menus[i], ...{
+                    type: 'group',
+                    path: undefined
+                }
+            };
+
             if (menus[i].children) {
                 menus[i].children.push(addedMenu);
             } else {
@@ -57,9 +59,9 @@ const checkPathValid = (operMenu, menus, isAdd) => {
 };
 
 export const listSysMenu = () => async (dispatch, getState) => {
-    let resData = await Load_Sys_Menus();
+    let resData = await List_Sys_Menu();
     dispatch({
-        type: LIST_SYS_MENU,
+        type: SET_SYS_MENU,
         menu: resData.data
     });
 };
@@ -75,7 +77,7 @@ export const editSysMenu = (editedMenu, callBack) => (dispatch, getState) => {
     editMenuInfo(editedMenu, newMenu);
 
     dispatch({
-        type: EDIT_SYS_MENU,
+        type: SET_SYS_MENU,
         menu: newMenu
     });
 
@@ -94,9 +96,19 @@ export const addSysMenu = (addedMenu, callBack) => (dispatch, getState) => {
     addMenuInfo(addedMenu, newMenu);
 
     dispatch({
-        type: ADD_SYS_MENU,
+        type: SET_SYS_MENU,
         menu: newMenu
     });
 
     callBack && callBack(true);
+};
+
+export const delSysMenu = (menuID) => async (dispatch) => {
+    let resData1 = await Del_Sys_Menu(menuID);
+    let resData2 = await List_Sys_Menu();
+
+    dispatch({
+        type: SET_SYS_MENU,
+        menu: resData2.data
+    });
 };

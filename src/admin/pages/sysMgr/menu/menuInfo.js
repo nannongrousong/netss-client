@@ -60,7 +60,7 @@ class InfoModal extends Component {
                         )
                     }
                     {
-                        getFieldDecorator(`${fieldPrefix}parentKey`)(
+                        getFieldDecorator(`${fieldPrefix}parentID`)(
                             <Input className='d-none' />
                         )
                     }

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Tree, Icon } from 'antd';
+import { Button, Tree, Icon, Modal, message } from 'antd';
 import { connect } from 'react-redux';
-import { listSysMenu, editSysMenu, addSysMenu } from 'ADMIN_ACTION/sysMgr';
+import { listSysMenu, editSysMenu, addSysMenu, delSysMenu } from 'ADMIN_ACTION/sysMgr';
 import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 import PropTypes from 'prop-types';
 import MenuInfo from './menuInfo';
@@ -30,38 +30,49 @@ class Index extends Component {
             showModal: true,
             record: {
                 ...item,
-                parentTitle: item.title
+                parentTitle: item.parent_title
             },
             modalTitle: '修改',
         });
     }
 
-    addSubMenu = (parentKey, type, modalTitle, parentTitle) => {
+    addSubMenu = ({ menu_id: parentID, title: parentTitle }, type, modalTitle) => {
         this.setState({
             modalTitle,
             showModal: true,
             record: {
-                parentKey,
+                parentID,
                 type,
                 parentTitle
             }
         });
     }
 
+    delSubMenu = ({ menu_id, title }) => {
+        let delModal = Modal.confirm({
+            title: '删除确认',
+            content: `您确定要删除[${title}]吗？`,
+            onOk: () => {
+                const { delSysMenu } = this.props;
+                delSysMenu(menu_id).then(delModal.destroy).catch(err => {
+                    message.error(err.message);
+                    console.log(err);
+                });
+            }
+        });
+    }
+
     renderTitle = (item) => {
-        const { title, path, key, type } = item;
+        const { title, path, menu_id, type, children } = item;
         return (
             <Fragment>
                 <span className='color-cyan'>{title}</span>
                 {type == 'leaf' && <span className='ml-16'>{`(链接:${path})`}</span>}
 
-                {
-                    ['leaf', 'resource'].includes(type) &&
-                    <Fragment>
-                        <span className='ml-16'>|</span>
-                        <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, key, 'leaf', '添加子菜单', title)}>添加子菜单</a>
-                    </Fragment>
-                }
+                <Fragment>
+                    <span className='ml-16'>|</span>
+                    <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'leaf', '添加子菜单')}>添加子菜单</a>
+                </Fragment>
 
                 <span className='ml-16'>|</span>
                 <a href='#' className='ml-16' onClick={this.editMenu.bind(this, item)}>修改</a>
@@ -70,7 +81,15 @@ class Index extends Component {
                     type == 'leaf' &&
                     <Fragment>
                         <span className='ml-16'>|</span>
-                        <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, key, 'resource', '添加功能按钮', title)}>添加功能按钮</a>
+                        <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'resource', '添加功能按钮')}>添加功能按钮</a>
+                    </Fragment>
+                }
+
+                {
+                    (!children || children.length == 0) &&
+                    <Fragment>
+                        <span className='ml-16'>|</span>
+                        <a href='#' className='ml-16' onClick={this.delSubMenu.bind(this, item)}>删除</a>
                     </Fragment>
                 }
             </Fragment>
@@ -79,11 +98,11 @@ class Index extends Component {
 
     renderTreeNodes = (data) => {
         return data.map((item) => {
-            const { title, key, icon, children, path } = item;
+            const { title, menu_id, icon, children, path } = item;
             if (item.children) {
                 return (
                     <TreeNode
-                        key={key}
+                        key={menu_id}
                         title={this.renderTitle(item)}
                         icon={<Icon type={icon} />} >
                         {this.renderTreeNodes(children)}
@@ -91,7 +110,7 @@ class Index extends Component {
                 );
             }
             return <TreeNode
-                key={key}
+                key={menu_id}
                 title={this.renderTitle(item)}
                 icon={<Icon type={icon} />} />;
         });
@@ -138,6 +157,7 @@ Index.propTypes = {
     listSysMenu: PropTypes.func,
     editSysMenu: PropTypes.func,
     addSysMenu: PropTypes.func,
+    delSysMenu: PropTypes.func,
     tabFirstIn: PropTypes.bool
 };
 
@@ -149,7 +169,8 @@ Index = connect(
     {
         listSysMenu,
         editSysMenu,
-        addSysMenu
+        addSysMenu,
+        delSysMenu
     }
 )(Index);
 

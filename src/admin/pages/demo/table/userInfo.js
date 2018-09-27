@@ -73,7 +73,7 @@ class UserInfo extends Component {
                             {
                                 getFieldDecorator('name', {
                                     rules: [{ required: true, message: '请填写姓名' }]
-                                })(<Input />)
+                                })(<Input maxLength={45} />)
                             }
                         </FormItem>
 
@@ -82,8 +82,8 @@ class UserInfo extends Component {
                             label='年龄'>
                             {
                                 getFieldDecorator('age', {
-
-                                })(<Input />)
+                                    rules: [{ pattern: /^\d+$/, message: '请输入正确的年龄' }]
+                                })(<Input maxLength={45} />)
                             }
                         </FormItem>
 
@@ -93,7 +93,7 @@ class UserInfo extends Component {
                             {
                                 getFieldDecorator('address', {
 
-                                })(<Input />)
+                                })(<Input maxLength={45} />)
                             }
                         </FormItem>
 
