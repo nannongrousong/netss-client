@@ -14,51 +14,7 @@ const editMenuInfo = (editedMenu, menus) => {
     }
 };
 
-const addMenuInfo = (addedMenu, menus) => {
-    for (let i in menus) {
-        if (menus[i].key == addedMenu.parentKey) {
-            delete addedMenu.parentKey;
-            //  手动修改 group 节点信息
-            menus[i] = {
-                ...menus[i], ...{
-                    type: 'group',
-                    path: undefined
-                }
-            };
-
-            if (menus[i].children) {
-                menus[i].children.push(addedMenu);
-            } else {
-                menus[i].children = [addedMenu];
-            }
-            return;
-        }
-
-        if (menus[i].children) {
-            addMenuInfo(addedMenu, menus[i].children);
-        }
-    }
-};
-
-//  检查path是否合法，不允许重复
-const checkPathValid = (operMenu, menus, isAdd) => {
-    for (let menu of menus) {
-        if (isAdd && menu.path == operMenu.path
-            || (!isAdd && menu.path == operMenu.path && menu.key != operMenu.key)) {
-            return false;
-        }
-
-        if (menu.children) {
-            if (!checkPathValid(operMenu, menu.children, isAdd)) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-};
-
-export const listSysMenu = () => async (dispatch, getState) => {
+export const listSysMenu = () => async (dispatch) => {
     let resData = await List_Sys_Menu();
     dispatch({
         type: SET_SYS_MENU,
@@ -66,41 +22,24 @@ export const listSysMenu = () => async (dispatch, getState) => {
     });
 };
 
-export const editSysMenu = (editedMenu, callBack) => (dispatch, getState) => {
-    let { menu } = getState().sysMgr;
-    let newMenu = JSON.parse(JSON.stringify(menu));
-
-    if (editedMenu.type == 'leaf' && !checkPathValid(editedMenu, newMenu)) {
-        return callBack && callBack(false);
-    }
-
-    editMenuInfo(editedMenu, newMenu);
+export const editSysMenu = (editedMenu) => async (dispatch) => {
+    let resData1 = await Edit_Sys_Menu(editedMenu);
+    let resData2 = await List_Sys_Menu();
 
     dispatch({
         type: SET_SYS_MENU,
-        menu: newMenu
+        menu: resData2.data
     });
-
-    callBack && callBack(true);
 };
 
-export const addSysMenu = (addedMenu, callBack) => (dispatch, getState) => {
-    let { menu } = getState().sysMgr;
-    let newMenu = JSON.parse(JSON.stringify(menu));
-
-    if (addedMenu.type == 'leaf' && !checkPathValid(addedMenu, newMenu, true)) {
-        return callBack && callBack(false);
-    }
-
-    addedMenu.key = new Date().getTime();
-    addMenuInfo(addedMenu, newMenu);
+export const addSysMenu = (addedMenu) => async (dispatch) => {
+    let resData1 = await Add_Sys_Menu(addedMenu);
+    let resData2 = await List_Sys_Menu();
 
     dispatch({
         type: SET_SYS_MENU,
-        menu: newMenu
+        menu: resData2.data
     });
-
-    callBack && callBack(true);
 };
 
 export const delSysMenu = (menuID) => async (dispatch) => {

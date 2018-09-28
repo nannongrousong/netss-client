@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Modal, Input, Form, message } from 'antd';
+import React, { Component, Fragment } from 'react';
+import { Modal, Input, Form, message, Alert } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { removeObjPrefix } from 'COMMON_UTILS/common';
 
@@ -15,20 +15,21 @@ class InfoModal extends Component {
             }
 
             const { editSysMenu, closeModal, addSysMenu } = this.props;
-            if (values[`${fieldPrefix}key`]) {
-                editSysMenu(removeObjPrefix(values, fieldPrefix), (res) => {
-                    if (!res) {
-                        return message.error('路径值已存在，请重新填写！');
-                    }
-                    closeModal();
-                });
+
+            if (values[`${fieldPrefix}menu_id`]) {
+                editSysMenu(removeObjPrefix(values, fieldPrefix))
+                    .then(closeModal)
+                    .catch(err => {
+                        console.log(err);
+                        message.error(err.message);
+                    });
             } else {
-                addSysMenu(removeObjPrefix(values, fieldPrefix), (res) => {
-                    if (!res) {
-                        return message.error('路径值已存在，请重新填写！');
-                    }
-                    closeModal();
-                });
+                addSysMenu(removeObjPrefix(values, fieldPrefix))
+                    .then(closeModal)
+                    .catch(err => {
+                        console.log(err);
+                        message.error(err.message);
+                    });
             }
         });
     }
@@ -52,15 +53,19 @@ class InfoModal extends Component {
                 onOk={this.saveData}
                 onCancel={closeModal}
                 visible={true}
-                title={modalTitle}>
+                title={
+                    <Fragment>
+                        <span>{modalTitle}</span>
+                    </Fragment>
+                }>
                 <Form>
                     {
-                        getFieldDecorator(`${fieldPrefix}key`)(
+                        getFieldDecorator(`${fieldPrefix}menu_id`)(
                             <Input className='d-none' />
                         )
                     }
                     {
-                        getFieldDecorator(`${fieldPrefix}parentID`)(
+                        getFieldDecorator(`${fieldPrefix}parent_id`)(
                             <Input className='d-none' />
                         )
                     }
@@ -74,7 +79,7 @@ class InfoModal extends Component {
                         {...formItemLayout}
                         label='上级导航' >
                         {
-                            getFieldDecorator(`${fieldPrefix}parentTitle`)(
+                            getFieldDecorator(`${fieldPrefix}parent_title`)(
                                 <Input disabled />
                             )
                         }
@@ -112,6 +117,14 @@ class InfoModal extends Component {
                             })(<Input />)
                         }
                     </FormItem>
+
+                    {
+                        !record.menu_id &&
+                        <FormItem>
+                            <Alert type='warning' message='添加子菜单后会自动清空父级链接，请谨慎操作！' showIcon />
+                        </FormItem>
+                    }
+
                 </Form>
             </Modal>
         );

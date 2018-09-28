@@ -21,29 +21,37 @@ class Index extends Component {
         tabFirstIn && listSysMenu();
     }
 
-    handleSave = () => {
-
+    initSysMenu = () => {
+        const { addSysMenu } = this.props;
+        addSysMenu({
+            parent_id: 0,
+            title: '后台管理系统',
+            icon: 'tag',
+            type: 'leaf',
+            path: '/initRoot'
+        }).then()
+            .catch(err => {
+                console.log(err);
+                message.error(err.message);
+            });
     }
 
-    editMenu = (item) => {
+    editMenu = (record) => {
         this.setState({
             showModal: true,
-            record: {
-                ...item,
-                parentTitle: item.parent_title
-            },
+            record,
             modalTitle: '修改',
         });
     }
 
-    addSubMenu = ({ menu_id: parentID, title: parentTitle }, type, modalTitle) => {
+    addSubMenu = ({ menu_id: parent_id, title: parent_title }, type, modalTitle) => {
         this.setState({
             modalTitle,
             showModal: true,
             record: {
-                parentID,
+                parent_id,
                 type,
-                parentTitle
+                parent_title
             }
         });
     }
@@ -67,7 +75,7 @@ class Index extends Component {
         return (
             <Fragment>
                 <span className='color-cyan'>{title}</span>
-                {type == 'leaf' && <span className='ml-16'>{`(链接:${path})`}</span>}
+                {path && <span className='ml-16'>{`(链接:${path})`}</span>}
 
                 <Fragment>
                     <span className='ml-16'>|</span>
@@ -123,15 +131,40 @@ class Index extends Component {
         });
     }
 
+    handleDragStart = ({ event, node }) => {
+        //console.log('event', event);
+        //console.log('node', node);
+    }
+
+    handleDragOver = ({event, node}) => {
+        console.log('handleDragOver.node', node.props);
+    }
+
+    handleOnDrop = ({ event, node, dragNode, dragNodesKeys }) => {
+        //console.log('event1111111111111', event);
+        //console.log('node2222222222', node);
+        //console.log('dragNode22333333333333333', dragNode);
+        console.log('dragNodesKeys44444444444444', dragNodesKeys);
+    }
+
     render() {
         const { sysMenu, editSysMenu, addSysMenu } = this.props;
         const { showModal, record, modalTitle } = this.state;
 
         return (
             <div>
-                <Button type='primary' onClick={this.handleSave}>保存</Button>
                 {
-                    sysMenu && sysMenu.length > 0 && <Tree
+                    (!sysMenu || sysMenu && sysMenu.length == 0) &&
+                    <Button type='primary' onClick={this.initSysMenu}>初始化根节点</Button>
+                }
+
+                {
+                    sysMenu && sysMenu.length > 0 &&
+                    <Tree
+                        draggable
+                        onDragOver={this.handleDragOver}
+                        onDragStart={this.handleDragStart}
+                        onDrop={this.handleOnDrop}
                         defaultExpandAll
                         showLine
                         showIcon >

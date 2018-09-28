@@ -34,7 +34,7 @@ export default async (url, params, method = 'GET') => {
         if (data.code) {
             return data;
         } else {
-            throw new Error(data.info);
+            throw new Error(data.info || '') ;
         }
     } else {
         throw new Error(`fetch error. url: ${url}, \n params: ${JSON.stringify(params)}, \n info:${response.statusText}`);
