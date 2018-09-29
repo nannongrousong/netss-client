@@ -13,4 +13,10 @@ export default [{
         loader: () => import('ADMIN_PAGES_SYSMGR/user'),
         loading: Loading
     })
+}, {
+    path: '/sysMgr/role',
+    component: Loadable({
+        loader: () => import('ADMIN_PAGES_SYSMGR/role'),
+        loading: Loading
+    })
 }];
