@@ -1,3 +1,4 @@
+import { message } from 'antd';
 
 /**
  * 为对象的每个key手动添加前缀，不支持嵌套
@@ -22,3 +23,9 @@ export const removeObjPrefix = (obj, prefix) => (
         return prev;
     }, {})
 );
+
+
+export const errorHandle = err => {
+    message.error(err.message);
+    console.log(err);
+};

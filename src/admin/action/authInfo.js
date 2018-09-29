@@ -1,6 +1,6 @@
 import { SET_AUTH_INFO } from 'ADMIN_ACTIONTYPE/authInfo';
 import { CMS_Login } from 'ADMIN_SERVICE/Sys_Login';
-import { message } from 'antd';
+import { errorHandle } from 'COMMON_UTILS/common';
 
 export const cmsLogin = (userInfo, callBack) => async (dispatch, getState) => {
     try {
@@ -14,7 +14,6 @@ export const cmsLogin = (userInfo, callBack) => async (dispatch, getState) => {
 
         typeof callBack == 'function' && callBack();
     } catch (err) {
-        message.error(err.message);
-        console.log(err);
+        errorHandle(err);
     }
 };

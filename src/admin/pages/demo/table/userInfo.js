@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { Select } from 'antd';
 import { tagsSource } from 'ADMIN_CONFIG_ENUM/roleTags';
 import createFormField from 'COMMON_UTILS/createFormField';
-import { message } from 'antd';
+import { errorHandle } from 'COMMON_UTILS/common';
+
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -24,15 +25,9 @@ class UserInfo extends Component {
 
             const { addData, editData, closeModal } = this.props;
             if (values.user_id) {
-                editData(values).then(closeModal).catch(err => {
-                    message.error(err.message);
-                    console.log(err);
-                });
+                editData(values).then(closeModal).catch(errorHandle);
             } else {
-                addData(values).then(closeModal).catch(err => {
-                    message.error(err.message);
-                    console.log(err);
-                });
+                addData(values).then(closeModal).catch(errorHandle);
             }
         });
     }

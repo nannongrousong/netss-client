@@ -1,6 +1,6 @@
 import { SET_NAV_MENU, SET_NAV_TAB, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB, EDIT_TAB_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 import { Load_User_Menus } from 'ADMIN_SERVICE/Authority_Mgr';
-import { message } from 'antd';
+import { errorHandle } from 'COMMON_UTILS/common';
 
 export const setNavTab = () => async (dispatch, getState) => {
     try {
@@ -10,8 +10,7 @@ export const setNavTab = () => async (dispatch, getState) => {
             data: resData.data
         });
     } catch (err) {
-        message.error(err.message);
-        console.log(err);
+        errorHandle(err);
     }
 };
 
@@ -45,8 +44,7 @@ export const initNavMenu = (initPath, callBack) => async (dispatch, getState) =>
 
         typeof callBack == 'function' && callBack(activeRoute);
     } catch (err) {
-        message.error(err.message);
-        console.log(err);
+        errorHandle(err);
     }
 };
 

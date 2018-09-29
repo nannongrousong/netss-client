@@ -5,9 +5,24 @@ import { listSysMenu, editSysMenu, addSysMenu, delSysMenu } from 'ADMIN_ACTION/s
 import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 import PropTypes from 'prop-types';
 import MenuInfo from './menuInfo';
+import { errorHandle } from 'COMMON_UTILS/common';
 
 const { TreeNode } = Tree;
 
+const findMenu = (menuID, menus) => {
+    for (let menu of menus) {
+        if (menu.menu_id == menuID) {
+            return menu;
+        }
+
+        if (menu.children) {
+            let tempMenu = findMenu(menuID, menu.children);
+            if (tempMenu) {
+                return tempMenu;
+            }
+        }
+    }
+};
 @TabWrapper('sysMgr')
 class Index extends Component {
     state = {
@@ -27,13 +42,10 @@ class Index extends Component {
             parent_id: 0,
             title: '后台管理系统',
             icon: 'tag',
-            type: 'leaf',
+            type: 'node',
             path: '/initRoot'
         }).then()
-            .catch(err => {
-                console.log(err);
-                message.error(err.message);
-            });
+            .catch(errorHandle);
     }
 
     editMenu = (record) => {
@@ -62,10 +74,7 @@ class Index extends Component {
             content: `您确定要删除[${title}]吗？`,
             onOk: () => {
                 const { delSysMenu } = this.props;
-                delSysMenu(menu_id).then(delModal.destroy).catch(err => {
-                    message.error(err.message);
-                    console.log(err);
-                });
+                delSysMenu(menu_id).then(delModal.destroy).catch(errorHandle);
             }
         });
     }
@@ -75,18 +84,21 @@ class Index extends Component {
         return (
             <Fragment>
                 <span className='color-cyan'>{title}</span>
-                {path && <span className='ml-16'>{`(链接:${path})`}</span>}
+                {path && type == 'node' && <span className='ml-16'>{`(链接:${path})`}</span>}
 
-                <Fragment>
-                    <span className='ml-16'>|</span>
-                    <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'leaf', '添加子菜单')}>添加子菜单</a>
-                </Fragment>
+                {
+                    type == 'node' &&
+                    <Fragment>
+                        <span className='ml-16'>|</span>
+                        <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'node', '添加子菜单')}>添加子菜单</a>
+                    </Fragment>
+                }
 
                 <span className='ml-16'>|</span>
                 <a href='#' className='ml-16' onClick={this.editMenu.bind(this, item)}>修改</a>
 
                 {
-                    type == 'leaf' &&
+                    path && type == 'node' &&
                     <Fragment>
                         <span className='ml-16'>|</span>
                         <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'resource', '添加功能按钮')}>添加功能按钮</a>
@@ -131,20 +143,41 @@ class Index extends Component {
         });
     }
 
-    handleDragStart = ({ event, node }) => {
-        //console.log('event', event);
-        //console.log('node', node);
-    }
+    handleOnDrop = ({ node, dragNode, dragNodesKeys }) => {
+        const { editSysMenu, sysMenu } = this.props;
 
-    handleDragOver = ({event, node}) => {
-        console.log('handleDragOver.node', node.props);
-    }
+        //  目标节点参数
+        const { dragOver, dragOverGapBottom, dragOverGapTop, eventKey } = node.props;
+        const [dragNodeKey] = dragNodesKeys;
+        let dragNodeInfo = findMenu(dragNodeKey, sysMenu);
+        let targetNodeInfo = findMenu(eventKey, sysMenu);
 
-    handleOnDrop = ({ event, node, dragNode, dragNodesKeys }) => {
-        //console.log('event1111111111111', event);
-        //console.log('node2222222222', node);
-        //console.log('dragNode22333333333333333', dragNode);
-        console.log('dragNodesKeys44444444444444', dragNodesKeys);
+        let modifyPart = {};
+
+        if (dragOver) {
+            //  drageNode成为node子元素
+            //  判断新老parent_id是否相同，相同的话可不拖动
+            if (dragNodeInfo.parent_id == eventKey) {
+                return;
+            }
+
+            modifyPart.parent_id = eventKey;
+        }
+
+        if (dragOverGapBottom || dragOverGapTop) {
+            //  再判断是否是同一个父级
+            if (dragNodeInfo.parent_id != targetNodeInfo.parent_id) {
+                modifyPart.parent_id = targetNodeInfo.parent_id;
+            }
+
+            //  在node下方 优先级降低；在node上方 优先级提升
+            modifyPart.priority = targetNodeInfo.priority + (dragOverGapBottom ? 1 : -1);
+        }
+
+        editSysMenu({
+            ...dragNodeInfo,
+            ...modifyPart
+        }).then().catch(errorHandle);
     }
 
     render() {
@@ -162,7 +195,6 @@ class Index extends Component {
                     sysMenu && sysMenu.length > 0 &&
                     <Tree
                         draggable
-                        onDragOver={this.handleDragOver}
                         onDragStart={this.handleDragStart}
                         onDrop={this.handleOnDrop}
                         defaultExpandAll

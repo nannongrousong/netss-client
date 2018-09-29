@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, Input, Form, message, Alert } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
-import { removeObjPrefix } from 'COMMON_UTILS/common';
+import { removeObjPrefix, errorHandle } from 'COMMON_UTILS/common';
 
 const FormItem = Form.Item;
 const fieldPrefix = 'menu-';
@@ -19,23 +19,22 @@ class InfoModal extends Component {
             if (values[`${fieldPrefix}menu_id`]) {
                 editSysMenu(removeObjPrefix(values, fieldPrefix))
                     .then(closeModal)
-                    .catch(err => {
-                        console.log(err);
-                        message.error(err.message);
-                    });
+                    .catch(errorHandle);
             } else {
                 addSysMenu(removeObjPrefix(values, fieldPrefix))
                     .then(closeModal)
-                    .catch(err => {
-                        console.log(err);
-                        message.error(err.message);
-                    });
+                    .catch(errorHandle);
             }
         });
     }
 
     render() {
-        const { record, closeModal, modalTitle, form: { getFieldDecorator } } = this.props;
+        const {
+            record: { menu_id, type, path },
+            closeModal,
+            modalTitle,
+            form: { getFieldDecorator }
+        } = this.props;
 
         const formItemLayout = {
             labelCol: {
@@ -87,22 +86,35 @@ class InfoModal extends Component {
 
                     <FormItem
                         {...formItemLayout}
-                        label='标题'>
+                        label={type == 'node' ? '导航名称' : '功能名称'}>
                         {
                             getFieldDecorator(`${fieldPrefix}title`, {
-                                rules: [{ required: true, message: '请填写标题' }]
+                                rules: [{ required: true, message: '请填写名称' }]
                             })(<Input />)
                         }
                     </FormItem>
 
                     {
-                        (record && record.type == 'leaf') &&
+                        (path || !menu_id) &&
                         <FormItem
                             {...formItemLayout}
-                            label='路径'>
+                            label={type == 'node' ? '导航路径' : '功能ID'}>
                             {
                                 getFieldDecorator(`${fieldPrefix}path`, {
-                                    rules: [{ required: true, message: '请填写路径' }]
+                                    rules: [{ required: true, message: '请填写信息' }]
+                                })(<Input />)
+                            }
+                        </FormItem>
+                    }
+
+                    {
+                        <FormItem
+                            {...formItemLayout}
+                            label='图标'
+                            className={type == 'resource' ? 'd-none' : ''}>
+                            {
+                                getFieldDecorator(`${fieldPrefix}icon`, {
+                                    initialValue: 'tag'
                                 })(<Input />)
                             }
                         </FormItem>
@@ -110,18 +122,16 @@ class InfoModal extends Component {
 
                     <FormItem
                         {...formItemLayout}
-                        label='图标'>
+                        label='备注'>
                         {
-                            getFieldDecorator(`${fieldPrefix}icon`, {
-                                initialValue: 'tag'
-                            })(<Input />)
+                            getFieldDecorator(`${fieldPrefix}remark`)(<Input />)
                         }
                     </FormItem>
 
                     {
-                        !record.menu_id &&
+                        !menu_id && type == 'node' &&
                         <FormItem>
-                            <Alert type='warning' message='添加子菜单后会自动清空父级链接，请谨慎操作！' showIcon />
+                            <Alert type='warning' message='添加子菜单后会使父级链接失效，请留意！' showIcon />
                         </FormItem>
                     }
 
