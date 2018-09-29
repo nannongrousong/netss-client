@@ -1,1 +1,1 @@
-export const SAVE_CHANGES = Symbol('SAVE_CHANGES');
+export const SAVE_FORM_CHANGES = Symbol('SAVE_FORM_CHANGES');

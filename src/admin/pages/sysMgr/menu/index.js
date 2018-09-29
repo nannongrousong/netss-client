@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Tree, Icon, Modal, message } from 'antd';
+import { Button, Tree, Icon, Modal, Divider } from 'antd';
 import { connect } from 'react-redux';
-import { listSysMenu, editSysMenu, addSysMenu, delSysMenu } from 'ADMIN_ACTION/sysMgr';
+import { listSysMenu, editSysMenu, addSysMenu, delSysMenu } from 'ADMIN_ACTION_SYSMGR/menu';
 import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 import PropTypes from 'prop-types';
 import MenuInfo from './menuInfo';
@@ -23,7 +23,7 @@ const findMenu = (menuID, menus) => {
         }
     }
 };
-@TabWrapper('sysMgr')
+@TabWrapper('sysMenu')
 class Index extends Component {
     state = {
         showModal: false,
@@ -89,18 +89,19 @@ class Index extends Component {
                 {
                     type == 'node' &&
                     <Fragment>
-                        <span className='ml-16'>|</span>
+                        <Divider type='vertical' />
                         <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'node', '添加子菜单')}>添加子菜单</a>
                     </Fragment>
                 }
 
-                <span className='ml-16'>|</span>
+                <Divider type='vertical' />
                 <a href='#' className='ml-16' onClick={this.editMenu.bind(this, item)}>修改</a>
 
                 {
                     path && type == 'node' &&
                     <Fragment>
-                        <span className='ml-16'>|</span>
+                        <Divider type='vertical' />
+
                         <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'resource', '添加功能按钮')}>添加功能按钮</a>
                     </Fragment>
                 }
@@ -108,7 +109,7 @@ class Index extends Component {
                 {
                     (!children || children.length == 0) &&
                     <Fragment>
-                        <span className='ml-16'>|</span>
+                        <Divider type='vertical' />
                         <a href='#' className='ml-16' onClick={this.delSubMenu.bind(this, item)}>删除</a>
                     </Fragment>
                 }
@@ -229,7 +230,7 @@ Index.propTypes = {
 
 Index = connect(
     (state) => ({
-        sysMenu: state.sysMgr.menu
+        sysMenu: state.sysMenu
     }),
     {
         listSysMenu,

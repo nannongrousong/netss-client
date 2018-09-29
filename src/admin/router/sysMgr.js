@@ -7,4 +7,10 @@ export default [{
         loader: () => import('ADMIN_PAGES_SYSMGR/menu'),
         loading: Loading
     })
+}, {
+    path: '/sysMgr/user',
+    component: Loadable({
+        loader: () => import('ADMIN_PAGES_SYSMGR/user'),
+        loading: Loading
+    })
 }];

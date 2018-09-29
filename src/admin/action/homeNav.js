@@ -93,6 +93,10 @@ export const setActiveTab = (tabPath, callBack) => (dispatch, getState) => {
     let { navTab, navMenu } = getState().homeNav;
     let routeInfo = getRouteInfo(tabPath, navMenu);
 
+    if (!routeInfo) {
+        return;
+    }
+
     let { path } = routeInfo;
     let resTab = navTab.find((tab) => tab.path == path);
 

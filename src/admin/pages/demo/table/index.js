@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { listData, addData, editData, delData } from 'ADMIN_ACTION/tableDemo';
+import { listData, addData, editData, delData } from 'ADMIN_ACTION_DEMO/table';
 import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 import PropTypes from 'prop-types';
 

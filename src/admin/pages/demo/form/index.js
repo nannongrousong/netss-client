@@ -3,7 +3,7 @@ import { Form, Row, Col, Input, DatePicker, Button } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Select } from 'antd';
-import { saveChanges } from 'ADMIN_ACTION/formDemo';
+import { saveFormChanges } from 'ADMIN_ACTION_DEMO/form';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 
@@ -141,7 +141,7 @@ Index = connect(
         formDemo: state.formDemo
     }),
     {
-        saveChanges
+        saveFormChanges
 
     }
 )(Index);

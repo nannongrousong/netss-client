@@ -82,7 +82,14 @@ class UserTable extends Component {
                 <Table
                     {...this.props}
                     rowKey={'user_id'}
-                    columns={columns} >
+                    columns={columns}
+                    pagination={{
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        pageSizeOptions: ['8', '15'],
+                        showTotal: (total, range) => (`第${range[0]}-${range[1]}条 共${total}条`),
+                        pageSize: 8
+                    }} >
                 </Table>
                 {
                     showModal
