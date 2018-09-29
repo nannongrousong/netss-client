@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Radio } from 'antd';
-import PropTypes from 'prop-types';
+import { Modal, Form, Input } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { errorHandle } from 'COMMON_UTILS/common';
+import { Switch } from 'antd';
 
 const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
 
 class UserInfo extends Component {
     saveData = (e) => {
@@ -14,6 +13,8 @@ class UserInfo extends Component {
             if (err) {
                 return;
             }
+
+            values = { ...values, IsValid: values.IsValid ? 1 : 0 };
 
             const { addSysUser, editSysUser, closeModal } = this.props;
             if (values.UserID) {
@@ -79,12 +80,9 @@ class UserInfo extends Component {
                             label='是否有效'>
                             {
                                 getFieldDecorator('IsValid', {
-
+                                    valuePropName: 'checked'
                                 })(
-                                    <RadioGroup>
-                                        <Radio value={1}>有效</Radio>
-                                        <Radio value={0}>无效</Radio>
-                                    </RadioGroup>
+                                    <Switch />
                                 )
                             }
                         </FormItem>
@@ -97,8 +95,9 @@ class UserInfo extends Component {
 
 UserInfo = Form.create({
     mapPropsToFields: (props) => {
-        if (props.record) {
-            return createFormField(props.record);
+        const { record } = props;
+        if (record) {
+            return createFormField({ ...record, IsValid: record.IsValid == 1 });
         }
     }
 })(UserInfo);
