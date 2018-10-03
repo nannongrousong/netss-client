@@ -6,6 +6,10 @@
  */
 export default async (url, params, method = 'GET') => {
     url = '/api' + url;
+
+    console.log('请求链接', url);
+    console.log('请求参数', params);
+
     let response = null;
     let commonOptions = {
         method,

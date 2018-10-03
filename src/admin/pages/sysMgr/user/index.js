@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addSysUser, delSysUser, editSysUser, listSysUser } from 'ADMIN_ACTION_SYSMGR/user';
+import { listSysRole } from 'ADMIN_ACTION_SYSMGR/role';
 import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 import UserTable from './userTable';
 
@@ -13,7 +14,7 @@ class Index extends Component {
     }
 
     render() {
-        const { addSysUser, delSysUser, editSysUser, listSysUser, sysUser } = this.props;
+        const { addSysUser, delSysUser, editSysUser, listSysUser, sysUser, sysRole, listSysRole } = this.props;
         return (
             <div>
                 <UserTable
@@ -22,7 +23,9 @@ class Index extends Component {
                         delSysUser,
                         editSysUser,
                         listSysUser,
-                        sysUser
+                        sysUser,
+                        sysRole,
+                        listSysRole
                     }} >
                 </UserTable>
             </div>
@@ -36,18 +39,22 @@ Index.propTypes = {
     editSysUser: PropTypes.func,
     listSysUser: PropTypes.func,
     sysUser: PropTypes.object,
+    sysRole: PropTypes.array,
+    listSysRole: PropTypes.func,
     tabFirstIn: PropTypes.bool
 };
 
 Index = connect(
     (state) => ({
-        sysUser: state.sysUser
+        sysUser: state.sysUser,
+        sysRole: state.sysRole
     }),
     {
         addSysUser,
         delSysUser,
         editSysUser,
-        listSysUser
+        listSysUser,
+        listSysRole
     }
 )(Index);
 

@@ -16,7 +16,7 @@ class InfoModal extends Component {
 
             const { editSysMenu, closeModal, addSysMenu } = this.props;
 
-            if (values[`${fieldPrefix}menu_id`]) {
+            if (values[`${fieldPrefix}MenuID`]) {
                 editSysMenu(removeObjPrefix(values, fieldPrefix))
                     .then(closeModal)
                     .catch(errorHandle);
@@ -30,7 +30,7 @@ class InfoModal extends Component {
 
     render() {
         const {
-            record: { menu_id, type, path },
+            record: { MenuID, Type, Path },
             closeModal,
             modalTitle,
             form: { getFieldDecorator }
@@ -59,17 +59,22 @@ class InfoModal extends Component {
                 }>
                 <Form>
                     {
-                        getFieldDecorator(`${fieldPrefix}menu_id`)(
+                        getFieldDecorator(`${fieldPrefix}MenuID`)(
                             <Input className='d-none' />
                         )
                     }
                     {
-                        getFieldDecorator(`${fieldPrefix}parent_id`)(
+                        getFieldDecorator(`${fieldPrefix}ParentID`)(
                             <Input className='d-none' />
                         )
                     }
                     {
-                        getFieldDecorator(`${fieldPrefix}type`)(
+                        getFieldDecorator(`${fieldPrefix}Type`)(
+                            <Input className='d-none' />
+                        )
+                    }
+                    {
+                        getFieldDecorator(`${fieldPrefix}Priority`)(
                             <Input className='d-none' />
                         )
                     }
@@ -78,31 +83,31 @@ class InfoModal extends Component {
                         {...formItemLayout}
                         label='上级导航' >
                         {
-                            getFieldDecorator(`${fieldPrefix}parent_title`)(
-                                <Input disabled />
+                            getFieldDecorator(`${fieldPrefix}ParentTitle`)(
+                                <Input disabled maxLength={45} />
                             )
                         }
                     </FormItem>
 
                     <FormItem
                         {...formItemLayout}
-                        label={type == 'node' ? '导航名称' : '功能名称'}>
+                        label={Type == 'node' ? '导航名称' : '功能名称'}>
                         {
-                            getFieldDecorator(`${fieldPrefix}title`, {
+                            getFieldDecorator(`${fieldPrefix}Title`, {
                                 rules: [{ required: true, message: '请填写名称' }]
-                            })(<Input />)
+                            })(<Input maxLength={45} />)
                         }
                     </FormItem>
 
                     {
-                        (path || !menu_id) &&
+                        (Path || !MenuID) &&
                         <FormItem
                             {...formItemLayout}
-                            label={type == 'node' ? '导航路径' : '功能ID'}>
+                            label={Type == 'node' ? '导航路径' : '功能ID'}>
                             {
-                                getFieldDecorator(`${fieldPrefix}path`, {
+                                getFieldDecorator(`${fieldPrefix}Path`, {
                                     rules: [{ required: true, message: '请填写信息' }]
-                                })(<Input />)
+                                })(<Input maxLength={45} />)
                             }
                         </FormItem>
                     }
@@ -111,11 +116,11 @@ class InfoModal extends Component {
                         <FormItem
                             {...formItemLayout}
                             label='图标'
-                            className={type == 'resource' ? 'd-none' : ''}>
+                            className={Type == 'resource' ? 'd-none' : ''}>
                             {
-                                getFieldDecorator(`${fieldPrefix}icon`, {
+                                getFieldDecorator(`${fieldPrefix}Icon`, {
                                     initialValue: 'tag'
-                                })(<Input />)
+                                })(<Input maxLength={45} />)
                             }
                         </FormItem>
                     }
@@ -124,17 +129,18 @@ class InfoModal extends Component {
                         {...formItemLayout}
                         label='备注'>
                         {
-                            getFieldDecorator(`${fieldPrefix}remark`)(<Input />)
+                            getFieldDecorator(`${fieldPrefix}Remark`, {
+                                initialValue: ''
+                            })(<Input maxLength={45} />)
                         }
                     </FormItem>
 
                     {
-                        !menu_id && type == 'node' &&
+                        !MenuID && Type == 'node' &&
                         <FormItem>
                             <Alert type='warning' message='添加子菜单后会使父级链接失效，请留意！' showIcon />
                         </FormItem>
                     }
-
                 </Form>
             </Modal>
         );

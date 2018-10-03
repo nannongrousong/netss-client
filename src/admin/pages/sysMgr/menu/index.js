@@ -11,12 +11,12 @@ const { TreeNode } = Tree;
 
 const findMenu = (menuID, menus) => {
     for (let menu of menus) {
-        if (menu.menu_id == menuID) {
+        if (menu.MenuID == menuID) {
             return menu;
         }
 
-        if (menu.children) {
-            let tempMenu = findMenu(menuID, menu.children);
+        if (menu.Children) {
+            let tempMenu = findMenu(menuID, menu.Children);
             if (tempMenu) {
                 return tempMenu;
             }
@@ -39,11 +39,11 @@ class Index extends Component {
     initSysMenu = () => {
         const { addSysMenu } = this.props;
         addSysMenu({
-            parent_id: 0,
-            title: '后台管理系统',
-            icon: 'tag',
-            type: 'node',
-            path: '/initRoot'
+            ParentID: 0,
+            Title: '后台管理系统',
+            Icon: 'tag',
+            Type: 'node',
+            Path: '/initRoot'
         }).then()
             .catch(errorHandle);
     }
@@ -56,38 +56,38 @@ class Index extends Component {
         });
     }
 
-    addSubMenu = ({ menu_id: parent_id, title: parent_title }, type, modalTitle) => {
+    addSubMenu = ({ MenuID: ParentID, Title: ParentTitle }, Type, modalTitle) => {
         this.setState({
             modalTitle,
             showModal: true,
             record: {
-                parent_id,
-                type,
-                parent_title
+                ParentID,
+                Type,
+                ParentTitle
             }
         });
     }
 
-    delSubMenu = ({ menu_id, title }) => {
+    delSubMenu = ({ MenuID, Title }) => {
         let delModal = Modal.confirm({
             title: '删除确认',
-            content: `您确定要删除[${title}]吗？`,
+            content: `您确定要删除[${Title}]吗？`,
             onOk: () => {
                 const { delSysMenu } = this.props;
-                delSysMenu(menu_id).then(delModal.destroy).catch(errorHandle);
+                delSysMenu(MenuID).then(delModal.destroy).catch(errorHandle);
             }
         });
     }
 
     renderTitle = (item) => {
-        const { title, path, menu_id, type, children } = item;
+        const { Title, Path, MenuID, Type, Children } = item;
         return (
             <Fragment>
-                <span className='color-cyan'>{title}</span>
-                {path && type == 'node' && <span className='ml-16'>{`(链接:${path})`}</span>}
+                <span className='color-cyan'>{Title}</span>
+                {Path && Type == 'node' && <span className='ml-16'>{`(链接:${Path})`}</span>}
 
                 {
-                    type == 'node' &&
+                    Type == 'node' &&
                     <Fragment>
                         <Divider type='vertical' />
                         <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'node', '添加子菜单')}>添加子菜单</a>
@@ -98,7 +98,7 @@ class Index extends Component {
                 <a href='#' className='ml-16' onClick={this.editMenu.bind(this, item)}>修改</a>
 
                 {
-                    path && type == 'node' &&
+                    Path && Type == 'node' &&
                     <Fragment>
                         <Divider type='vertical' />
 
@@ -107,7 +107,7 @@ class Index extends Component {
                 }
 
                 {
-                    (!children || children.length == 0) &&
+                    (!Children || Children.length == 0) &&
                     <Fragment>
                         <Divider type='vertical' />
                         <a href='#' className='ml-16' onClick={this.delSubMenu.bind(this, item)}>删除</a>
@@ -119,21 +119,21 @@ class Index extends Component {
 
     renderTreeNodes = (data) => {
         return data.map((item) => {
-            const { title, menu_id, icon, children, path } = item;
-            if (item.children) {
+            const { Title, MenuID, Icon: IconV, Children, Path } = item;
+            if (Children) {
                 return (
                     <TreeNode
-                        key={menu_id}
+                        key={MenuID}
                         title={this.renderTitle(item)}
-                        icon={<Icon type={icon} />} >
-                        {this.renderTreeNodes(children)}
+                        icon={<Icon type={IconV} />} >
+                        {this.renderTreeNodes(Children)}
                     </TreeNode>
                 );
             }
             return <TreeNode
-                key={menu_id}
+                key={MenuID}
                 title={this.renderTitle(item)}
-                icon={<Icon type={icon} />} />;
+                icon={<Icon type={IconV} />} />;
         });
     }
 
@@ -158,21 +158,21 @@ class Index extends Component {
         if (dragOver) {
             //  drageNode成为node子元素
             //  判断新老parent_id是否相同，相同的话可不拖动
-            if (dragNodeInfo.parent_id == eventKey) {
+            if (dragNodeInfo.ParentID == eventKey) {
                 return;
             }
 
-            modifyPart.parent_id = eventKey;
+            modifyPart.ParentID = eventKey;
         }
 
         if (dragOverGapBottom || dragOverGapTop) {
             //  再判断是否是同一个父级
-            if (dragNodeInfo.parent_id != targetNodeInfo.parent_id) {
-                modifyPart.parent_id = targetNodeInfo.parent_id;
+            if (dragNodeInfo.ParentID != targetNodeInfo.ParentID) {
+                modifyPart.ParentID = targetNodeInfo.ParentID;
             }
 
             //  在node下方 优先级降低；在node上方 优先级提升
-            modifyPart.priority = targetNodeInfo.priority + (dragOverGapBottom ? 1 : -1);
+            modifyPart.Priority = targetNodeInfo.Priority + (dragOverGapBottom ? 1 : -1);
         }
 
         editSysMenu({

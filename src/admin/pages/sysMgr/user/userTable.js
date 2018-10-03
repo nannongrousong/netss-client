@@ -1,12 +1,20 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Divider } from 'antd';
+import { Table, Divider, Button, Modal } from 'antd';
 import PropTypes from 'prop-types';
 import UserInfo from './userInfo';
+import { errorHandle } from 'COMMON_UTILS/common';
 
 class UserTable extends Component {
     state = {
         isShowModal: false,
         record: null
+    }
+
+    startAdd = () => {
+        this.setState({
+            isShowModal: true,
+            record: null
+        });
     }
 
     startEditUser = (record) => {
@@ -16,8 +24,15 @@ class UserTable extends Component {
         });
     }
 
-    startDelUser = (userID) => {
-
+    startDelUser = ({UserID, LoginName}) => {
+        let delModal = Modal.confirm({
+            title: '删除确认',
+            content: `您确定要删除[${LoginName}]吗？`,
+            onOk: () => {
+                const { delSysUser } = this.props;
+                delSysUser(UserID).then(delModal.destroy).catch(errorHandle);
+            }
+        });
     }
 
     closeModal = () => {
@@ -27,7 +42,7 @@ class UserTable extends Component {
     }
 
     render() {
-        const { sysUser: { data }, addSysUser, editSysUser } = this.props;
+        const { sysUser: { data }, addSysUser, editSysUser, sysRole, listSysRole } = this.props;
         const { isShowModal, record } = this.state;
 
         const columns = [{
@@ -48,7 +63,7 @@ class UserTable extends Component {
                 <span>
                     <a href='#' onClick={this.startEditUser.bind(this, record)}>修改</a>
                     <Divider type='vertical' />
-                    <a href='#' onClick={this.startDelUser.bind(this, record.UserID)}>删除</a>
+                    <a href='#' onClick={this.startDelUser.bind(this, record)}>删除</a>
                 </span>
             )
         }];
@@ -58,16 +73,21 @@ class UserTable extends Component {
                 <Table
                     rowKey='UserID'
                     dataSource={data}
-                    columns={columns}>
+                    columns={columns}
+                    title={() => (<Button type='primary' onClick={this.startAdd}>添加用户</Button>)}>
 
                 </Table>
                 {
                     isShowModal &&
                     <UserInfo
-                        addSysUser={addSysUser}
-                        editSysUser={editSysUser}
-                        closeModal={this.closeModal}
-                        record={record}>
+                        {...{
+                            addSysUser,
+                            editSysUser,
+                            record,
+                            sysRole,
+                            listSysRole
+                        }}
+                        closeModal={this.closeModal} >
                     </UserInfo>
                 }
             </Fragment>

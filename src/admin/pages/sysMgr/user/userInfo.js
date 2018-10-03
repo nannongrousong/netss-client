@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Select } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { errorHandle } from 'COMMON_UTILS/common';
 import { Switch } from 'antd';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 
 class UserInfo extends Component {
+    componentDidMount() {
+        const { sysRole, listSysRole } = this.props;
+        (!sysRole || sysRole.length == 0) && listSysRole();
+    }
+
     saveData = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -26,7 +32,7 @@ class UserInfo extends Component {
     }
 
     render() {
-        const { record, closeModal, form: { getFieldDecorator } } = this.props;
+        const { record, closeModal, form: { getFieldDecorator }, sysRole } = this.props;
 
         const formItemLayout = {
             labelCol: {
@@ -57,6 +63,24 @@ class UserInfo extends Component {
 
                         <FormItem
                             {...formItemLayout}
+                            label='角色'>
+                            {
+                                getFieldDecorator('Role', {
+                                    rules: [{required: true, message: '请选择用户角色'}]
+                                })(
+                                    <Select mode='multiple'>
+                                        {
+                                            sysRole.map(({ RoleID, RoleName }) => (
+                                                <Option key={RoleID} value={RoleID}>{RoleName}</Option>
+                                            ))
+                                        }
+                                    </Select>
+                                )
+                            }
+                        </FormItem>
+
+                        <FormItem
+                            {...formItemLayout}
                             label='登录名'>
                             {
                                 getFieldDecorator('LoginName', {
@@ -64,6 +88,19 @@ class UserInfo extends Component {
                                 })(<Input maxLength={45} />)
                             }
                         </FormItem>
+
+                        {
+                            !record &&
+                            <FormItem
+                                {...formItemLayout}
+                                label='密码'>
+                                {
+                                    getFieldDecorator('Password', {
+                                        rules: [{ required: true, message: '请输入密码' }]
+                                    })(<Input maxLength={45} type='password' />)
+                                }
+                            </FormItem>
+                        }
 
                         <FormItem
                             {...formItemLayout}

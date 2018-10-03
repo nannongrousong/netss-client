@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Divider, Button } from 'antd';
+import { Table, Divider, Button, Modal } from 'antd';
 import PropTypes from 'prop-types';
 import RoleInfo from './roleInfo';
+import { errorHandle } from 'COMMON_UTILS/common';
 
 class RoleTable extends Component {
     state = {
@@ -23,7 +24,16 @@ class RoleTable extends Component {
     }
 
     startDel = (roleID) => {
-
+        const { delSysRole } = this.props;
+        let tempDialog = Modal.confirm({
+            title: '信息',
+            content: '确认要删除当前角色吗？',
+            onOk: () => {
+                delSysRole(roleID)
+                .then(tempDialog.destroy)
+                .catch(errorHandle);
+            }
+        });
     }
 
     closeModal = () => {
@@ -83,7 +93,8 @@ class RoleTable extends Component {
 RoleTable.propTypes = {
     sysRole: PropTypes.array,
     addSysRole: PropTypes.func,
-    editSysRole: PropTypes.func
+    editSysRole: PropTypes.func,
+    delSysRole: PropTypes.func
 };
 
 export default RoleTable;
