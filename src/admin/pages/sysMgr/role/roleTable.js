@@ -1,25 +1,29 @@
 import React, { Component, Fragment } from 'react';
 import { Table, Divider, Button, Modal } from 'antd';
 import PropTypes from 'prop-types';
-import RoleInfo from './roleInfo';
 import { errorHandle } from 'COMMON_UTILS/common';
+
+import RoleInfo from './roleInfo';
+import MenuAuth from './menuAuth';
 
 class RoleTable extends Component {
     state = {
-        isShowModal: false,
-        record: null
+        isShowInfoModal: false,
+        isShowMenuModal: false,
+        record: null,
+        roleID: null
     }
 
     startEdit = (record) => {
         this.setState({
-            isShowModal: true,
+            isShowInfoModal: true,
             record
         });
     }
 
     startAdd = () => {
         this.setState({
-            isShowModal: true
+            isShowInfoModal: true
         });
     }
 
@@ -30,21 +34,28 @@ class RoleTable extends Component {
             content: '确认要删除当前角色吗？',
             onOk: () => {
                 delSysRole(roleID)
-                .then(tempDialog.destroy)
-                .catch(errorHandle);
+                    .then(tempDialog.destroy)
+                    .catch(errorHandle);
             }
         });
     }
 
-    closeModal = () => {
+    configAuth = (roleID) => {
         this.setState({
-            isShowModal: false
+            isShowMenuModal: true,
+            roleID
+        });
+    }
+
+    closeModal = (type) => {
+        this.setState({
+            [{ info: 'isShowInfoModal', menu: 'isShowMenuModal' }[type]]: false
         });
     }
 
     render() {
-        const { sysRole, addSysRole, editSysRole } = this.props;
-        const { isShowModal, record } = this.state;
+        const { sysRole, addSysRole, editSysRole, sysMenu, listSysMenu } = this.props;
+        const { isShowInfoModal, isShowMenuModal, record } = this.state;
 
         const columns = [{
             title: '角色名',
@@ -61,13 +72,14 @@ class RoleTable extends Component {
                     <a href='#' onClick={this.startEdit.bind(this, record)}>修改</a>
                     <Divider type='vertical' />
                     <a href='#' onClick={this.startDel.bind(this, record.RoleID)}>删除</a>
+                    <Divider type='vertical' />
+                    <a href='#' onClick={this.configAuth.bind(this, record.RoleID)}>配置权限</a>
                 </span>
             )
         }];
 
         return (
             <Fragment>
-                
                 <Table
                     rowKey='RoleID'
                     title={() => (<Button className='mb-8' type='primary' onClick={this.startAdd}>添加角色</Button>)}
@@ -76,13 +88,24 @@ class RoleTable extends Component {
 
                 </Table>
                 {
-                    isShowModal &&
+                    isShowInfoModal &&
                     <RoleInfo
-                        addSysRole={addSysRole}
-                        editSysRole={editSysRole}
-                        closeModal={this.closeModal}
-                        record={record}>
-                    </RoleInfo>
+                        {...{
+                            addSysRole,
+                            editSysRole,
+                            record
+                        }}
+                        closeModal={this.closeModal} />
+                }
+
+                {
+                    isShowMenuModal &&
+                    <MenuAuth
+                        {...{
+                            sysMenu,
+                            listSysMenu
+                        }}
+                        closeModal={this.closeModal} />
                 }
             </Fragment>
 

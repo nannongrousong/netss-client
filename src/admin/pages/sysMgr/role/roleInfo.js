@@ -13,7 +13,8 @@ class UserInfo extends Component {
                 return;
             }
 
-            const { addSysRole, editSysRole, closeModal } = this.props;
+            let { addSysRole, editSysRole, closeModal } = this.props;
+            closeModal = closeModal.bind(this, 'info');
             if (values.RoleID) {
                 editSysRole(values).then(closeModal).catch(errorHandle);
             } else {
@@ -23,7 +24,8 @@ class UserInfo extends Component {
     }
 
     render() {
-        const { record, closeModal, form: { getFieldDecorator } } = this.props;
+        let { record, closeModal, form: { getFieldDecorator } } = this.props;
+        closeModal = closeModal.bind(this, 'info');
 
         const formItemLayout = {
             labelCol: {
