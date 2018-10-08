@@ -14,3 +14,6 @@ export const List_Sys_Role = (params) => request('/Sys_Mgr/Role', params);
 export const Add_Sys_Role = (params) => request('/Sys_Mgr/Role', params, 'POST');
 export const Del_Sys_Role = (params) => request('/Sys_Mgr/Role', params, 'DELETE');
 export const Edit_Sys_Role = (params) => request('/Sys_Mgr/Role', params, 'PUT');
+
+export const List_Role_Menus = (params) => request('/Sys_Mgr/Role_Menu', params);
+export const Save_Role_Menus = (params) => request('/Sys_Mgr/Role_Menu', params, 'POST');

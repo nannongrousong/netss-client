@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Tree, Icon } from 'antd';
 import PropTypes from 'prop-types';
 import { errorHandle } from 'COMMON_UTILS/common';
-import { Save_Role_Menus, List_Role_Menus } from 'ADMIN_SERVICE/Authority_Mgr';
+import { Save_Role_Menus, List_Role_Menus } from 'ADMIN_SERVICE/Sys_Mgr';
 const { TreeNode } = Tree;
 
 class MenuAuth extends Component {
