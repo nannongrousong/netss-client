@@ -1,3 +1,6 @@
+import reduceReducers from 'reduce-reducers';
+import { combineReducers } from 'redux';
+
 import tableDemo from './tableDemo';
 import formDemo from './formDemo';
 import homeNav from './homeNav';
@@ -5,23 +8,32 @@ import authInfo from './authInfo';
 import sysUser from './sysUser';
 import sysMenu from './sysMenu';
 import sysRole from './sysRole';
-
 import { RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
-import reduceReducers from 'reduce-reducers';
 
-import { combineReducers } from 'redux';
+const getStoreNames = (paths, storeMap) => paths.map((path) => (storeMap[path].storeName));
 
 const commonReducer = (state = {}, action) => {
-    switch (action.type) {
-        case RESET_TAB_STORE:
-            return {
-                ...state, ...action.storeNames.reduce((prev, curr) => {
-                    prev[curr] = undefined;
-                    return prev;
-                }, {})
-            };
-        default:
-            return state;
+    if (action.type == RESET_TAB_STORE) {
+        const { storeMap } = state.homeNav;
+        const { storePaths } = action;
+        let storeNames = getStoreNames(storePaths, storeMap);
+        let newStoreMap = JSON.parse(JSON.stringify(storeMap));
+        storePaths.forEach((path) => {
+            delete newStoreMap[path];
+        });
+
+        //  注意查看store树级解构
+        return {
+            ...state, ...storeNames.reduce((prev, curr) => {
+                prev[curr] = undefined;
+                return prev;
+            }, {}), homeNav: {
+                ...state.homeNav,
+                storeMap: newStoreMap
+            }
+        };
+    } else {
+        return state;
     }
 };
 
