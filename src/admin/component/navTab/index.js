@@ -35,11 +35,11 @@ class NavTab extends Component {
                 {
                     navTab.map((tab) => (
                         <TabPane tab={
-                            <Dropdown overlay={tabOperMenus(tab.path)} trigger={['contextMenu']}>
-                                <div style={{ userSelect: 'none', display: 'inline-block' }}>{tab.title}</div>
+                            <Dropdown overlay={tabOperMenus(tab.Path)} trigger={['contextMenu']}>
+                                <div style={{ userSelect: 'none', display: 'inline-block' }}>{tab.Title}</div>
                             </Dropdown>
-                        } key={tab.path} closable>
-                            {tab.path == activeRoute && <div style={{padding: '20px', height: '100%', overflowY: 'auto', backgroundColor: '#FFF'}}><p>当前tab页信息{JSON.stringify(tab)}</p><div>{children}</div></div>}
+                        } key={tab.Path} closable>
+                            {tab.Path == activeRoute && <div style={{padding: '20px', height: '100%', overflowY: 'auto', backgroundColor: '#FFF'}}><p>当前tab页信息{JSON.stringify(tab)}</p><div>{children}</div></div>}
                         </TabPane>
                     ))
                 }

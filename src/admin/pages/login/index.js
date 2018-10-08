@@ -48,7 +48,7 @@ class Login extends Component {
                     <h1 className='mt-16 mb-16'>网盘系统</h1>
                     <Form className={styles.form} onSubmit={this.handleLogin}>
                         <FormItem>
-                            {getFieldDecorator('userName', {
+                            {getFieldDecorator('loginName', {
                                 rules: [{ required: true, message: '请输入用户名!' }],
                             })(
                                 <Input size='large' prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='用户名' />

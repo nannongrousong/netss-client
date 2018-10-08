@@ -1,18 +1,6 @@
-import { SET_NAV_MENU, SET_NAV_TAB, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB, EDIT_TAB_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
+import { SET_NAV_MENU, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB, EDIT_TAB_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 import { Load_User_Menus } from 'ADMIN_SERVICE/Authority_Mgr';
 import { errorHandle } from 'COMMON_UTILS/common';
-
-export const setNavTab = () => async (dispatch, getState) => {
-    try {
-        let resData = await Load_User_Menus();
-        dispatch({
-            type: SET_NAV_TAB,
-            data: resData.data
-        });
-    } catch (err) {
-        errorHandle(err);
-    }
-};
 
 export const initNavMenu = (initPath, callBack) => async (dispatch, getState) => {
     try {
@@ -32,7 +20,7 @@ export const initNavMenu = (initPath, callBack) => async (dispatch, getState) =>
             routeInfo = getRouteInfo(initPath, navMenu);
         }
 
-        let activeRoute = routeInfo ? routeInfo.path : '/404';
+        let activeRoute = routeInfo ? routeInfo.Path : '/404';
 
         dispatch({
             type: ACTIVE_TAB,
@@ -50,12 +38,12 @@ export const initNavMenu = (initPath, callBack) => async (dispatch, getState) =>
 
 const getRouteInfo = (path, routes) => {
     for (let i = 0; i < routes.length; i++) {
-        if (routes[i]['path'] == path) {
+        if (routes[i]['Path'] == path) {
             return routes[i];
         }
 
-        if (routes[i].children) {
-            let tempRes = getRouteInfo(path, routes[i].children);
+        if (routes[i].Children) {
+            let tempRes = getRouteInfo(path, routes[i].Children);
             if (tempRes) {
                 return tempRes;
             }
@@ -67,7 +55,7 @@ const getRouteInfo = (path, routes) => {
 let _firstValidPath = null;
 const getFirstShowPage = (routes) => {
     for (let i = 0; i < routes.length; i++) {
-        if (!_firstValidPath && routes[i].path) {
+        if (!_firstValidPath && routes[i].Path) {
             _firstValidPath = routes[i];
         }
 
@@ -97,34 +85,34 @@ export const setActiveTab = (tabPath, callBack) => (dispatch, getState) => {
         return;
     }
 
-    let { path } = routeInfo;
-    let resTab = navTab.find((tab) => tab.path == path);
+    let { Path } = routeInfo;
+    let resTab = navTab.find((tab) => tab.Path == Path);
 
     dispatch({
         type: ACTIVE_TAB,
         data: {
-            activeRoute: path,
+            activeRoute: Path,
             navTab: !resTab ? [...navTab, routeInfo] : navTab
         }
     });
 
-    typeof callBack == 'function' && callBack(path);
+    typeof callBack == 'function' && callBack(Path);
 };
 
 export const closeNavTab = (tabPath, callBack) => (dispatch, getState) => {
     let { navTab, activeRoute, storeMap } = getState().homeNav;
     let newPath = '';
-    let tabIndex = navTab.findIndex((route) => route.path == tabPath);
+    let tabIndex = navTab.findIndex((route) => route.Path == tabPath);
 
     //  关闭的是当前激活的
     if (tabPath == activeRoute) {
         if (tabIndex == navTab.length - 1) {
             //  当前激活的是最后一个tab页，取相邻左边一个
             //  考虑仅剩下一个情况
-            newPath = (navTab.length == 1) ? '' : navTab[tabIndex - 1].path;
+            newPath = (navTab.length == 1) ? '' : navTab[tabIndex - 1].Path;
         } else {
             //  当前激活的非最后一个tab页，取相邻右边一个
-            newPath = navTab[tabIndex + 1].path;
+            newPath = navTab[tabIndex + 1].Path;
         }
     } else {
         newPath = activeRoute;
@@ -157,8 +145,8 @@ export const closeOtherNavTab = (tabPath) => (dispatch, getState) => {
 
     let storeNames = [];
     navTab.forEach((tab) => {
-        if (tab.path != tabPath) {
-            storeNames.push(storeMap[tab.path].storeName);
+        if (tab.Path != tabPath) {
+            storeNames.push(storeMap[tab.Path].storeName);
         }
     });
     resetTabStore(storeNames, dispatch);
@@ -166,7 +154,7 @@ export const closeOtherNavTab = (tabPath) => (dispatch, getState) => {
 
 export const closeAllNavTab = () => (dispatch, getState) => {
     let { navTab, storeMap } = getState().homeNav;
-    let storeNames = navTab.map((tab) => (storeMap[tab.path].storeName));
+    let storeNames = navTab.map((tab) => (storeMap[tab.Path].storeName));
 
     dispatch({
         type: CLOSE_NAV_ALL_TAB,

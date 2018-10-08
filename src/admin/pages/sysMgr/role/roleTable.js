@@ -55,7 +55,7 @@ class RoleTable extends Component {
 
     render() {
         const { sysRole, addSysRole, editSysRole, sysMenu, listSysMenu } = this.props;
-        const { isShowInfoModal, isShowMenuModal, record } = this.state;
+        const { isShowInfoModal, isShowMenuModal, record, roleID } = this.state;
 
         const columns = [{
             title: '角色名',
@@ -103,7 +103,8 @@ class RoleTable extends Component {
                     <MenuAuth
                         {...{
                             sysMenu,
-                            listSysMenu
+                            listSysMenu,
+                            roleID
                         }}
                         closeModal={this.closeModal} />
                 }

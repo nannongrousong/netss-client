@@ -1,13 +1,34 @@
 import React, { Component } from 'react';
 import { Modal, Tree, Icon } from 'antd';
 import PropTypes from 'prop-types';
-
+import { errorHandle } from 'COMMON_UTILS/common';
+import { Save_Role_Menus, List_Role_Menus } from 'ADMIN_SERVICE/Authority_Mgr';
 const { TreeNode } = Tree;
 
 class MenuAuth extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            checked: []
+        };
+    }
+
     componentDidMount() {
-        const { sysMenu, listSysMenu } = this.props;
+        const { sysMenu, listSysMenu, roleID } = this.props;
         (!sysMenu || sysMenu.length == 0) && listSysMenu();
+
+        List_Role_Menus({ roleID }).then((resData) => {
+            this.setState({
+                checked: resData.data
+            });
+        }).catch(err => {
+            errorHandle(err);
+        });
+    }
+
+    closeModal = () => {
+        let { closeModal } = this.props;
+        closeModal('menu');
     }
 
     renderTreeNodes = (data) => {
@@ -30,19 +51,42 @@ class MenuAuth extends Component {
         });
     }
 
+    saveUserMenus = () => {
+        const { roleID } = this.props;
+        const { checked } = this.state;
+
+        Save_Role_Menus({
+            roleID,
+            menuIDs: checked
+        }).then(this.closeModal).catch(errorHandle);
+
+    }
+
+    handleTreeCheck = (checkedKeys, e) => {
+        const { checked } = checkedKeys;
+        this.setState({ checked });
+    }
+
     render() {
-        let { closeModal, sysMenu } = this.props;
-        closeModal = closeModal.bind(this, 'menu');
+        const { sysMenu } = this.props;
+        const { checked } = this.state;
+
+        console.log('checked', checked);
+
         return (
             <Modal
                 visible={true}
-                onCancel={closeModal}>
+                onCancel={this.closeModal}
+                onOk={this.saveUserMenus}>
                 {
                     sysMenu && sysMenu.length > 0 &&
                     <Tree
                         defaultExpandAll
                         showLine
-                        checkable>
+                        checkable
+                        checkStrictly
+                        checkedKeys={checked}
+                        onCheck={this.handleTreeCheck}>
                         {this.renderTreeNodes(sysMenu)}
                     </Tree>
                 }
@@ -55,7 +99,8 @@ class MenuAuth extends Component {
 MenuAuth.propTypes = {
     sysMenu: PropTypes.array,
     listSysMenu: PropTypes.func,
-    closeModal: PropTypes.func
+    closeModal: PropTypes.func,
+    roleID: PropTypes.number.isRequired
 };
 
 export default MenuAuth;

@@ -41,6 +41,10 @@ export default async (url, params, method = 'GET') => {
             throw new Error(data.info || '') ;
         }
     } else {
+        if(response.status == 401) {
+            let data = await response.json();
+            throw new Error(data.info);
+        }
         throw new Error(`fetch error. url: ${url}, \n params: ${JSON.stringify(params)}, \n info:${response.statusText}`);
     }
 };
