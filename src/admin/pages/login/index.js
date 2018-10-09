@@ -26,9 +26,9 @@ class Login extends Component {
 
             try {
                 let resData = await CMS_Login(values);
-                const { code, data: { token }, info } = resData;
-                if (!code) {
-                    errorHandle(new Error(info));
+                const { Code, Data: { token }, Info } = resData;
+                if (!Code) {
+                    errorHandle(new Error(Info));
                 } else {
                     //  save userinfo into localstorage
                     sessionStorage.setItem('AUTH_INFO', token);

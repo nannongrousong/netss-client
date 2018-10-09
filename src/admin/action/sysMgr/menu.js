@@ -18,7 +18,7 @@ export const listSysMenu = () => async (dispatch) => {
     let resData = await List_Sys_Menu();
     dispatch({
         type: SET_SYS_MENU,
-        menu: resData.data
+        menu: resData.Data
     });
 };
 
@@ -28,7 +28,7 @@ export const editSysMenu = (editedMenu) => async (dispatch) => {
 
     dispatch({
         type: SET_SYS_MENU,
-        menu: resData2.data
+        menu: resData2.Data
     });
 };
 
@@ -38,7 +38,7 @@ export const addSysMenu = (addedMenu) => async (dispatch) => {
 
     dispatch({
         type: SET_SYS_MENU,
-        menu: resData2.data
+        menu: resData2.Data
     });
 };
 
@@ -48,7 +48,7 @@ export const delSysMenu = (menuID) => async (dispatch) => {
 
     dispatch({
         type: SET_SYS_MENU,
-        menu: resData2.data
+        menu: resData2.Data
     });
 };
 

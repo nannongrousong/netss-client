@@ -6,7 +6,7 @@ export const addSysUser = (userInfo) => async (dispatch) => {
     let resData = await List_Sys_User();
     dispatch({
         type: SET_SYS_USER,
-        user: resData.data
+        user: resData.Data
     });
 };
 
@@ -15,7 +15,7 @@ export const delSysUser = (userID) => async (dispatch) => {
     let resData = await List_Sys_User();
     dispatch({
         type: SET_SYS_USER,
-        user: resData.data
+        user: resData.Data
     });
 };
 
@@ -24,7 +24,7 @@ export const editSysUser = (userInfo) => async (dispatch) => {
     let resData = await List_Sys_User();
     dispatch({
         type: SET_SYS_USER,
-        user: resData.data
+        user: resData.Data
     });
 };
 
@@ -32,6 +32,6 @@ export const listSysUser = () => async (dispatch) => {
     let resData = await List_Sys_User();
     dispatch({
         type: SET_SYS_USER,
-        user: resData.data
+        user: resData.Data
     });
 };

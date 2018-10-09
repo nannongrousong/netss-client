@@ -34,16 +34,16 @@ export default async (url, params, method = 'GET') => {
     }
 
     if (response.ok) {
-        let data = await response.json();
-        if (data.code) {
-            return data;
+        let resData = await response.json();
+        if (resData.Code) {
+            return resData;
         } else {
-            throw new Error(data.info || '') ;
+            throw new Error(resData.Info || '') ;
         }
     } else {
         if(response.status == 401) {
-            let data = await response.json();
-            throw new Error(data.info);
+            let resData = await response.json();
+            throw new Error(resData.Info);
         }
         throw new Error(`fetch error. url: ${url}, \n params: ${JSON.stringify(params)}, \n info:${response.statusText}`);
     }

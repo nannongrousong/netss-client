@@ -6,7 +6,7 @@ export const addSysRole = (userInfo) => async (dispatch) => {
     let resData = await List_Sys_Role();
     dispatch({
         type: SET_SYS_ROLE,
-        role: resData.data
+        role: resData.Data
     });
 };
 
@@ -15,7 +15,7 @@ export const delSysRole = (roleID) => async (dispatch) => {
     let resData = await List_Sys_Role();
     dispatch({
         type: SET_SYS_ROLE,
-        role: resData.data
+        role: resData.Data
     });
 };
 
@@ -24,7 +24,7 @@ export const editSysRole = (userInfo) => async (dispatch) => {
     let resData = await List_Sys_Role();
     dispatch({
         type: SET_SYS_ROLE,
-        role: resData.data
+        role: resData.Data
     });
 };
 
@@ -32,6 +32,6 @@ export const listSysRole = () => async (dispatch) => {
     let resData = await List_Sys_Role();
     dispatch({
         type: SET_SYS_ROLE,
-        role: resData.data
+        role: resData.Data
     });
 };

@@ -19,7 +19,7 @@ class MenuAuth extends Component {
 
         List_Role_Menus({ roleID }).then((resData) => {
             this.setState({
-                checked: resData.data
+                checked: resData.Data
             });
         }).catch(err => {
             errorHandle(err);

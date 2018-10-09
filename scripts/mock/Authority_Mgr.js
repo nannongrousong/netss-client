@@ -1,8 +1,8 @@
 module.exports = {
     'GET /api/Authority_Mgr/Load_User_Menus': {
-        code: 0,
-        info: '成功',
-        data: [{
+        Code: 0,
+        Info: '成功',
+        Data: [{
             menu_id: '1',
             type: 'group',
             title: 'Antdesign Demo',
@@ -42,9 +42,9 @@ module.exports = {
         }]
     }, 
     'GET /api/Authority_Mgr/Load_Sys_Menus': {
-        code: 0,
-        info: '成功',
-        data: [{
+        Code: 0,
+        Info: '成功',
+        Data: [{
             menu_id: '1',
             type: 'group',
             title: 'Antdesign Demo',

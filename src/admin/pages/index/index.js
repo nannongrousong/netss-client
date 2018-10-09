@@ -36,8 +36,8 @@ class Index extends Component {
         //  用户主动刷新了页面
         if (this.IS_LOGIN) {
             Load_User_Info().then((resData) => {
-                const { code, data: { Menu, NickName, RoleName }, info } = resData;
-                if (code) {
+                const { Code, Data: { Menu, NickName, RoleName }, Info } = resData;
+                if (Code) {
                     const { initNavMenu, history, setAuthInfo } = this.props;
                     const { location: { pathname } } = history;
                     initNavMenu(pathname, Menu, (realPath) => {
@@ -49,7 +49,7 @@ class Index extends Component {
 
                     setAuthInfo({ NickName, RoleName });
                 } else {
-                    errorHandle(new Error(info));
+                    errorHandle(new Error(Info));
                 }
             }).catch(errorHandle);
         }
