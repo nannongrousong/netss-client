@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Tag, Divider, Modal, Button } from 'antd';
 import { tagsSource } from 'ADMIN_CONFIG_ENUM/roleTags';
+import PropTypes from 'prop-types';
 
 import UserInfo from './userInfo';
 
@@ -11,6 +12,7 @@ class UserTable extends Component {
     }
 
     startEditUser = (record) => {
+        console.log('record', record);
         this.setState({
             showModal: true,
             record
@@ -24,13 +26,13 @@ class UserTable extends Component {
         });
     }
 
-    startDelUser = (user_id) => {
+    startDelUser = (UserID) => {
         const { delData } = this.props;
         Modal.confirm({
             title: '信息',
             content: '您确定要删除当前选中用户吗？',
             onOk: () => {
-                delData(user_id);
+                delData(UserID);
             }
         });
     }
@@ -44,21 +46,21 @@ class UserTable extends Component {
 
     render() {
         const { showModal, record } = this.state;
-        const { addData, editData } = this.props;
+        const { addData, editData, tableDemo: { data: { RecordList, RecordCount}, pagination }, editPage } = this.props;
 
         const columns = [{
             title: '姓名',
-            dataIndex: 'name',
+            dataIndex: 'Name',
             render: (text, record) => <a href='#' onClick={this.startEditUser.bind(this, record)}>{text}</a>
         }, {
             title: '年龄',
-            dataIndex: 'age'
+            dataIndex: 'Age'
         }, {
             title: '地址',
-            dataIndex: 'address'
+            dataIndex: 'Address'
         }, {
             title: '标签',
-            dataIndex: 'tag',
+            dataIndex: 'Tag',
             render: tag => (
                 <span>
                     {tag && tag.map(item => <Tag color='blue' key={item}>{tagsSource[item]}</Tag>)}
@@ -71,7 +73,7 @@ class UserTable extends Component {
                 <span>
                     <a href='#' onClick={this.startEditUser.bind(this, record)}>修改</a>
                     <Divider type='vertical' />
-                    <a href='#' onClick={this.startDelUser.bind(this, record.user_id)}>删除</a>
+                    <a href='#' onClick={this.startDelUser.bind(this, record.UserID)}>删除</a>
                 </span>
             )
         }];
@@ -80,15 +82,22 @@ class UserTable extends Component {
             <div>
                 <Button onClick={this.startAddUser} className='mb-16'>添加用户</Button>
                 <Table
-                    {...this.props}
-                    rowKey={'user_id'}
+                    dataSource={RecordList}
+                    rowKey={'UserID'}
                     columns={columns}
                     pagination={{
                         showSizeChanger: true,
                         showQuickJumper: true,
-                        pageSizeOptions: ['8', '15'],
+                        pageSizeOptions: ['8', '20', '30', '50'],
                         showTotal: (total, range) => (`第${range[0]}-${range[1]}条 共${total}条`),
-                        pageSize: 8
+                        total: RecordCount,
+                        ...pagination,
+                        onShowSizeChange: (current, size) => {
+                            editPage(current, size);
+                        },
+                        onChange: (page, pageSize) => {
+                            editPage(page, pageSize);
+                        }
                     }} >
                 </Table>
                 {
@@ -103,5 +112,15 @@ class UserTable extends Component {
         );
     }
 }
+
+UserTable.propTypes = {
+    delData: PropTypes.func,
+    addData: PropTypes.func,
+    editData: PropTypes.func,
+    editPage: PropTypes.func,
+    tableDemo: PropTypes.object
+};
+
+
 
 export default UserTable;

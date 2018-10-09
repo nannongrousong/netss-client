@@ -24,7 +24,7 @@ class UserInfo extends Component {
             }
 
             const { addData, editData, closeModal } = this.props;
-            if (values.user_id) {
+            if (values.UserID) {
                 editData(values).then(closeModal).catch(errorHandle);
             } else {
                 addData(values).then(closeModal).catch(errorHandle);
@@ -56,7 +56,7 @@ class UserInfo extends Component {
                     <Form>
                         <FormItem>
                             {
-                                getFieldDecorator('user_id')(
+                                getFieldDecorator('UserID')(
                                     <Input className='d-none' />
                                 )
                             }
@@ -66,7 +66,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='姓名'>
                             {
-                                getFieldDecorator('name', {
+                                getFieldDecorator('Name', {
                                     rules: [{ required: true, message: '请填写姓名' }]
                                 })(<Input maxLength={45} />)
                             }
@@ -76,7 +76,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='年龄'>
                             {
-                                getFieldDecorator('age', {
+                                getFieldDecorator('Age', {
                                     rules: [{ pattern: /^\d+$/, message: '请输入正确的年龄' }]
                                 })(<Input maxLength={45} />)
                             }
@@ -86,7 +86,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='地址'>
                             {
-                                getFieldDecorator('address', {
+                                getFieldDecorator('Address', {
 
                                 })(<Input maxLength={45} />)
                             }
@@ -97,7 +97,7 @@ class UserInfo extends Component {
                             label='标签'>
 
                             {
-                                getFieldDecorator('tag', {
+                                getFieldDecorator('Tag', {
 
                                 })(
                                     <Select

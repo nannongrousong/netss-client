@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { listData, addData, editData, delData } from 'ADMIN_ACTION_DEMO/table';
+import { listData, addData, editData, delData, editPage } from 'ADMIN_ACTION_DEMO/table';
 import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 import PropTypes from 'prop-types';
 
@@ -13,13 +13,12 @@ class Index extends Component {
     }
 
     render() {
-        const { tableDemo: { tableData }, listData, editData, addData, delData } = this.props;
+        const { tableDemo, listData, editData, addData, delData, editPage } = this.props;
         return (
             <div>
                 <UserTable
-                    dataSource={tableData}
                     {...{
-                        listData, editData, addData, delData
+                        listData, editData, addData, delData, tableDemo, editPage
                     }}
                 />
             </div>
@@ -32,7 +31,8 @@ Index.propTypes = {
     listData: PropTypes.func,
     addData: PropTypes.func,
     editData: PropTypes.func,
-    delData: PropTypes.func
+    delData: PropTypes.func,
+    editPage: PropTypes.func
 };
 
 Index = connect(
@@ -43,7 +43,8 @@ Index = connect(
         listData,
         addData,
         editData,
-        delData
+        delData,
+        editPage
     })(Index);
 
 export default Index;
