@@ -1,16 +1,13 @@
 import { SET_NAV_MENU, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB, EDIT_TAB_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
-import { Load_User_Menus } from 'ADMIN_SERVICE/Authority_Mgr';
 import { errorHandle } from 'COMMON_UTILS/common';
 
-export const initNavMenu = (initPath, callBack) => async (dispatch, getState) => {
+export const initNavMenu = (initPath, navMenu, callBack) => async (dispatch, getState) => {
     try {
-        let resData = await Load_User_Menus();
         dispatch({
             type: SET_NAV_MENU,
-            data: resData.data
+            data: navMenu
         });
 
-        let { navMenu } = getState().homeNav;
         let routeInfo = null;
 
         if (initPath == '/index') {

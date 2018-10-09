@@ -4,14 +4,18 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styles from 'ADMIN_STYLES/index.less';
+import { errorHandle } from 'COMMON_UTILS/common';
 
 import { initNavMenu, setActiveTab, closeNavTab, closeOtherNavTab, closeAllNavTab, editTabStore } from 'ADMIN_ACTION/homeNav';
+import { setAuthInfo } from 'ADMIN_ACTION/authInfo';
+
 import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
 import NavSlider from 'ADMIN_COMPONENT_NAVSLIDER';
-import NavFooter from 'ADMIN_COMPONENT_NAVFOOTER';
 import NavTab from 'ADMIN_COMPONENT_NAVTAB';
 
 import adminRouters from 'ADMIN_ROUTER';
+
+import { Load_User_Info } from 'ADMIN_SERVICE/Sys_Login';
 
 const { Content } = Layout;
 
@@ -30,14 +34,23 @@ class Index extends Component {
     componentDidMount() {
         //  用户主动刷新了页面
         if (this.IS_LOGIN) {
-            const { initNavMenu, history } = this.props;
-            const { location: { pathname } } = history;
-            initNavMenu(pathname, (realPath) => {
-                if (pathname != realPath) {
-                    //  碰到404了
-                    history.push(realPath);
+            Load_User_Info().then((resData) => {
+                const { code, data: { Menu, NickName, RoleName }, info } = resData;
+                if (code) {
+                    const { initNavMenu, history, setAuthInfo } = this.props;
+                    const { location: { pathname } } = history;
+                    initNavMenu(pathname, Menu, (realPath) => {
+                        if (pathname != realPath) {
+                            //  碰到404了
+                            history.push(realPath);
+                        }
+                    });
+
+                    setAuthInfo({ NickName, RoleName });
+                } else {
+                    errorHandle(new Error(info));
                 }
-            });
+            }).catch(errorHandle);
         }
     }
 
@@ -91,7 +104,7 @@ class Index extends Component {
     }
 
     handleTabClick = (tabKey) => {
-        
+
     }
 
     render() {
@@ -149,7 +162,8 @@ Index.propTypes = {
     activeRoute: PropTypes.string,
     closeNavTab: PropTypes.func,
     closeOtherNavTab: PropTypes.func,
-    closeAllNavTab: PropTypes.func
+    closeAllNavTab: PropTypes.func,
+    setAuthInfo: PropTypes.func
 };
 
 Index = connect(
@@ -163,7 +177,8 @@ Index = connect(
         setActiveTab,
         closeNavTab,
         closeOtherNavTab,
-        closeAllNavTab
+        closeAllNavTab,
+        setAuthInfo
     }
 )(Index);
 export default Index;
@@ -185,7 +200,7 @@ export const TabWrapper = (storeName) => {
                 }
 
                 componentWillUnmount() {
-                    
+
                 }
 
                 render() {

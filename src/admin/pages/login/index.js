@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Form, Input, Icon, Button } from 'antd';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from 'ADMIN_STYLES/login.less';
 import logoImg from 'COMMON_IMAGES/logo.jpg';
-import { cmsLogin } from 'ADMIN_ACTION/authInfo';
+import { CMS_Login } from 'ADMIN_SERVICE/Sys_Login';
+import { errorHandle } from 'COMMON_UTILS/common';
 
 const FormItem = Form.Item;
 
@@ -19,17 +19,26 @@ class Login extends Component {
 
     handleLogin = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (err) {
                 return;
             }
 
-            const { cmsLogin } = this.props;
-            cmsLogin(values, () => {
-                this.setState({
-                    isLogin: !!sessionStorage.getItem('AUTH_INFO')
-                });
-            });
+            try {
+                let resData = await CMS_Login(values);
+                const { code, data: { token }, info } = resData;
+                if (!code) {
+                    errorHandle(new Error(info));
+                } else {
+                    //  save userinfo into localstorage
+                    sessionStorage.setItem('AUTH_INFO', token);
+                    this.setState({
+                        isLogin: !!sessionStorage.getItem('AUTH_INFO')
+                    });
+                }
+            } catch (err) {
+                errorHandle(err);
+            }
         });
     }
 
@@ -73,19 +82,9 @@ class Login extends Component {
 
 Login.propTypes = {
     history: PropTypes.object,
-    form: PropTypes.object,
-    cmsLogin: PropTypes.func
+    form: PropTypes.object
 };
 
 Login = Form.create()(Login);
-
-Login = connect(
-    (state) => ({
-
-    }),
-    {
-        cmsLogin
-    }
-)(Login);
 
 export default Login;
