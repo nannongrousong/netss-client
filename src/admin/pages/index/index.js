@@ -97,7 +97,6 @@ class Index extends Component {
     }
 
     handleMenuClick = ({ key: path }) => {
-        debugger;
         const { history, setActiveTab } = this.props;
         setActiveTab(path, (path2) => {
             history.push(path2);

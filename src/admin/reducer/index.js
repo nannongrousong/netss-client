@@ -10,7 +10,13 @@ import sysMenu from './sysMenu';
 import sysRole from './sysRole';
 import { RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 
-const getStoreNames = (paths, storeMap) => paths.map((path) => (storeMap[path].storeName));
+const getStoreNames = (paths, storeMap) => {
+    let storeNames = [];
+    paths.forEach((path) => {
+        storeMap[path] && storeNames.push(storeMap[path].storeName);
+    });
+    return storeNames;
+};
 
 const commonReducer = (state = {}, action) => {
     if (action.type == RESET_TAB_STORE) {
