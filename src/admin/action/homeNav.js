@@ -75,10 +75,10 @@ const getFirstShowPage = (routes) => {
  * @param {回调函数，送出查询到的path供页面跳转} callBack 
  */
 export const setActiveTab = (tabPath, callBack) => (dispatch, getState) => {
-    let { navTab, navMenu } = getState().homeNav;
+    let { navTab, navMenu, activeRoute } = getState().homeNav;
     let routeInfo = getRouteInfo(tabPath, navMenu);
 
-    if (!routeInfo) {
+    if (!routeInfo || activeRoute == tabPath) {
         return;
     }
 
