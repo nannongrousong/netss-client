@@ -124,12 +124,12 @@ class Index extends Component {
 
 Index.propTypes = {
     form: PropTypes.object,
-    saveChanges: PropTypes.func
+    saveFormChanges: PropTypes.func
 };
 
 Index = Form.create({
     onValuesChange: (props, changedValues, allValues) => {
-        props.saveChanges(allValues);
+        props.saveFormChanges(allValues);
     },
     mapPropsToFields: (props) => {
         return createFormField(props.formDemo);
@@ -142,7 +142,6 @@ Index = connect(
     }),
     {
         saveFormChanges
-
     }
 )(Index);
 
