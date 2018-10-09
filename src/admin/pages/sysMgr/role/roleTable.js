@@ -49,7 +49,9 @@ class RoleTable extends Component {
 
     closeModal = (type) => {
         this.setState({
-            [{ info: 'isShowInfoModal', menu: 'isShowMenuModal' }[type]]: false
+            [{ info: 'isShowInfoModal', menu: 'isShowMenuModal' }[type]]: false,
+            record: null,
+            roleID: null
         });
     }
 

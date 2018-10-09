@@ -37,7 +37,8 @@ class UserTable extends Component {
 
     closeModal = () => {
         this.setState({
-            isShowModal: false
+            isShowModal: false,
+            record: null
         });
     }
 
