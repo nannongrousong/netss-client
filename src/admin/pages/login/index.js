@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styles from 'ADMIN_STYLES/login.less';
 import logoImg from 'COMMON_IMAGES/logo.jpg';
-import { CMS_Login } from 'ADMIN_SERVICE/Sys_Login';
+import { CMS_Login } from 'ADMIN_SERVICE/Sys_Auth';
 import { errorHandle } from 'COMMON_UTILS/common';
 
 const FormItem = Form.Item;

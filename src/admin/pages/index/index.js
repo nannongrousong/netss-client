@@ -15,7 +15,8 @@ import NavTab from 'ADMIN_COMPONENT_NAVTAB';
 
 import adminRouters from 'ADMIN_ROUTER';
 
-import { Load_User_Info } from 'ADMIN_SERVICE/Sys_Login';
+import { Load_User_Info } from 'ADMIN_SERVICE/Sys_Auth';
+
 
 const { Content } = Layout;
 
