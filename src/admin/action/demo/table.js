@@ -1,8 +1,8 @@
 import { SET_DATA, EIDT_PAGE } from 'ADMIN_ACTIONTYPE/tableDemo';
-import { addTableData, delTableData, editTableData, listTableData } from 'ADMIN_SERVICE/Demo';
+import { Add_Demo_Data, Del_Demo_Data, Edit_Demo_Data, List_Demo_Data } from 'ADMIN_SERVICE/Demo';
 
 export const addData = (record) => async (dispatch, getState) => {
-    await addTableData(record);
+    await Add_Demo_Data(record);
     await reloadData(dispatch, getState);
 };
 
@@ -11,12 +11,12 @@ export const listData = () => async (dispatch, getState) => {
 };
 
 export const editData = (record) => async (dispatch, getState) => {
-    await editTableData(record);
+    await Edit_Demo_Data(record);
     await reloadData(dispatch, getState);
 };
 
 export const delData = (user_id) => async (dispatch, getState) => {
-    await delTableData(user_id);
+    await Del_Demo_Data(user_id);
     await reloadData(dispatch, getState);
 };
 
@@ -37,7 +37,7 @@ const reloadData = async (dispatch, getState) => {
         size: pageSize
     };
 
-    let resData = await listTableData(reqParam);
+    let resData = await List_Demo_Data(reqParam);
     dispatch({
         type: SET_DATA,
         data: resData.Data
