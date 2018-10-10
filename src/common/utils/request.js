@@ -17,20 +17,33 @@ export default async (url, params, method = 'GET') => {
             'authorization': `Bearer ${sessionStorage.getItem('AUTH_INFO')}`
         }
     };
-    if (['POST', 'PUT'].includes(method)) {
-        response = await fetch(url, {
-            ...commonOptions,
-            body: JSON.stringify(params),
-            headers: {
-                ...commonOptions.headers, 
-                'Content-type': 'application/json; charset=UTF-8'
-            }
-        });
-    } else if (method == 'DELETE') {
-        response = await fetch(`${url}/${params}`, commonOptions);
-    } else {
-        params = new URLSearchParams(params);
-        response = await fetch(url + '?' + params.toString(), commonOptions);
+
+    switch (method) {
+        case 'POST':
+        case 'PUT':
+            response = await fetch(url, {
+                ...commonOptions,
+                body: JSON.stringify(params),
+                headers: {
+                    ...commonOptions.headers,
+                    'Content-type': 'application/json; charset=UTF-8'
+                }
+            });
+            break;
+        case 'DELETE':
+            response = await fetch(`${url}/${params}`, commonOptions);
+            break;
+        case 'FILE':
+            response = await fetch(url, {
+                ...commonOptions,
+                body: params,
+                method: 'POST'
+            });
+            break;
+        default:
+            params = new URLSearchParams(params);
+            response = await fetch(url + '?' + params.toString(), commonOptions);
+            break;
     }
 
     if (response.ok) {
@@ -38,10 +51,10 @@ export default async (url, params, method = 'GET') => {
         if (resData.Code) {
             return resData;
         } else {
-            throw new Error(resData.Info || '') ;
+            throw new Error(resData.Info || '');
         }
     } else {
-        if(response.status == 401) {
+        if (response.status == 401) {
             let resData = await response.json();
             throw new Error(resData.Info);
         }
