@@ -16,6 +16,7 @@ import NavTab from 'ADMIN_COMPONENT_NAVTAB';
 import adminRouters from 'ADMIN_ROUTER';
 
 import { Load_User_Info } from 'ADMIN_SERVICE/Sys_Auth';
+import { setResource } from 'COMMON_COMPONENT/AuthResource';
 
 
 const { Content } = Layout;
@@ -36,7 +37,7 @@ class Index extends Component {
         //  用户主动刷新了页面
         if (this.IS_LOGIN) {
             Load_User_Info().then((resData) => {
-                const { Code, Data: { Menu, NickName, RoleName }, Info } = resData;
+                const { Code, Data: { Menu, NickName, RoleName, Resource }, Info } = resData;
                 if (Code) {
                     const { initNavMenu, history, setAuthInfo } = this.props;
                     const { location: { pathname } } = history;
@@ -48,6 +49,7 @@ class Index extends Component {
                     });
 
                     setAuthInfo({ NickName, RoleName });
+                    setResource(Resource.map(res => (res.Path)));
                 } else {
                     errorHandle(new Error(Info));
                 }
