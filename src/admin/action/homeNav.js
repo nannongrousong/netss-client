@@ -18,6 +18,7 @@ export const initNavMenu = (initPath, navMenu, callBack) => async (dispatch, get
         }
 
         let activeRoute = routeInfo ? routeInfo.Path : '/404';
+        document.title = routeInfo.Title || document.title;
 
         dispatch({
             type: ACTIVE_TAB,
@@ -82,7 +83,9 @@ export const setActiveTab = (tabPath, callBack) => (dispatch, getState) => {
         return;
     }
 
-    let { Path } = routeInfo;
+    let { Path, Title } = routeInfo;
+    document.title = Title;
+
     let resTab = navTab.find((tab) => tab.Path == Path);
 
     dispatch({
