@@ -1,12 +1,20 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Input, Form, message, Alert } from 'antd';
+import { Modal, Input, Form, Alert, Dropdown, Menu } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { removeObjPrefix, errorHandle } from 'COMMON_UTILS/common';
+import FileUpload from 'ADMIN_COMPONENT/Upload';
+import IconList from './iconList';
+import styles from 'ADMIN_STYLES/sysMrg-menu.less';
 
 const FormItem = Form.Item;
+const MenuItem = Menu.Item;
 const fieldPrefix = 'menu-';
 
 class InfoModal extends Component {
+    state = {
+        showIconModal: false
+    }
+
     saveData = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -28,6 +36,36 @@ class InfoModal extends Component {
         });
     }
 
+    handleFileChange = ({ file, fileList, event }) => {
+        const { status, response: newPath } = file;
+        const { form } = this.props;
+        if (status == 'done') {
+            form.setFieldsValue({
+                [`${fieldPrefix}Icon`]: newPath
+            });
+        }
+    }
+
+    chooseIcon = () => {
+        this.setState({
+            showIconModal: true
+        });
+    }
+
+    endChooseIcon = (icon) => {
+        const { form } = this.props;
+        form.setFieldsValue({
+            [`${fieldPrefix}Icon`]: icon
+        });
+        this.closeIconListModal();
+    }
+
+    closeIconListModal = () => {
+        this.setState({
+            showIconModal: false
+        });
+    }
+
     render() {
         const {
             record: { MenuID, Type, Path },
@@ -35,6 +73,8 @@ class InfoModal extends Component {
             modalTitle,
             form: { getFieldDecorator }
         } = this.props;
+
+        const { showIconModal } = this.state;
 
         const formItemLayout = {
             labelCol: {
@@ -48,71 +88,72 @@ class InfoModal extends Component {
         };
 
         return (
-            <Modal
-                onOk={this.saveData}
-                onCancel={closeModal}
-                visible={true}
-                title={
-                    <Fragment>
-                        <span>{modalTitle}</span>
-                    </Fragment>
-                }>
-                <Form>
-                    {
-                        getFieldDecorator(`${fieldPrefix}MenuID`)(
-                            <Input className='d-none' />
-                        )
-                    }
-                    {
-                        getFieldDecorator(`${fieldPrefix}ParentID`)(
-                            <Input className='d-none' />
-                        )
-                    }
-                    {
-                        getFieldDecorator(`${fieldPrefix}Type`)(
-                            <Input className='d-none' />
-                        )
-                    }
-                    {
-                        getFieldDecorator(`${fieldPrefix}Priority`)(
-                            <Input className='d-none' />
-                        )
-                    }
+            <Fragment>
 
-                    <FormItem
-                        {...formItemLayout}
-                        label='上级导航' >
+                <Modal
+                    onOk={this.saveData}
+                    onCancel={closeModal}
+                    visible={true}
+                    title={
+                        <Fragment>
+                            <span>{modalTitle}</span>
+                        </Fragment>
+                    }>
+                    <Form>
                         {
-                            getFieldDecorator(`${fieldPrefix}ParentTitle`)(
-                                <Input disabled maxLength={45} />
+                            getFieldDecorator(`${fieldPrefix}MenuID`)(
+                                <Input className='d-none' />
                             )
                         }
-                    </FormItem>
-
-                    <FormItem
-                        {...formItemLayout}
-                        label={Type == 'node' ? '导航名称' : '功能名称'}>
                         {
-                            getFieldDecorator(`${fieldPrefix}Title`, {
-                                rules: [{ required: true, message: '请填写名称' }]
-                            })(<Input maxLength={45} />)
+                            getFieldDecorator(`${fieldPrefix}ParentID`)(
+                                <Input className='d-none' />
+                            )
                         }
-                    </FormItem>
+                        {
+                            getFieldDecorator(`${fieldPrefix}Type`)(
+                                <Input className='d-none' />
+                            )
+                        }
+                        {
+                            getFieldDecorator(`${fieldPrefix}Priority`)(
+                                <Input className='d-none' />
+                            )
+                        }
 
-                    {
-                        (Path || !MenuID) &&
                         <FormItem
                             {...formItemLayout}
-                            label={Type == 'node' ? '导航路径' : '功能ID'}>
+                            label='上级导航' >
                             {
-                                getFieldDecorator(`${fieldPrefix}Path`, {
-                                    rules: [{ required: true, message: '请填写信息' }]
+                                getFieldDecorator(`${fieldPrefix}ParentTitle`)(
+                                    <Input disabled maxLength={45} />
+                                )
+                            }
+                        </FormItem>
+
+                        <FormItem
+                            {...formItemLayout}
+                            label={Type == 'node' ? '导航名称' : '功能名称'}>
+                            {
+                                getFieldDecorator(`${fieldPrefix}Title`, {
+                                    rules: [{ required: true, message: '请填写名称' }]
                                 })(<Input maxLength={45} />)
                             }
                         </FormItem>
-                    }
 
-                    {
+                        {
+                            (Path || !MenuID) &&
+                            <FormItem
+                                {...formItemLayout}
+                                label={Type == 'node' ? '导航路径' : '功能ID'}>
+                                {
+                                    getFieldDecorator(`${fieldPrefix}Path`, {
+                                        rules: [{ required: true, message: '请填写信息' }]
+                                    })(<Input maxLength={45} />)
+                                }
+                            </FormItem>
+                        }
+
                         <FormItem
                             {...formItemLayout}
                             label='图标'
@@ -120,29 +161,54 @@ class InfoModal extends Component {
                             {
                                 getFieldDecorator(`${fieldPrefix}Icon`, {
                                     initialValue: 'tag'
+                                })(<Input maxLength={45} className='w-50' disabled />)
+                            }
+                            <div className={'text-right ' + styles['choose-icon-btn']}>
+                                <Dropdown.Button
+                                    placement='bottomRight'
+                                    overlay={
+                                        <Menu>
+                                            <MenuItem>
+                                                <FileUpload
+                                                    showTitle='选择图片'
+                                                    showType='a'
+                                                    showUploadList={false}
+                                                    onChange={this.handleFileChange}
+                                                    multiple />
+                                            </MenuItem>
+                                        </Menu>} >
+                                    <a href='#' onClick={this.chooseIcon}>选择图标</a>
+                                </Dropdown.Button>
+                            </div>
+                        </FormItem>
+
+                        <FormItem
+                            {...formItemLayout}
+                            label='备注'>
+                            {
+                                getFieldDecorator(`${fieldPrefix}Remark`, {
+                                    initialValue: ''
                                 })(<Input maxLength={45} />)
                             }
                         </FormItem>
-                    }
 
-                    <FormItem
-                        {...formItemLayout}
-                        label='备注'>
                         {
-                            getFieldDecorator(`${fieldPrefix}Remark`, {
-                                initialValue: ''
-                            })(<Input maxLength={45} />)
+                            !MenuID && Type == 'node' &&
+                            <FormItem>
+                                <Alert type='warning' message='添加子菜单后会使父级链接失效，请留意！' showIcon />
+                            </FormItem>
                         }
-                    </FormItem>
+                    </Form>
+                </Modal>
 
-                    {
-                        !MenuID && Type == 'node' &&
-                        <FormItem>
-                            <Alert type='warning' message='添加子菜单后会使父级链接失效，请留意！' showIcon />
-                        </FormItem>
-                    }
-                </Form>
-            </Modal>
+                {
+                    showIconModal &&
+                    <IconList
+                        endChooseIcon={this.endChooseIcon}
+                        closeModal={this.closeIconListModal} />
+                }
+
+            </Fragment>
         );
     }
 }

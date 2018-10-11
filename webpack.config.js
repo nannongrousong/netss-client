@@ -93,7 +93,7 @@ let webpackConfig = {
                 }
             },
             {
-                test: /\.(png|jpe?g|gif|svg)$/,
+                test: /\.(png|jpe?g|gif|svg|bmp)$/,
                 loader: 'url-loader',
                 options: {
                     limit: 8192,

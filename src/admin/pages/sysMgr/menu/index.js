@@ -6,6 +6,7 @@ import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 import PropTypes from 'prop-types';
 import MenuInfo from './menuInfo';
 import { errorHandle } from 'COMMON_UTILS/common';
+import styles from 'ADMIN_STYLES/sysMrg-menu.less';
 
 const { TreeNode } = Tree;
 
@@ -117,6 +118,16 @@ class Index extends Component {
         );
     };
 
+    renderIcon = (icon) => {
+        if(/\.(png|jpe?g|gif|svg)$/.test(icon)) {
+            //  图片
+            return <img className={styles['icon-pic']} src={icon} />;
+        } else {
+            //  图标
+            return <Icon type={icon} />;
+        }
+    }
+
     renderTreeNodes = (data) => {
         return data.map((item) => {
             const { Title, MenuID, Icon: IconV, Children, Path } = item;
@@ -125,7 +136,7 @@ class Index extends Component {
                     <TreeNode
                         key={MenuID}
                         title={this.renderTitle(item)}
-                        icon={<Icon type={IconV} />} >
+                        icon={this.renderIcon(IconV)} >
                         {this.renderTreeNodes(Children)}
                     </TreeNode>
                 );
@@ -133,7 +144,7 @@ class Index extends Component {
             return <TreeNode
                 key={MenuID}
                 title={this.renderTitle(item)}
-                icon={<Icon type={IconV} />} />;
+                icon={this.renderIcon(IconV)} />;
         });
     }
 

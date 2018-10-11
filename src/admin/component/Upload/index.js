@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Upload } from 'antd';
 import PropTypes from 'prop-types';
-import { File_Upload } from 'ADMIN_SERVICE/File_Upload';
+import { Upload_Attach } from 'ADMIN_SERVICE/Attach';
 
 class Index extends Component {
     //  https://github.com/react-component/upload#customrequest
@@ -21,7 +21,7 @@ class Index extends Component {
         formData.append(filename, file);
 
         try {
-            const resData = await File_Upload(formData);
+            const resData = await Upload_Attach(formData);
             const { Code, Data, Info } = resData;
             if (Code) {
                 onSuccess(Data, file);
@@ -35,16 +35,22 @@ class Index extends Component {
         return {
             abort() {
                 console.log('upload progress is aborted.');
-            },
+            }
         };
     }
 
     render() {
+        const { showTitle = '选择文件', showType = 'button' } = this.props;
         return (
             <Upload
                 {...this.props}
                 customRequest={this.customRequest} >
-                <Button>上传文件</Button>
+                {
+                    showType == 'button'
+                        ? <Button>{showTitle}</Button>
+                        : <a href='#' className='w-100'>{showTitle}</a>
+                }
+
             </Upload>
         );
     }

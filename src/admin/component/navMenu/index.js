@@ -4,6 +4,16 @@ import PropTypes from 'prop-types';
 
 const { Item: MenuItem, SubMenu } = Menu;
 
+const renderIcon = (icon) => {
+    if(/\.(png|jpe?g|gif|svg)$/.test(icon)) {
+        //  图片
+        return <img style={{display: 'inline-block', height: '16px', width: '16px', marginRight: '10px'}} src={icon} />;
+    } else {
+        //  图标
+        return <Icon type={icon} />;
+    }
+};
+
 const createMenus = (menus) => {
     //  有children忽略path参数
     return menus.map((item) => {
@@ -13,7 +23,7 @@ const createMenus = (menus) => {
             return (
                 <SubMenu
                     key={MenuID}
-                    title={<span><Icon type={IconV} /><span>{Title}</span></span>}>
+                    title={<span>{renderIcon(IconV)}<span>{Title}</span></span>}>
                     {createMenus(Children)}
                 </SubMenu>
             );
@@ -21,7 +31,7 @@ const createMenus = (menus) => {
             //  MenuItem一定有path且唯一，key使用item.path，避免查找工作
             return (
                 <MenuItem key={Path} >
-                    <Icon type={IconV} />
+                    {renderIcon(IconV)}
                     <span className='nav-text'>{Title}</span>
                 </MenuItem>
             );

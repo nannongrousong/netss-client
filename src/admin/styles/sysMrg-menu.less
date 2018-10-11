@@ -1,0 +1,46 @@
+.choose-icon-btn {
+    display: inline-block;
+    width: 40%;
+    margin-left: 10%;
+}
+
+.icon-pic {
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+}
+
+.modal-icon-content {
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+.modal-icon-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.modal-icon-wrapper {
+    height: 60px;
+    width: 60px;    
+    text-align: center;
+}
+
+.modal-icon-item {
+    font-size: 40px;
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+
+    &:hover {
+        background-color: #1890ff;
+        color: white;
+        font-size: 50px;
+    }
+}
+
+.modal-icon-selected {
+    background-color: #1890ff;
+    color: white;
+    font-size: 50px;
+}
