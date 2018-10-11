@@ -29,7 +29,7 @@ class Exception extends Component {
 
     render() {
         const { type } = this.props;
-        const {img, title, desc} = exceptionMap[type];
+        const { img, title, desc } = exceptionMap[type];
         return (
             <div className={styles.wrapper + ' h-100'}>
                 <img src={img} />

@@ -1,37 +1,32 @@
-import { SET_NAV_MENU, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB, EDIT_TAB_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
-import { errorHandle } from 'COMMON_UTILS/common';
+import { SET_NAV_MENU, EDIT_NAV_TAB, EDIT_TAB_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 
-export const initNavMenu = (initPath, navMenu, callBack) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: SET_NAV_MENU,
-            data: navMenu
-        });
+export const initNavMenu = (initPath, navMenu, callBack) => async (dispatch) => {
+    dispatch({
+        type: SET_NAV_MENU,
+        navMenu
+    });
 
-        let routeInfo = null;
+    let routeInfo = null;
 
-        if (initPath == '/index') {
-            routeInfo = getFirstShowPage(navMenu) || _firstValidPath;
-            _firstValidPath = null;
-        } else {
-            routeInfo = getRouteInfo(initPath, navMenu);
-        }
-
-        let activeRoute = routeInfo ? routeInfo.Path : '/404';
-        document.title = routeInfo.Title || document.title;
-
-        dispatch({
-            type: ACTIVE_TAB,
-            data: {
-                activeRoute,
-                navTab: routeInfo ? [routeInfo] : []
-            }
-        });
-
-        typeof callBack == 'function' && callBack(activeRoute);
-    } catch (err) {
-        errorHandle(err);
+    if (initPath == '/index') {
+        routeInfo = getFirstShowPage(navMenu) || _firstValidPath;
+        _firstValidPath = null;
+    } else {
+        routeInfo = getRouteInfo(initPath, navMenu);
     }
+
+    let activeRoute = routeInfo ? routeInfo.Path : '/404';
+    document.title = routeInfo ? routeInfo.Title : document.title;
+
+    dispatch({
+        type: EDIT_NAV_TAB,
+        data: {
+            activeRoute,
+            navTab: routeInfo ? [routeInfo] : []
+        }
+    });
+
+    typeof callBack == 'function' && callBack(activeRoute);
 };
 
 const getRouteInfo = (path, routes) => {
@@ -49,7 +44,7 @@ const getRouteInfo = (path, routes) => {
     }
 };
 
-//  找第一个显示的tab页，若没有设置，则取第一个有效的path
+//  找第一个显示的tab页，若没有设置，则取第一个有效的path。defaultShow暂不支持.....
 let _firstValidPath = null;
 const getFirstShowPage = (routes) => {
     for (let i = 0; i < routes.length; i++) {
@@ -70,11 +65,6 @@ const getFirstShowPage = (routes) => {
     }
 };
 
-/**
- * 
- * @param {路由路径 path} fieldKey 
- * @param {回调函数，送出查询到的path供页面跳转} callBack 
- */
 export const setActiveTab = (tabPath, callBack) => (dispatch, getState) => {
     let { navTab, navMenu, activeRoute } = getState().homeNav;
     let routeInfo = getRouteInfo(tabPath, navMenu);
@@ -89,7 +79,7 @@ export const setActiveTab = (tabPath, callBack) => (dispatch, getState) => {
     let resTab = navTab.find((tab) => tab.Path == Path);
 
     dispatch({
-        type: ACTIVE_TAB,
+        type: EDIT_NAV_TAB,
         data: {
             activeRoute: Path,
             navTab: !resTab ? [...navTab, routeInfo] : navTab
@@ -119,7 +109,7 @@ export const closeNavTab = (tabPath, callBack) => (dispatch, getState) => {
     }
 
     dispatch({
-        type: CLOSE_NAV_TAB,
+        type: EDIT_NAV_TAB,
         data: {
             activeRoute: newPath,
             navTab: [...navTab.slice(0, tabIndex), ...navTab.slice(tabIndex + 1, navTab.length)]
@@ -136,7 +126,7 @@ export const closeOtherNavTab = (tabPath) => (dispatch, getState) => {
     let routeInfo = getRouteInfo(tabPath, navMenu);
 
     dispatch({
-        type: CLOSE_NAV_OTHER_TAB,
+        type: EDIT_NAV_TAB,
         data: {
             activeRoute: tabPath,
             navTab: [routeInfo]
@@ -149,6 +139,7 @@ export const closeOtherNavTab = (tabPath) => (dispatch, getState) => {
             storePaths.push(tab.Path);
         }
     });
+
     resetTabStore(storePaths, dispatch);
 };
 
@@ -157,7 +148,7 @@ export const closeAllNavTab = () => (dispatch, getState) => {
     let storePaths = navTab.map((tab) => (tab.Path));
 
     dispatch({
-        type: CLOSE_NAV_ALL_TAB,
+        type: EDIT_NAV_TAB,
         data: {
             activeRoute: '',
             navTab: []
@@ -172,9 +163,7 @@ export const editTabStore = (path, storeName) => (dispatch, getState) => {
     if (!(storeMap[path] && !storeMap[path].firstIn)) {
         dispatch({
             type: EDIT_TAB_STORE,
-            data: {
-                storeMap: { ...storeMap, [path]: { storeName, firstIn: !storeMap[path] } }
-            }
+            storeMap: { ...storeMap, [path]: { storeName, firstIn: !storeMap[path] } }
         });
     }
 };

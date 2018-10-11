@@ -1,7 +1,11 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import { Table, Divider, Button, Modal } from 'antd';
 import PropTypes from 'prop-types';
+
 import { errorHandle } from 'COMMON_UTILS/common';
+import { addSysRole, delSysRole, editSysRole } from 'ADMIN_ACTION_SYSMGR/role';
+import { listSysMenu } from 'ADMIN_ACTION_SYSMGR/menu';
 
 import RoleInfo from './roleInfo';
 import MenuAuth from './menuAuth';
@@ -12,32 +16,6 @@ class RoleTable extends Component {
         isShowMenuModal: false,
         record: null,
         roleID: null
-    }
-
-    startEdit = (record) => {
-        this.setState({
-            isShowInfoModal: true,
-            record
-        });
-    }
-
-    startAdd = () => {
-        this.setState({
-            isShowInfoModal: true
-        });
-    }
-
-    startDel = (roleID) => {
-        const { delSysRole } = this.props;
-        let tempDialog = Modal.confirm({
-            title: '信息',
-            content: '确认要删除当前角色吗？',
-            onOk: () => {
-                delSysRole(roleID)
-                    .then(tempDialog.destroy)
-                    .catch(errorHandle);
-            }
-        });
     }
 
     configAuth = (roleID) => {
@@ -55,14 +33,50 @@ class RoleTable extends Component {
         });
     }
 
+    handleRoleOper = (record, e) => {
+        if (!e) {
+            e = record;
+        }
+
+        const { oper } = e.target.dataset;
+
+        switch (oper) {
+            case 'add':
+                this.setState({
+                    isShowInfoModal: true
+                });
+                break;
+            case 'edit':
+                this.setState({
+                    isShowInfoModal: true,
+                    record
+                });
+                break;
+            case 'del':
+                 Modal.confirm({
+                    title: '信息',
+                    content: '确认要删除当前角色吗？角色删除后，绑定该角色的用户所有权限都会丢失',
+                    onOk: () => {
+                        const { delSysRole } = this.props;
+                        const { RoleID } = record;
+                        delSysRole(RoleID)
+                            .then()
+                            .catch(errorHandle);
+                    }
+                });
+                break;
+            default:
+                break;
+        }
+    }
+
     render() {
         const { sysRole, addSysRole, editSysRole, sysMenu, listSysMenu } = this.props;
         const { isShowInfoModal, isShowMenuModal, record, roleID } = this.state;
 
         const columns = [{
             title: '角色名',
-            dataIndex: 'RoleName',
-            render: (text, record) => <a href='#' onClick={this.startEdit.bind(this, record)}>{text}</a>
+            dataIndex: 'RoleName'
         }, {
             title: '备注',
             dataIndex: 'Remark'
@@ -70,10 +84,10 @@ class RoleTable extends Component {
             title: '操作',
             key: 'action',
             render: (text, record) => (
-                <span>
-                    <a href='#' onClick={this.startEdit.bind(this, record)}>修改</a>
+                <span onClick={this.handleRoleOper.bind(this, record)}>
+                    <a href='#' data-oper='edit'>修改</a>
                     <Divider type='vertical' />
-                    <a href='#' onClick={this.startDel.bind(this, record.RoleID)}>删除</a>
+                    <a href='#' data-oper='del'>删除</a>
                     <Divider type='vertical' />
                     <a href='#' onClick={this.configAuth.bind(this, record.RoleID)}>配置权限</a>
                 </span>
@@ -84,7 +98,7 @@ class RoleTable extends Component {
             <Fragment>
                 <Table
                     rowKey='RoleID'
-                    title={() => (<Button className='mb-8' type='primary' onClick={this.startAdd}>添加角色</Button>)}
+                    title={() => (<Button data-oper='add' className='mb-8' type='primary' onClick={this.handleRoleOper}>添加角色</Button>)}
                     dataSource={sysRole}
                     columns={columns}>
 
@@ -111,7 +125,6 @@ class RoleTable extends Component {
                         closeModal={this.closeModal} />
                 }
             </Fragment>
-
         );
     }
 }
@@ -122,5 +135,18 @@ RoleTable.propTypes = {
     editSysRole: PropTypes.func,
     delSysRole: PropTypes.func
 };
+
+RoleTable = connect(
+    (state) => ({
+        sysRole: state.sysRole,
+        sysMenu: state.sysMenu
+    }),
+    {
+        addSysRole,
+        delSysRole,
+        editSysRole,
+        listSysMenu
+    }
+)(RoleTable);
 
 export default RoleTable;

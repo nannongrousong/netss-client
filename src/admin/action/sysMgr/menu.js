@@ -15,40 +15,29 @@ const editMenuInfo = (editedMenu, menus) => {
 };
 
 export const listSysMenu = () => async (dispatch) => {
+    await reloadData(dispatch);
+};
+
+export const editSysMenu = (editedMenu) => async (dispatch) => {
+    await Edit_Sys_Menu(editedMenu);
+    await reloadData(dispatch);
+};
+
+export const addSysMenu = (addedMenu) => async (dispatch) => {
+    await Add_Sys_Menu(addedMenu);
+    await reloadData(dispatch);
+};
+
+export const delSysMenu = (menuID) => async (dispatch) => {
+    await Del_Sys_Menu(menuID);
+    await reloadData(dispatch);
+};
+
+const reloadData = async (dispatch) => {
     let resData = await List_Sys_Menu();
+
     dispatch({
         type: SET_SYS_MENU,
         menu: resData.Data
     });
 };
-
-export const editSysMenu = (editedMenu) => async (dispatch) => {
-    let resData1 = await Edit_Sys_Menu(editedMenu);
-    let resData2 = await List_Sys_Menu();
-
-    dispatch({
-        type: SET_SYS_MENU,
-        menu: resData2.Data
-    });
-};
-
-export const addSysMenu = (addedMenu) => async (dispatch) => {
-    let resData1 = await Add_Sys_Menu(addedMenu);
-    let resData2 = await List_Sys_Menu();
-
-    dispatch({
-        type: SET_SYS_MENU,
-        menu: resData2.Data
-    });
-};
-
-export const delSysMenu = (menuID) => async (dispatch) => {
-    let resData1 = await Del_Sys_Menu(menuID);
-    let resData2 = await List_Sys_Menu();
-
-    dispatch({
-        type: SET_SYS_MENU,
-        menu: resData2.Data
-    });
-};
-

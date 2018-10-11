@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, Select } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
-import { errorHandle } from 'COMMON_UTILS/common';
+import { errorHandle, removeObjPrefix } from 'COMMON_UTILS/common';
 import { Switch } from 'antd';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const fieldPrefix = 'user-';
 
 class UserInfo extends Component {
     componentDidMount() {
@@ -23,10 +24,14 @@ class UserInfo extends Component {
             values = { ...values, IsValid: values.IsValid ? 1 : 0 };
 
             const { addSysUser, editSysUser, closeModal } = this.props;
-            if (values.UserID) {
-                editSysUser(values).then(closeModal).catch(errorHandle);
+            if (values[`${fieldPrefix}UserID`]) {
+                editSysUser(removeObjPrefix(values, fieldPrefix))
+                    .then(closeModal)
+                    .catch(errorHandle);
             } else {
-                addSysUser(values).then(closeModal).catch(errorHandle);
+                addSysUser(removeObjPrefix(values, fieldPrefix))
+                    .then(closeModal)
+                    .catch(errorHandle);
             }
         });
     }
@@ -55,7 +60,7 @@ class UserInfo extends Component {
                     <Form>
                         <FormItem>
                             {
-                                getFieldDecorator('UserID')(
+                                getFieldDecorator(`${fieldPrefix}UserID`)(
                                     <Input className='d-none' />
                                 )
                             }
@@ -65,8 +70,8 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='角色'>
                             {
-                                getFieldDecorator('Role', {
-                                    rules: [{required: true, message: '请选择用户角色'}]
+                                getFieldDecorator(`${fieldPrefix}Role`, {
+                                    rules: [{ required: true, message: '请选择用户角色' }]
                                 })(
                                     <Select mode='multiple'>
                                         {
@@ -83,7 +88,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='登录名'>
                             {
-                                getFieldDecorator('LoginName', {
+                                getFieldDecorator(`${fieldPrefix}LoginName`, {
                                     rules: [{ required: true, message: '请填写登录名' }]
                                 })(<Input maxLength={45} />)
                             }
@@ -95,7 +100,7 @@ class UserInfo extends Component {
                                 {...formItemLayout}
                                 label='密码'>
                                 {
-                                    getFieldDecorator('Password', {
+                                    getFieldDecorator(`${fieldPrefix}Password`, {
                                         rules: [{ required: true, message: '请输入密码' }]
                                     })(<Input maxLength={45} type='password' />)
                                 }
@@ -106,7 +111,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='昵称'>
                             {
-                                getFieldDecorator('NickName', {
+                                getFieldDecorator(`${fieldPrefix}NickName`, {
                                     rules: [{ required: true, message: '请填写登录名' }]
                                 })(<Input maxLength={45} />)
                             }
@@ -116,7 +121,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='是否有效'>
                             {
-                                getFieldDecorator('IsValid', {
+                                getFieldDecorator(`${fieldPrefix}IsValid`, {
                                     valuePropName: 'checked'
                                 })(
                                     <Switch />
@@ -134,7 +139,7 @@ UserInfo = Form.create({
     mapPropsToFields: (props) => {
         const { record } = props;
         if (record) {
-            return createFormField({ ...record, IsValid: record.IsValid == 1 });
+            return createFormField({ ...record, IsValid: record.IsValid == 1 }, fieldPrefix);
         }
     }
 })(UserInfo);

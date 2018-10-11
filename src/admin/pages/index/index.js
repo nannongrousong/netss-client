@@ -18,7 +18,6 @@ import adminRouters from 'ADMIN_ROUTER';
 import { Load_User_Info } from 'ADMIN_SERVICE/Sys_Auth';
 import { setResource } from 'COMMON_COMPONENT/AuthResource';
 
-
 const { Content } = Layout;
 
 class Index extends Component {
@@ -51,7 +50,7 @@ class Index extends Component {
                     setAuthInfo({ NickName, RoleName });
                     setResource(Resource.map(res => (res.Path)));
                 } else {
-                    errorHandle(new Error(Info));
+                    errorHandle(Info);
                 }
             }).catch(errorHandle);
         }

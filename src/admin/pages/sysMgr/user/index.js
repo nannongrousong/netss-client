@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addSysUser, delSysUser, editSysUser, listSysUser } from 'ADMIN_ACTION_SYSMGR/user';
-import { listSysRole } from 'ADMIN_ACTION_SYSMGR/role';
+import { listSysUser } from 'ADMIN_ACTION_SYSMGR/user';
 import { TabWrapper } from 'ADMIN_PAGES_INDEX';
 import UserTable from './userTable';
 
@@ -14,47 +13,24 @@ class Index extends Component {
     }
 
     render() {
-        const { addSysUser, delSysUser, editSysUser, listSysUser, sysUser, sysRole, listSysRole } = this.props;
         return (
-            <div>
-                <UserTable
-                    {...{
-                        addSysUser,
-                        delSysUser,
-                        editSysUser,
-                        listSysUser,
-                        sysUser,
-                        sysRole,
-                        listSysRole
-                    }} >
+            <Fragment>
+                <UserTable>
                 </UserTable>
-            </div>
+            </Fragment>
         );
     }
 }
 
 Index.propTypes = {
-    addSysUser: PropTypes.func,
-    delSysUser: PropTypes.func,
-    editSysUser: PropTypes.func,
     listSysUser: PropTypes.func,
-    sysUser: PropTypes.object,
-    sysRole: PropTypes.array,
-    listSysRole: PropTypes.func,
     tabFirstIn: PropTypes.bool
 };
 
 Index = connect(
-    (state) => ({
-        sysUser: state.sysUser,
-        sysRole: state.sysRole
-    }),
+    (state) => ({}),
     {
-        addSysUser,
-        delSysUser,
-        editSysUser,
-        listSysUser,
-        listSysRole
+        listSysUser
     }
 )(Index);
 

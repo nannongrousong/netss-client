@@ -1,4 +1,4 @@
-import { SET_DATA, EIDT_PAGE } from 'ADMIN_ACTIONTYPE/tableDemo';
+import { SET_DEMO_TABLE_DATA, EDIT_DEMO_TABLE_PAGE } from 'ADMIN_ACTIONTYPE/tableDemo';
 
 const initialState = {
     data: [],
@@ -10,9 +10,9 @@ const initialState = {
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
-        case SET_DATA:
+        case SET_DEMO_TABLE_DATA:
             return { ...state, data: action.data };
-        case EIDT_PAGE:
+        case EDIT_DEMO_TABLE_PAGE:
             return { ...state, pagination: action.pagination };
         default:
             return state;

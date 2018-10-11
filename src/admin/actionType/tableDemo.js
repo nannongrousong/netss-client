@@ -1,2 +1,2 @@
-export const SET_DATA = Symbol('SET_DATA');
-export const EIDT_PAGE = Symbol('EIDT_PAGE');
+export const SET_DEMO_TABLE_DATA = Symbol('SET_DEMO_TABLE_DATA');
+export const EDIT_DEMO_TABLE_PAGE = Symbol('EDIT_DEMO_TABLE_PAGE');

@@ -26,6 +26,10 @@ export const removeObjPrefix = (obj, prefix) => (
 
 
 export const errorHandle = err => {
-    message.error(err.message);
+    if (err.__proto__ == Error.prototype) {
+        message.error(err.message);
+    } else {
+        message.error(err);
+    }
     console.log(err);
 };

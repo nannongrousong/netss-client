@@ -1,4 +1,4 @@
-import { LIST_NAV_MENU, SET_NAV_MENU, LIST_NAV_TAB, ACTIVE_TAB, CLOSE_NAV_TAB, CLOSE_NAV_OTHER_TAB, CLOSE_NAV_ALL_TAB, EDIT_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
+import { SET_NAV_MENU, EDIT_NAV_TAB, EDIT_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 
 let initialState = {
     navMenu: [],
@@ -9,20 +9,12 @@ let initialState = {
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
-        case LIST_NAV_MENU:
-            return state.navMenu;
         case SET_NAV_MENU:
-            return { ...state, navMenu: action.data };
-        case LIST_NAV_TAB:
-            return state.navTab;
-        case ACTIVE_TAB:
-            return { ...state, ...action.data };
-        case CLOSE_NAV_TAB:
-        case CLOSE_NAV_OTHER_TAB:
-        case CLOSE_NAV_ALL_TAB:
+            return { ...state, navMenu: action.navMenu };
+        case EDIT_NAV_TAB:
             return { ...state, ...action.data };
         case EDIT_TAB_STORE:
-            return { ...state, ...action.data };
+            return { ...state, storeMap: action.storeMap };
         default:
             return state;
     }

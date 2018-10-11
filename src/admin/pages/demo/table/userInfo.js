@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import { Select } from 'antd';
 import { tagsSource } from 'ADMIN_CONFIG_ENUM/roleTags';
 import createFormField from 'COMMON_UTILS/createFormField';
-import { errorHandle } from 'COMMON_UTILS/common';
-
+import { errorHandle, removeObjPrefix } from 'COMMON_UTILS/common';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const fieldPrefix = 'user-';
+
 
 class UserInfo extends Component {
     static propTypes = {
@@ -24,10 +25,14 @@ class UserInfo extends Component {
             }
 
             const { addData, editData, closeModal } = this.props;
-            if (values.UserID) {
-                editData(values).then(closeModal).catch(errorHandle);
+            if (values[`${fieldPrefix}UserID`]) {
+                editData(removeObjPrefix(values, fieldPrefix))
+                    .then(closeModal)
+                    .catch(errorHandle);
             } else {
-                addData(values).then(closeModal).catch(errorHandle);
+                addData(removeObjPrefix(values, fieldPrefix))
+                    .then(closeModal)
+                    .catch(errorHandle);
             }
         });
     }
@@ -56,7 +61,7 @@ class UserInfo extends Component {
                     <Form>
                         <FormItem>
                             {
-                                getFieldDecorator('UserID')(
+                                getFieldDecorator(`${fieldPrefix}UserID`)(
                                     <Input className='d-none' />
                                 )
                             }
@@ -66,7 +71,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='姓名'>
                             {
-                                getFieldDecorator('Name', {
+                                getFieldDecorator(`${fieldPrefix}Name`, {
                                     rules: [{ required: true, message: '请填写姓名' }]
                                 })(<Input maxLength={45} />)
                             }
@@ -76,7 +81,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='年龄'>
                             {
-                                getFieldDecorator('Age', {
+                                getFieldDecorator(`${fieldPrefix}Age`, {
                                     rules: [{ pattern: /^\d+$/, message: '请输入正确的年龄' }]
                                 })(<Input maxLength={45} />)
                             }
@@ -86,7 +91,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='地址'>
                             {
-                                getFieldDecorator('Address', {
+                                getFieldDecorator(`${fieldPrefix}Address`, {
 
                                 })(<Input maxLength={45} />)
                             }
@@ -97,7 +102,7 @@ class UserInfo extends Component {
                             label='标签'>
 
                             {
-                                getFieldDecorator('Tag', {
+                                getFieldDecorator(`${fieldPrefix}Tag`, {
 
                                 })(
                                     <Select
@@ -121,7 +126,7 @@ class UserInfo extends Component {
 UserInfo = Form.create({
     mapPropsToFields: (props) => {
         if (props.record) {
-            return createFormField(props.record);
+            return createFormField(props.record, fieldPrefix);
         }
     }
 })(UserInfo);

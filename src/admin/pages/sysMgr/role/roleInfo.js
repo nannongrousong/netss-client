@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
-import { errorHandle } from 'COMMON_UTILS/common';
+import { errorHandle, removeObjPrefix } from 'COMMON_UTILS/common';
 
 const FormItem = Form.Item;
+const fieldPrefix = 'role-';
 
 class UserInfo extends Component {
     saveData = (e) => {
@@ -15,10 +16,14 @@ class UserInfo extends Component {
 
             let { addSysRole, editSysRole, closeModal } = this.props;
             closeModal = closeModal.bind(this, 'info');
-            if (values.RoleID) {
-                editSysRole(values).then(closeModal).catch(errorHandle);
+            if (values[`${fieldPrefix}RoleID`]) {
+                editSysRole(removeObjPrefix(values, fieldPrefix))
+                    .then(closeModal)
+                    .catch(errorHandle);
             } else {
-                addSysRole(values).then(closeModal).catch(errorHandle);
+                addSysRole(removeObjPrefix(values, fieldPrefix))
+                    .then(closeModal)
+                    .catch(errorHandle);
             }
         });
     }
@@ -48,7 +53,7 @@ class UserInfo extends Component {
                     <Form>
                         <FormItem>
                             {
-                                getFieldDecorator('RoleID')(
+                                getFieldDecorator(`${fieldPrefix}RoleID`)(
                                     <Input className='d-none' />
                                 )
                             }
@@ -58,7 +63,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='角色名称'>
                             {
-                                getFieldDecorator('RoleName', {
+                                getFieldDecorator(`${fieldPrefix}RoleName`, {
                                     rules: [{ required: true, message: '请填写角色名称' }]
                                 })(<Input maxLength={45} />)
                             }
@@ -68,7 +73,7 @@ class UserInfo extends Component {
                             {...formItemLayout}
                             label='备注'>
                             {
-                                getFieldDecorator('Remark')(<Input maxLength={45} />)
+                                getFieldDecorator(`${fieldPrefix}Remark`)(<Input maxLength={45} />)
                             }
                         </FormItem>
                     </Form>
@@ -82,7 +87,7 @@ UserInfo = Form.create({
     mapPropsToFields: (props) => {
         const { record } = props;
         if (record) {
-            return createFormField(record);
+            return createFormField(record, fieldPrefix);
         }
     }
 })(UserInfo);

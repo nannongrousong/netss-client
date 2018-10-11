@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { Form, Input, Icon, Button } from 'antd';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import styles from 'ADMIN_STYLES/login.less';
-import logoImg from 'COMMON_IMAGES/logo.jpg';
+
 import { CMS_Login } from 'ADMIN_SERVICE/Sys_Auth';
 import { errorHandle } from 'COMMON_UTILS/common';
+
+import styles from 'ADMIN_STYLES/login.less';
+import logoImg from 'COMMON_IMAGES/logo.jpg';
 
 const FormItem = Form.Item;
 
@@ -28,7 +30,7 @@ class Login extends Component {
                 let resData = await CMS_Login(values);
                 const { Code, Data: { token }, Info } = resData;
                 if (!Code) {
-                    errorHandle(new Error(Info));
+                    errorHandle(Info);
                 } else {
                     //  save userinfo into localstorage
                     sessionStorage.setItem('AUTH_INFO', token);
