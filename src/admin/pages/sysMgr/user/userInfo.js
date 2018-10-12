@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Form, Input, Select, Button, Switch, message } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { errorHandle, removeObjPrefix } from 'COMMON_UTILS/common';
-import { Switch } from 'antd';
+import { Rest_Sys_User_Pwd } from 'ADMIN_SERVICE/Sys_Mgr';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -32,6 +32,23 @@ class UserInfo extends Component {
                 addSysUser(removeObjPrefix(values, fieldPrefix))
                     .then(closeModal)
                     .catch(errorHandle);
+            }
+        });
+    }
+
+    resetPwd = () => {
+        Modal.confirm({
+            title: '信息',
+            content: '您确定要重置密码吗？',
+            onOk: async () => {
+                const { record: { UserID } } = this.props;
+                try {
+                    let resData = await Rest_Sys_User_Pwd({ UserID });
+                    const { Code, Info } = resData;
+                    Code ? message.success('重置密码成功！') : errorHandle(Info);
+                } catch (err) {
+                    errorHandle(err);
+                }
             }
         });
     }
@@ -94,18 +111,17 @@ class UserInfo extends Component {
                             }
                         </FormItem>
 
-                        {
-                            !record &&
-                            <FormItem
-                                {...formItemLayout}
-                                label='密码'>
-                                {
-                                    getFieldDecorator(`${fieldPrefix}Password`, {
+                        <FormItem
+                            {...formItemLayout}
+                            label='密码'>
+                            {
+                                record
+                                    ? <Button type='danger' onClick={this.resetPwd}>重置密码</Button>
+                                    : getFieldDecorator(`${fieldPrefix}Password`, {
                                         rules: [{ required: true, message: '请输入密码' }]
                                     })(<Input maxLength={45} type='password' />)
-                                }
-                            </FormItem>
-                        }
+                            }
+                        </FormItem>
 
                         <FormItem
                             {...formItemLayout}
