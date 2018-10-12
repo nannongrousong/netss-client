@@ -21,7 +21,7 @@ class UserInfo extends Component {
                 return;
             }
 
-            values = { ...values, IsValid: values.IsValid ? 1 : 0 };
+            values = { ...values, [`${fieldPrefix}IsValid`]: values[`${fieldPrefix}IsValid`] ? 1 : 0 };
 
             const { addSysUser, editSysUser, closeModal } = this.props;
             if (values[`${fieldPrefix}UserID`]) {
