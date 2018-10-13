@@ -19,33 +19,19 @@
     padding: 0;
 }
 
-.content { 
-    height: 100%;
-    overflow: hidden;
+.layout-content {
+    position: relative;
+}
 
-    :global{
-        .ant-tabs {
-            height: 100%;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-
-            .ant-tabs-bar {
-                flex: 1 1 40px;
-                margin: 0;
-            }
-
-            .ant-tabs-content {
-                flex: 1 1 auto;
-                overflow: hidden;
-                height: 100%;
-
-                .ant-tabs-tabpane {
-                    height: 100%;
-                }
-            }
-        }
-    }
+.content {
+    overflow-y: scroll;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    padding: 20px;
+    background-color: #FFF;
 }
 
 .switch-icon {

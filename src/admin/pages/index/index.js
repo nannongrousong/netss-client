@@ -12,6 +12,7 @@ import { setAuthInfo } from 'ADMIN_ACTION/authInfo';
 import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
 import NavSlider from 'ADMIN_COMPONENT_NAVSLIDER';
 import NavTab from 'ADMIN_COMPONENT_NAVTAB';
+import Exception from 'ADMIN_COMPONENT_EXCEPTION';
 
 import adminRouters from 'ADMIN_ROUTER';
 
@@ -24,12 +25,30 @@ const { Content } = Layout;
 //  设置授权路由
 const setAuthRouter = (allRouters, navMenu) => {
     const authPaths = navMenu.map((menu) => (menu.Path));
-    allRouters.forEach(router => {
-        const { path } = router;
-        router.isAuth = authPaths.includes(path);
-    });
-    return allRouters;
+    return allRouters.map(router => (
+        { ...router, isAuth: authPaths.includes(router.path) }
+    ));
 };
+
+//  生成路由信息
+const createRouteInfo = (adminRouters, navMenu) => (
+    <Switch>
+        {
+            setAuthRouter(adminRouters, navMenu).map((routerItem, index) => {
+                const { path, component, isAuth } = routerItem;
+                return <Route
+                    key={index}
+                    path={path}
+                    component={
+                        isAuth ? component : () => <Redirect to='/403' />
+                    } />;
+            })
+        }
+        <Route path='/500' component={() => <Exception type='500' homePath='/admin/index' />} />
+        <Route path='/403' component={() => <Exception type='403' homePath='/admin/index' />} />
+        <Route path='*' component={() => <Exception type='404' homePath='/admin/index' />} />
+    </Switch>
+);
 
 class Index extends Component {
     constructor(props) {
@@ -51,13 +70,7 @@ class Index extends Component {
                 if (Code) {
                     const { initNavMenu, history, setAuthInfo } = this.props;
                     const { location: { pathname } } = history;
-                    initNavMenu(pathname, Menu, (realPath) => {
-                        if (pathname != realPath) {
-                            //  碰到404了
-                            history.push(realPath);
-                        }
-                    });
-
+                    initNavMenu(pathname, Menu);
                     setAuthInfo({ NickName, RoleName });
                     setResource(Resource.map(res => (res.Path)));
                 } else {
@@ -132,27 +145,25 @@ class Index extends Component {
                         <NavHeader
                             collapsed={collapsed}
                             handleCollapse={this.handleCollapse} />
-                        <Content
-                            className={styles.content}>
-                            <NavTab
-                                handleTabsEdit={this.handleTabsEdit}
-                                handleTabsChange={this.handleTabsChange}
-                                navTab={navTab}
-                                activeRoute={activeRoute} >
-                                <Switch>
+                        <Content className={styles['layout-content']}>
+                            {
+                                activeRoute &&
+                                <NavTab
+                                    handleTabsEdit={this.handleTabsEdit}
+                                    handleTabsChange={this.handleTabsChange}
+                                    navTab={navTab}
+                                    activeRoute={activeRoute} >
+                                </NavTab>
+                            }
+
+                            {
+                                navMenu.length &&
+                                <div className={styles.content} style={{top: activeRoute ? '40px' : 0}}>
                                     {
-                                        setAuthRouter(adminRouters, navMenu).map((routerItem, index) => {
-                                            const { path, component, isAuth } = routerItem;
-                                            return <Route
-                                                key={index}
-                                                path={path}
-                                                component={
-                                                    isAuth ? component : <Redirect to='/403' />
-                                                } />;
-                                        })
+                                        createRouteInfo(adminRouters, navMenu)
                                     }
-                                </Switch>
-                            </NavTab>
+                                </div>
+                            }
                         </Content>
                     </Layout>
                 </Layout>

@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Tabs, Dropdown, Icon, Menu } from 'antd';
-import Exception from 'ADMIN_COMPONENT_EXCEPTION';
 import PropTypes from 'prop-types';
 
 const { TabPane } = Tabs;
@@ -18,35 +17,30 @@ class NavTab extends Component {
         );
 
         return (
-            activeRoute == '/404'
-                ? <Exception type='404' homePath='/admin/index' />
-                : <Tabs
-                    hideAdd
-                    activeKey={activeRoute}
-                    onTabClick={handleTabClick}
-                    tabBarExtraContent={
-                        <Dropdown overlay={tabOperMenus(activeRoute)}>
-                            <a href="#">操作<Icon type="down" /></a>
-                        </Dropdown>
-                    }
-                    onEdit={handleTabsEdit}
-                    onChange={handleTabsChange}
-                    type='editable-card'>
-                    {
-                        navTab.map((tab) => (
-                            <TabPane tab={
-                                <Dropdown overlay={tabOperMenus(tab.Path)} trigger={['contextMenu']}>
-                                    <div style={{ userSelect: 'none', display: 'inline-block' }}>{tab.Title}</div>
-                                </Dropdown>
-                            } key={tab.Path} closable>
-                                {
-                                    tab.Path == activeRoute &&
-                                    <div style={{ padding: '20px', height: '100%', overflowY: 'auto', backgroundColor: '#FFF' }}>{children}</div>
-                                }
-                            </TabPane>
-                        ))
-                    }
-                </Tabs>
+            <Tabs
+                hideAdd
+                activeKey={activeRoute}
+                onTabClick={handleTabClick}
+                tabBarExtraContent={
+                    <Dropdown overlay={tabOperMenus(activeRoute)}>
+                        <a href="#">操作<Icon type="down" /></a>
+                    </Dropdown>
+                }
+                onEdit={handleTabsEdit}
+                onChange={handleTabsChange}
+                type='editable-card'>
+                {
+                    navTab.map((tab) => (
+                        <TabPane tab={
+                            <Dropdown overlay={tabOperMenus(tab.Path)} trigger={['contextMenu']}>
+                                <div style={{ userSelect: 'none', display: 'inline-block' }}>{tab.Title}</div>
+                            </Dropdown>
+                        } key={tab.Path} closable>
+                            
+                        </TabPane>
+                    ))
+                }
+            </Tabs>
         );
     }
 }

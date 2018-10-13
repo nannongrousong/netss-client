@@ -72,8 +72,6 @@ class MenuAuth extends Component {
         const { sysMenu } = this.props;
         const { checked } = this.state;
 
-        console.log('checked', checked);
-
         return (
             <Modal
                 visible={true}

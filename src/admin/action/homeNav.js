@@ -1,6 +1,6 @@
 import { SET_NAV_MENU, EDIT_NAV_TAB, EDIT_TAB_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 
-export const initNavMenu = (initPath, navMenu, callBack) => async (dispatch) => {
+export const initNavMenu = (initPath, navMenu) => async (dispatch) => {
     dispatch({
         type: SET_NAV_MENU,
         navMenu
@@ -14,31 +14,33 @@ export const initNavMenu = (initPath, navMenu, callBack) => async (dispatch) => 
         routeInfo = getRouteInfo(initPath, navMenu);
     }
 
-    let activeRoute = routeInfo ? routeInfo.Path : '/404';
-    document.title = routeInfo ? routeInfo.Title : document.title;
+    if (!routeInfo) {
+        return;
+    }
+
+    const { Path, Title } = routeInfo;
+    document.title = Title;
 
     dispatch({
         type: EDIT_NAV_TAB,
         data: {
-            activeRoute,
+            activeRoute: Path,
             navTab: routeInfo ? [routeInfo] : []
         }
     });
-
-    typeof callBack == 'function' && callBack(activeRoute);
 };
 
 const getRouteInfo = (path, routers) => {
-    for(let router of routers) {
-        if(router.Path == path) {
+    for (let router of routers) {
+        if (router.Path == path) {
             return router;
         }
     }
 };
 
 const getFirstValidRoute = (routers) => {
-    for(let router of routers) {
-        if(router.Path) {
+    for (let router of routers) {
+        if (router.Path) {
             return router;
         }
     }
