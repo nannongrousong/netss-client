@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import MenuInfo from './menuInfo';
 import { errorHandle } from 'COMMON_UTILS/common';
 import styles from 'ADMIN_STYLES/sysMrg-menu.less';
+import createTreeNode from 'COMMON_UTILS/createTreeNode';
 
 const { TreeNode } = Tree;
 
@@ -14,13 +15,6 @@ const findMenu = (menuID, menus) => {
     for (let menu of menus) {
         if (menu.MenuID == menuID) {
             return menu;
-        }
-
-        if (menu.Children) {
-            let tempMenu = findMenu(menuID, menu.Children);
-            if (tempMenu) {
-                return tempMenu;
-            }
         }
     }
 };
@@ -119,7 +113,7 @@ class Index extends Component {
     };
 
     renderIcon = (icon) => {
-        if(/\.(png|jpe?g|gif|svg)$/.test(icon)) {
+        if (/\.(png|jpe?g|gif|svg)$/.test(icon)) {
             //  图片
             return <img className={styles['icon-pic']} src={icon} />;
         } else {
@@ -212,7 +206,7 @@ class Index extends Component {
                         defaultExpandAll
                         showLine
                         showIcon >
-                        {this.renderTreeNodes(sysMenu)}
+                        {this.renderTreeNodes(createTreeNode(sysMenu))}
                     </Tree>
                 }
 

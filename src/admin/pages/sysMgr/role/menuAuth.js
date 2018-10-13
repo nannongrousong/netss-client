@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { errorHandle } from 'COMMON_UTILS/common';
 import { Save_Role_Menus, List_Role_Menus } from 'ADMIN_SERVICE/Sys_Mgr';
 const { TreeNode } = Tree;
+import createTreeNode from 'COMMON_UTILS/createTreeNode';
 
 class MenuAuth extends Component {
     constructor(props) {
@@ -87,7 +88,7 @@ class MenuAuth extends Component {
                         checkStrictly
                         checkedKeys={checked}
                         onCheck={this.handleTreeCheck}>
-                        {this.renderTreeNodes(sysMenu)}
+                        {this.renderTreeNodes(createTreeNode(sysMenu))}
                     </Tree>
                 }
 

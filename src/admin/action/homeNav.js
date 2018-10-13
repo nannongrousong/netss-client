@@ -9,8 +9,7 @@ export const initNavMenu = (initPath, navMenu, callBack) => async (dispatch) => 
     let routeInfo = null;
 
     if (initPath == '/index') {
-        routeInfo = getFirstShowPage(navMenu) || _firstValidPath;
-        _firstValidPath = null;
+        routeInfo = getFirstValidRoute(navMenu);
     } else {
         routeInfo = getRouteInfo(initPath, navMenu);
     }
@@ -29,38 +28,18 @@ export const initNavMenu = (initPath, navMenu, callBack) => async (dispatch) => 
     typeof callBack == 'function' && callBack(activeRoute);
 };
 
-const getRouteInfo = (path, routes) => {
-    for (let i = 0; i < routes.length; i++) {
-        if (routes[i]['Path'] == path) {
-            return routes[i];
-        }
-
-        if (routes[i].Children) {
-            let tempRes = getRouteInfo(path, routes[i].Children);
-            if (tempRes) {
-                return tempRes;
-            }
+const getRouteInfo = (path, routers) => {
+    for(let router of routers) {
+        if(router.Path == path) {
+            return router;
         }
     }
 };
 
-//  找第一个显示的tab页，若没有设置，则取第一个有效的path。defaultShow暂不支持.....
-let _firstValidPath = null;
-const getFirstShowPage = (routes) => {
-    for (let i = 0; i < routes.length; i++) {
-        if (!_firstValidPath && routes[i].Path) {
-            _firstValidPath = routes[i];
-        }
-
-        if (routes[i] && routes[i].defaultShow) {
-            return routes[i];
-        }
-
-        if (routes[i].children) {
-            let tempRes = getFirstShowPage(routes[i].children);
-            if (tempRes && tempRes.defaultShow) {
-                return tempRes;
-            }
+const getFirstValidRoute = (routers) => {
+    for(let router of routers) {
+        if(router.Path) {
+            return router;
         }
     }
 };

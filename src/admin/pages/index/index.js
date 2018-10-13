@@ -17,8 +17,19 @@ import adminRouters from 'ADMIN_ROUTER';
 
 import { Load_User_Info } from 'ADMIN_SERVICE/Sys_Auth';
 import { setResource } from 'COMMON_COMPONENT/AuthResource';
+import createTreeNode from 'COMMON_UTILS/createTreeNode';
 
 const { Content } = Layout;
+
+//  设置授权路由
+const setAuthRouter = (allRouters, navMenu) => {
+    const authPaths = navMenu.map((menu) => (menu.Path));
+    allRouters.forEach(router => {
+        const { path } = router;
+        router.isAuth = authPaths.includes(path);
+    });
+    return allRouters;
+};
 
 class Index extends Component {
     constructor(props) {
@@ -103,11 +114,6 @@ class Index extends Component {
             history.push(path2);
         });
     }
-
-    handleTabClick = (tabKey) => {
-
-    }
-
     render() {
         const { navMenu, navTab, activeRoute } = this.props;
         const { collapsed } = this.state;
@@ -117,7 +123,7 @@ class Index extends Component {
                 <Layout className='h-100'>
                     <NavSlider
                         collapsed={collapsed}
-                        navMenu={navMenu}
+                        navMenu={createTreeNode(navMenu)}
                         handleCollapse={this.handleCollapse}
                         handleMenuClick={this.handleMenuClick}
                         activeRoute={activeRoute} />
@@ -130,18 +136,19 @@ class Index extends Component {
                             className={styles.content}>
                             <NavTab
                                 handleTabsEdit={this.handleTabsEdit}
-                                handleTabClick={this.handleTabClick}
                                 handleTabsChange={this.handleTabsChange}
                                 navTab={navTab}
                                 activeRoute={activeRoute} >
                                 <Switch>
                                     {
-                                        adminRouters.map((routerItem, index) => {
-                                            const { path, component } = routerItem;
+                                        setAuthRouter(adminRouters, navMenu).map((routerItem, index) => {
+                                            const { path, component, isAuth } = routerItem;
                                             return <Route
                                                 key={index}
                                                 path={path}
-                                                component={component} />;
+                                                component={
+                                                    isAuth ? component : <Redirect to='/403' />
+                                                } />;
                                         })
                                     }
                                 </Switch>

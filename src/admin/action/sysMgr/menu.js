@@ -1,19 +1,6 @@
 import { SET_SYS_MENU } from 'ADMIN_ACTIONTYPE/sysMgr';
 import { Add_Sys_Menu, Del_Sys_Menu, Edit_Sys_Menu, List_Sys_Menu, } from 'ADMIN_SERVICE/Sys_Mgr';
 
-const editMenuInfo = (editedMenu, menus) => {
-    for (let i in menus) {
-        if (menus[i].key == editedMenu.key) {
-            menus[i] = { ...menus[i], ...editedMenu };
-            return;
-        }
-
-        if (menus[i].children) {
-            editMenuInfo(editedMenu, menus[i].children);
-        }
-    }
-};
-
 export const listSysMenu = () => async (dispatch) => {
     await reloadData(dispatch);
 };
