@@ -5,6 +5,7 @@ import { removeObjPrefix, errorHandle } from 'COMMON_UTILS/common';
 import FileUpload from 'ADMIN_COMPONENT/Upload';
 import IconList from './iconList';
 import styles from 'ADMIN_STYLES/sysMrg-menu.less';
+import { formItemLayout }  from 'ADMIN_CONFIG/formLayout';
 
 const FormItem = Form.Item;
 const MenuItem = Menu.Item;
@@ -75,17 +76,6 @@ class InfoModal extends Component {
         } = this.props;
 
         const { showIconModal } = this.state;
-
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 6 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 15 },
-            }
-        };
 
         return (
             <Fragment>

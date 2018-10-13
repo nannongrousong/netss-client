@@ -5,21 +5,16 @@ import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import styles from 'ADMIN_STYLES/index.less';
 import { errorHandle } from 'COMMON_UTILS/common';
-
+import createTreeNode from 'COMMON_UTILS/createTreeNode';
 import { initNavMenu, setActiveTab, closeNavTab, closeOtherNavTab, closeAllNavTab, editTabStore } from 'ADMIN_ACTION/homeNav';
 import { setAuthInfo } from 'ADMIN_ACTION/authInfo';
-
 import NavHeader from 'ADMIN_COMPONENT_NAVHEADER';
 import NavSlider from 'ADMIN_COMPONENT_NAVSLIDER';
 import NavTab from 'ADMIN_COMPONENT_NAVTAB';
 import Exception from 'ADMIN_COMPONENT_EXCEPTION';
-
-import adminRouters from 'ADMIN_ROUTER';
-
 import { Load_User_Info } from 'ADMIN_SERVICE/Sys_Auth';
 import { setResource } from 'COMMON_COMPONENT/AuthResource';
-import createTreeNode from 'COMMON_UTILS/createTreeNode';
-
+import adminRouters from 'ADMIN_ROUTER';
 const { Content } = Layout;
 
 //  设置授权路由
@@ -70,7 +65,9 @@ class Index extends Component {
                 if (Code) {
                     const { initNavMenu, history, setAuthInfo } = this.props;
                     const { location: { pathname } } = history;
-                    initNavMenu(pathname, Menu);
+                    initNavMenu(pathname, Menu, (newPath) => {
+                        newPath != pathname && history.push(newPath);
+                    });
                     setAuthInfo({ NickName, RoleName });
                     setResource(Resource.map(res => (res.Path)));
                 } else {
@@ -115,8 +112,8 @@ class Index extends Component {
     handleTabsChange = (path) => {
         if (!this.DO_NOT_HANDLE_TAB_CHANGE) {
             const { setActiveTab, history } = this.props;
-            setActiveTab(path, (path2) => {
-                history.push(path2);
+            setActiveTab(path, (newPath) => {
+                history.push(newPath);
             });
         }
     }
@@ -158,7 +155,7 @@ class Index extends Component {
 
                             {
                                 navMenu.length &&
-                                <div className={styles.content} style={{top: activeRoute ? '40px' : 0}}>
+                                <div className={styles.content} style={{ top: activeRoute ? '40px' : 0 }}>
                                     {
                                         createRouteInfo(adminRouters, navMenu)
                                     }
@@ -230,9 +227,3 @@ export const TabWrapper = (storeName) => {
             });
     };
 };
-
-
-
-
-
-

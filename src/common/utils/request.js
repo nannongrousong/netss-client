@@ -7,8 +7,8 @@
 export default async (url, params, method = 'GET') => {
     url = '/api' + url;
 
-    console.log('请求链接', url);
-    console.log('请求参数', params);
+    console.log('%c请求地址：', 'color:red;', url);
+    console.log('%c请求参数：', 'color:red;', params);
 
     let response = null;
     let commonOptions = {

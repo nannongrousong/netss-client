@@ -7,7 +7,7 @@ const { Item: MenuItem } = Menu;
 
 class NavTab extends Component {
     render() {
-        const { handleTabsEdit, handleTabClick, handleTabsChange, children, navTab, activeRoute } = this.props;
+        const { handleTabsEdit, handleTabClick, handleTabsChange, navTab, activeRoute } = this.props;
         const tabOperMenus = (operTabKey) => (
             <Menu>
                 <MenuItem key="1" onClick={handleTabsEdit.bind(this, operTabKey, 'remove')}>关闭当前</MenuItem>

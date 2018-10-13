@@ -3,6 +3,7 @@ import { Modal, Form, Input, Select, Button, Switch, message } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { errorHandle, removeObjPrefix } from 'COMMON_UTILS/common';
 import { Rest_Sys_User_Pwd } from 'ADMIN_SERVICE/Sys_Mgr';
+import { formItemLayout }  from 'ADMIN_CONFIG/formLayout';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -56,16 +57,6 @@ class UserInfo extends Component {
     render() {
         const { record, closeModal, form: { getFieldDecorator }, sysRole } = this.props;
 
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 6 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 15 },
-            }
-        };
 
         return (
             <div>

@@ -5,6 +5,7 @@ import { Select } from 'antd';
 import { tagsSource } from 'ADMIN_CONFIG_ENUM/roleTags';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { errorHandle, removeObjPrefix } from 'COMMON_UTILS/common';
+import { formItemLayout }  from 'ADMIN_CONFIG/formLayout';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -38,18 +39,7 @@ class UserInfo extends Component {
     }
 
     render() {
-        const { record, closeModal, form: { getFieldDecorator } } = this.props;
-
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 6 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 15 },
-            }
-        };
+        const { record, closeModal, form: { getFieldDecorator } } = this.props;      
 
         return (
             <div>

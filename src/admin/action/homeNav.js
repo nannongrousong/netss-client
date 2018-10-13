@@ -1,18 +1,12 @@
 import { SET_NAV_MENU, EDIT_NAV_TAB, EDIT_TAB_STORE, RESET_TAB_STORE } from 'ADMIN_ACTIONTYPE/homeNav';
 
-export const initNavMenu = (initPath, navMenu) => async (dispatch) => {
+export const initNavMenu = (initPath, navMenu, callBack) => async (dispatch) => {
     dispatch({
         type: SET_NAV_MENU,
         navMenu
     });
 
-    let routeInfo = null;
-
-    if (initPath == '/index') {
-        routeInfo = getFirstValidRoute(navMenu);
-    } else {
-        routeInfo = getRouteInfo(initPath, navMenu);
-    }
+    let routeInfo = getRouteInfo(initPath, navMenu);
 
     if (!routeInfo) {
         return;
@@ -25,23 +19,21 @@ export const initNavMenu = (initPath, navMenu) => async (dispatch) => {
         type: EDIT_NAV_TAB,
         data: {
             activeRoute: Path,
-            navTab: routeInfo ? [routeInfo] : []
+            navTab: [routeInfo]
         }
     });
+
+    callBack && callBack(Path);
 };
 
 const getRouteInfo = (path, routers) => {
     for (let router of routers) {
-        if (router.Path == path) {
+        if (path == '/index' && router.Path) {
             return router;
-        }
-    }
-};
-
-const getFirstValidRoute = (routers) => {
-    for (let router of routers) {
-        if (router.Path) {
-            return router;
+        } else {
+            if (router.Path == path) {
+                return router;
+            }
         }
     }
 };

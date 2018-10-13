@@ -6,6 +6,7 @@ import { Select } from 'antd';
 import { saveFormChanges } from 'ADMIN_ACTION_DEMO/form';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { TabWrapper } from 'ADMIN_PAGES_INDEX';
+import { formItemLayout }  from 'ADMIN_CONFIG/formLayout';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -32,17 +33,7 @@ class Index extends Component {
     }
 
     render() {
-        const { form: { getFieldDecorator } } = this.props;
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
+        const { form: { getFieldDecorator } } = this.props;        
 
         const tailFormItemLayout = {
             wrapperCol: {

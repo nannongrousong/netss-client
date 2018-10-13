@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Form, Input } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { errorHandle, removeObjPrefix } from 'COMMON_UTILS/common';
+import { formItemLayout }  from 'ADMIN_CONFIG/formLayout';
 
 const FormItem = Form.Item;
 const fieldPrefix = 'role-';
@@ -31,17 +32,6 @@ class UserInfo extends Component {
     render() {
         let { record, closeModal, form: { getFieldDecorator } } = this.props;
         closeModal = closeModal.bind(this, 'info');
-
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 6 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 15 },
-            }
-        };
 
         return (
             <div>
