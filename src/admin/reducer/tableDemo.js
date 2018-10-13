@@ -1,7 +1,9 @@
 import { SET_DEMO_TABLE_DATA, EDIT_DEMO_TABLE_PAGE } from 'ADMIN_ACTIONTYPE/tableDemo';
 
 const initialState = {
+    //  数据
     data: [],
+    //  分页信息
     pagination: {
         current: 1, 
         pageSize: 8

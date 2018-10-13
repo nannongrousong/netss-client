@@ -1,5 +1,8 @@
-//  生成显示菜单。一维数组->递归
-export default (nodeData) => {
+/**
+ * 将一维的菜单数组递归转化为树形节点
+ * @param {菜单数组} nodeData 
+ */
+const createTreeNode = (nodeData) => {
     const getNodesByParent = (parentID) => (nodeData.filter(node => node.ParentID == parentID));
     const rootNodeID = 0;
 
@@ -18,3 +21,5 @@ export default (nodeData) => {
     createNodes(treeNodes);
     return treeNodes;
 };
+
+export default  createTreeNode;

@@ -28,7 +28,7 @@ const commonReducer = (state = {}, action) => {
             delete newStoreMap[path];
         });
 
-        //  注意查看store树级解构
+        //  根据path清空store。注意查看store树级解构
         return {
             ...state, ...storeNames.reduce((prev, curr) => {
                 prev[curr] = undefined;

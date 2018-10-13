@@ -14,10 +14,6 @@ class UserTable extends Component {
         record: null
     }
 
-    startEditUser = (record) => {
-
-    }
-
     closeModal = () => {
         this.setState({
             isShowModal: false,

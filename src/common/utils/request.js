@@ -2,7 +2,7 @@
  * 发起网络请求
  * @param {请求地址} url 
  * @param {请求参数} params
- * @param {请求类型，默认GET} method
+ * @param {请求类型，默认GET} method，可选POST/PUT/DELETE/FILE/GET
  */
 export default async (url, params, method = 'GET') => {
     url = '/api' + url;

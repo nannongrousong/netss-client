@@ -65,10 +65,13 @@ class Index extends Component {
                 if (Code) {
                     const { initNavMenu, history, setAuthInfo } = this.props;
                     const { location: { pathname } } = history;
+                    //  初始化菜单
                     initNavMenu(pathname, Menu, (newPath) => {
                         newPath != pathname && history.push(newPath);
                     });
+                    //  设置用户信息
                     setAuthInfo({ NickName, RoleName });
+                    //  设置用户权限资源
                     setResource(Resource.map(res => (res.Path)));
                 } else {
                     errorHandle(Info);

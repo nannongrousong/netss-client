@@ -1,3 +1,7 @@
+/**
+ * 存储用户信息
+ */
+
 import { SET_AUTH_INFO } from 'ADMIN_ACTIONTYPE/authInfo';
 
 let initialState = {
