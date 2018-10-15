@@ -76,6 +76,13 @@ class Index extends Component {
         }
     }
 
+    componentDidCatch(err, info) {
+        console.log('componentDidCatch.error', err);
+        console.log('componentDidCatch.info', info);
+        const { history } = this.props;
+        history.push('/500');
+    }
+
     handleCollapse = () => {
         this.setState({
             collapsed: !this.state.collapsed
