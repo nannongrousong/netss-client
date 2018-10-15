@@ -19,14 +19,9 @@ class MenuAuth extends Component {
         (!sysMenu || sysMenu.length == 0) && listSysMenu();
 
         List_Role_Menus({ roleID }).then((resData) => {
-            const { Code, Info, Data } = resData;
-            if (Code) {
-                this.setState({
-                    checked: Data
-                });
-            } else {
-                errorHandle(Info);
-            }
+            this.setState({
+                checked: resData.Data
+            });
         }).catch(err => {
             errorHandle(err);
         });

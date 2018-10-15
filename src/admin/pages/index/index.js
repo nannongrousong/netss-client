@@ -61,21 +61,17 @@ class Index extends Component {
         //  用户主动刷新了页面
         if (this.IS_LOGIN) {
             Load_User_Info().then((resData) => {
-                const { Code, Data: { Menu, NickName, RoleName, Resource }, Info } = resData;
-                if (Code) {
-                    const { initNavMenu, history, setAuthInfo } = this.props;
-                    const { location: { pathname } } = history;
-                    //  初始化菜单
-                    initNavMenu(pathname, Menu, (newPath) => {
-                        newPath != pathname && history.push(newPath);
-                    });
-                    //  设置用户信息
-                    setAuthInfo({ NickName, RoleName });
-                    //  设置用户权限资源
-                    setResource(Resource.map(res => (res.Path)));
-                } else {
-                    errorHandle(Info);
-                }
+                const { Data: { Menu, NickName, RoleName, Resource } } = resData;
+                const { initNavMenu, history, setAuthInfo } = this.props;
+                const { location: { pathname } } = history;
+                //  初始化菜单
+                initNavMenu(pathname, Menu, (newPath) => {
+                    newPath != pathname && history.push(newPath);
+                });
+                //  设置用户信息
+                setAuthInfo({ NickName, RoleName });
+                //  设置用户权限资源
+                setResource(Resource.map(res => (res.Path)));
             }).catch(errorHandle);
         }
     }

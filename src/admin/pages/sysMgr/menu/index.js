@@ -64,12 +64,12 @@ class Index extends Component {
     }
 
     delSubMenu = ({ MenuID, Title }) => {
-        let delModal = Modal.confirm({
+        Modal.confirm({
             title: '删除确认',
             content: `您确定要删除[${Title}]吗？`,
             onOk: () => {
                 const { delSysMenu } = this.props;
-                delSysMenu(MenuID).then(delModal.destroy).catch(errorHandle);
+                delSysMenu(MenuID).then().catch(errorHandle);
             }
         });
     }

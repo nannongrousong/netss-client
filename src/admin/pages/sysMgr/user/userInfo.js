@@ -3,7 +3,7 @@ import { Modal, Form, Input, Select, Button, Switch, message } from 'antd';
 import createFormField from 'COMMON_UTILS/createFormField';
 import { errorHandle, removeObjPrefix } from 'COMMON_UTILS/common';
 import { Rest_Sys_User_Pwd } from 'ADMIN_SERVICE/Sys_Mgr';
-import { formItemLayout }  from 'ADMIN_CONFIG/formLayout';
+import { formItemLayout } from 'ADMIN_CONFIG/formLayout';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -44,9 +44,8 @@ class UserInfo extends Component {
             onOk: async () => {
                 const { record: { UserID } } = this.props;
                 try {
-                    let resData = await Rest_Sys_User_Pwd({ UserID });
-                    const { Code, Info } = resData;
-                    Code ? message.success('重置密码成功！') : errorHandle(Info);
+                    await Rest_Sys_User_Pwd({ UserID });
+                    message.success('重置密码成功！');
                 } catch (err) {
                     errorHandle(err);
                 }

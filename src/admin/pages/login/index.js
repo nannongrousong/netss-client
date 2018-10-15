@@ -28,16 +28,12 @@ class Login extends Component {
 
             try {
                 let resData = await CMS_Login(values);
-                const { Code, Data: { token }, Info } = resData;
-                if (!Code) {
-                    errorHandle(Info);
-                } else {
-                    //  save userinfo into localstorage
-                    sessionStorage.setItem('AUTH_INFO', token);
-                    this.setState({
-                        isLogin: !!sessionStorage.getItem('AUTH_INFO')
-                    });
-                }
+                const { Data: { token } } = resData;
+                //  save userinfo into localstorage
+                sessionStorage.setItem('AUTH_INFO', token);
+                this.setState({
+                    isLogin: !!sessionStorage.getItem('AUTH_INFO')
+                });
             } catch (err) {
                 errorHandle(err);
             }
