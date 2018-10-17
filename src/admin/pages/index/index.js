@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout } from 'antd';
+import { Layout, Modal } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -15,6 +15,7 @@ import Exception from 'ADMIN_COMPONENT_EXCEPTION';
 import { Load_User_Info } from 'ADMIN_SERVICE/Sys_Auth';
 import { setResource } from 'COMMON_COMPONENT/AuthResource';
 import adminRouters from 'ADMIN_ROUTER';
+import ModifyPwdModal from './modifyPwd';
 const { Content } = Layout;
 
 //  设置授权路由
@@ -49,7 +50,8 @@ class Index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            collapsed: false
+            collapsed: false,
+            showModifyPwdModal: false
         };
 
         //  非当前激活的tab页右击操作会再出发tabChange事件，但实际上并不需要
@@ -130,9 +132,38 @@ class Index extends Component {
             history.push(path2);
         });
     }
+
+    handleUserCenter = () => {
+
+    }
+
+    handleResetPwd = () => {
+        this.setState({
+            showModifyPwdModal: true
+        });
+    }
+
+    closeModifyPwdModal = () => {
+        this.setState({
+            showModifyPwdModal: false
+        });
+    }
+
+    handleLogout = () => {
+        Modal.confirm({
+            title: '信息',
+            content: '请确认退出登录？',
+            onOk: () => {
+                const { history } = this.props;
+                sessionStorage.removeItem('AUTH_INFO');
+                history.push('/login');
+            }
+        });
+    }
+
     render() {
         const { navMenu, navTab, activeRoute } = this.props;
-        const { collapsed } = this.state;
+        const { collapsed, showModifyPwdModal } = this.state;
 
         return (
             this.IS_LOGIN ?
@@ -147,7 +178,10 @@ class Index extends Component {
                     <Layout>
                         <NavHeader
                             collapsed={collapsed}
-                            handleCollapse={this.handleCollapse} />
+                            handleCollapse={this.handleCollapse}
+                            handleUserCenter={this.handleUserCenter}
+                            handleResetPwd={this.handleResetPwd}
+                            handleLogout={this.handleLogout} />
                         <Content className={styles['layout-content']}>
                             {
                                 activeRoute &&
@@ -166,6 +200,12 @@ class Index extends Component {
                                         createRouteInfo(adminRouters, navMenu)
                                     }
                                 </div>
+                            }
+
+                            {
+                                showModifyPwdModal &&
+                                <ModifyPwdModal
+                                    closeModal={this.closeModifyPwdModal} />
                             }
                         </Content>
                     </Layout>

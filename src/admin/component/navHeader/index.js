@@ -7,19 +7,19 @@ import PropTypes from 'prop-types';
 const { Header } = Layout;
 const { Item: MenuItem, Divider: MenuDivider } = Menu;
 
-const operMenus = (
-    <Menu>
-        <MenuItem key="1" onClick={null}><Icon type='user' /> 个人中心</MenuItem>
-        <MenuItem key="2" onClick={null}><Icon type='setting' /> 个人中心设置</MenuItem>
-        <MenuDivider />
-        <MenuItem key="3" onClick={null}><Icon type='logout' /> 退出登录</MenuItem>
-    </Menu>
-);
-
-const NavHeader = ({ collapsed, handleCollapse }) => (
+const NavHeader = ({ collapsed, handleCollapse, handleUserCenter, handleResetPwd, handleLogout }) => (
     <Header className={styles.header}>
         <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} className={styles['switch-icon']} onClick={handleCollapse} />
-        <Dropdown overlay={operMenus} className={styles.userinfo} >
+        <Dropdown
+            className={styles.userinfo}
+            overlay={
+                <Menu>
+                    <MenuItem key="1" onClick={handleUserCenter}><Icon type='user' /> 个人中心</MenuItem>
+                    <MenuItem key="2" onClick={handleResetPwd}><Icon type='setting' /> 重置密码</MenuItem>
+                    <MenuDivider />
+                    <MenuItem key="3" onClick={handleLogout}><Icon type='logout' /> 退出登录</MenuItem>
+                </Menu>
+            }>
             <div>
                 <img src={logoImg} />
                 <a href="#">操作</a>
@@ -30,7 +30,10 @@ const NavHeader = ({ collapsed, handleCollapse }) => (
 
 NavHeader.propTypes = {
     collapsed: PropTypes.bool,
-    handleCollapse: PropTypes.func
+    handleCollapse: PropTypes.func,
+    handleUserCenter: PropTypes.func,
+    handleResetPwd: PropTypes.func,
+    handleLogout: PropTypes.func
 };
 
 export default NavHeader;
