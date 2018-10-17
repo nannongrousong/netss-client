@@ -45,7 +45,7 @@ export default async (url, params, method = 'GET') => {
             break;
         default:
             params = new URLSearchParams(params);
-            response = await fetch(url + '?' + params.toString(), commonOptions);
+            response = await fetch(url + '?' + params.toString() + `&_${new Date().getTime()}`, commonOptions);
             break;
     }
 
