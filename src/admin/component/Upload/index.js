@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Upload } from 'antd';
+import { Upload } from 'antd';
 import PropTypes from 'prop-types';
 import { Upload_Attach } from 'ADMIN_SERVICE/Attach';
 
@@ -40,17 +40,12 @@ class Index extends Component {
     }
 
     render() {
-        const { showTitle = '选择文件', showType = 'button' } = this.props;
+        const { children } = this.props;
         return (
             <Upload
                 {...this.props}
                 customRequest={this.customRequest} >
-                {
-                    showType == 'button'
-                        ? <Button>{showTitle}</Button>
-                        : <a href='#' className='w-100'>{showTitle}</a>
-                }
-
+                {children}
             </Upload>
         );
     }

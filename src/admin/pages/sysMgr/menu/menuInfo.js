@@ -160,11 +160,11 @@ class InfoModal extends Component {
                                         <Menu>
                                             <MenuItem>
                                                 <FileUpload
-                                                    showTitle='选择图片'
-                                                    showType='a'
+                                                    accept='image/*'
                                                     showUploadList={false}
-                                                    onChange={this.handleFileChange}
-                                                    multiple />
+                                                    onChange={this.handleFileChange} >
+                                                    <a href='#' className='w-100'>选择图片</a>
+                                                </FileUpload>
                                             </MenuItem>
                                         </Menu>} >
                                     <a href='#' onClick={this.chooseIcon}>选择图标</a>
