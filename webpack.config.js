@@ -40,9 +40,9 @@ fs.writeFileSync(path.resolve(__dirname, 'jsconfig.json'), JSON.stringify(jsconf
 
 let webpackEntry = entries.reduce((previous, current) => {
     if (NODE_ENV == dev) {
-        previous[current.name] = ['webpack-hot-middleware/client?quiet=true&reload=true', path.resolve(__dirname, current.entry)];
+        previous[current.name] = ['webpack-hot-middleware/client?quiet=true&reload=true', 'babel-polyfill', path.resolve(__dirname, current.entry)];
     } else {
-        previous[current.name] = [path.resolve(__dirname, current.entry)];
+        previous[current.name] = ['babel-polyfill', path.resolve(__dirname, current.entry)];
     }
     return previous;
 }, {});

@@ -1,3 +1,6 @@
+import 'isomorphic-fetch';
+import 'url-search-params-polyfill';
+
 /**
  * 发起网络请求
  * @param {请求地址} url 

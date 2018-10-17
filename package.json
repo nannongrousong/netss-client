@@ -57,9 +57,11 @@
   },
   "dependencies": {
     "@antv/data-set": "^0.9.6",
+    "babel-polyfill": "^6.26.0",
     "bizcharts": "^3.2.3",
     "express": "^4.16.3",
     "history": "^4.7.2",
+    "isomorphic-fetch": "^2.2.1",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
@@ -69,6 +71,7 @@
     "react-router-dom": "^4.3.1",
     "reduce-reducers": "^0.4.3",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "url-search-params-polyfill": "^5.0.0"
   }
 }
