@@ -39,7 +39,11 @@ jsconfigContent.compilerOptions.paths = jsconfigPaths;
 fs.writeFileSync(path.resolve(__dirname, 'jsconfig.json'), JSON.stringify(jsconfigContent));
 
 let webpackEntry = entries.reduce((previous, current) => {
-    previous[current.name] = ['webpack-hot-middleware/client?quiet=true&reload=true', path.resolve(__dirname, current.entry)];
+    if (NODE_ENV == dev) {
+        previous[current.name] = ['webpack-hot-middleware/client?quiet=true&reload=true', path.resolve(__dirname, current.entry)];
+    } else {
+        previous[current.name] = [path.resolve(__dirname, current.entry)];
+    }
     return previous;
 }, {});
 
@@ -51,7 +55,7 @@ let webpackConfig = {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[hash].js',
         //  cdn http://cdn.your.com/static
-        publicPath: '/'
+        publicPath: NODE_ENV == dev ? '/' : './'
     },
     resolve: {
         extensions: ['.js', '.css', '.json'],

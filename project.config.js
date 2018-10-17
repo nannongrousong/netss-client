@@ -17,7 +17,7 @@ module.exports = {
     }],
     proxy: [{
         router: '/api',
-        target: 'http://localhost:81',
+        target: 'http://localhost:10001',
         pathRewrite: { '^/api': '/' }
     }]
 }
