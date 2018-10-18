@@ -8,12 +8,13 @@ const createTreeNode = (nodeData) => {
 
     let treeNodes = [...getNodesByParent(rootNodeID)];
 
-    const createNodes = (treeNodes) => {
+    const createNodes = (treeNodes, parentTitle = '') => {
         for (let i in treeNodes) {
+            treeNodes[i].ParentTitle = parentTitle;
             let childNodes = getNodesByParent(treeNodes[i].MenuID);
             if (childNodes.length) {
                 treeNodes[i].Children = childNodes;
-                createNodes(treeNodes[i].Children);
+                createNodes(treeNodes[i].Children, treeNodes[i].Title);
             }
         }
     };

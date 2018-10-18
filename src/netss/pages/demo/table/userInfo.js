@@ -82,7 +82,7 @@ class UserInfo extends Component {
                             label='地址'>
                             {
                                 getFieldDecorator(`${fieldPrefix}Address`, {
-
+                                    initialValue: ''
                                 })(<Input maxLength={45} />)
                             }
                         </FormItem>
