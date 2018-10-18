@@ -29,7 +29,7 @@ if (env == dev) {
         verbose: false,
         rewrites: [{
             //  filter http GET where url startwith 'api'
-            from: /^\/api\//,
+            from: /^\/netss\/api\//,
             to: (context) => (context.parsedUrl.pathname)
         }, ...projectConfig.entries.map((item) => {
             return {
