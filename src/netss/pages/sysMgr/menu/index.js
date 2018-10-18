@@ -85,19 +85,19 @@ class Index extends Component {
                     Type == 'node' &&
                     <Fragment>
                         <Divider type='vertical' />
-                        <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'node', '添加子菜单')}>添加子菜单</a>
+                        <a href='#' className='ml-8 mr-8' onClick={this.addSubMenu.bind(this, item, 'node', '添加子菜单')}>添加子菜单</a>
                     </Fragment>
                 }
 
                 <Divider type='vertical' />
-                <a href='#' className='ml-16' onClick={this.editMenu.bind(this, item)}>修改</a>
+                <a href='#' className='ml-8 mr-8' onClick={this.editMenu.bind(this, item)}>修改</a>
 
                 {
                     Path && Type == 'node' &&
                     <Fragment>
                         <Divider type='vertical' />
 
-                        <a href='#' className='ml-16' onClick={this.addSubMenu.bind(this, item, 'resource', '添加功能按钮')}>添加功能按钮</a>
+                        <a href='#' className='ml-8 mr-8' onClick={this.addSubMenu.bind(this, item, 'resource', '添加功能按钮')}>添加功能按钮</a>
                     </Fragment>
                 }
 
@@ -105,7 +105,7 @@ class Index extends Component {
                     (!Children || Children.length == 0) &&
                     <Fragment>
                         <Divider type='vertical' />
-                        <a href='#' className='ml-16' onClick={this.delSubMenu.bind(this, item)}>删除</a>
+                        <a href='#' className='ml-8 mr-8' onClick={this.delSubMenu.bind(this, item)}>删除</a>
                     </Fragment>
                 }
             </Fragment>
