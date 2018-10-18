@@ -10,8 +10,11 @@ module.exports = {
         favicon: 'src/netss/favicon.ico'
     }],
     proxy: [{
+        //  拦截的路由
         router: '/netss/api',
+        //  目标服务器
         target: 'http://localhost:10001',
+        //  路由重写规则
         pathRewrite: { '^/netss/api': '/' }
     }]
 }
