@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 const { Header } = Layout;
 const { Item: MenuItem, Divider: MenuDivider } = Menu;
 
-const NavHeader = ({ collapsed, handleCollapse, handleUserCenter, handleResetPwd, handleLogout }) => (
+const NavHeader = ({ collapsed, handleCollapse, handleUserCenter, handleResetPwd, handleLogout, NickName }) => (
     <Header className={styles.header}>
         <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} className={styles['switch-icon']} onClick={handleCollapse} />
         <Dropdown
@@ -22,7 +22,7 @@ const NavHeader = ({ collapsed, handleCollapse, handleUserCenter, handleResetPwd
             }>
             <div>
                 <img src={logoImg} />
-                <a href="#">操作</a>
+                <a href="#">{NickName}</a>
             </div>
         </Dropdown>
     </Header>
@@ -33,7 +33,8 @@ NavHeader.propTypes = {
     handleCollapse: PropTypes.func,
     handleUserCenter: PropTypes.func,
     handleResetPwd: PropTypes.func,
-    handleLogout: PropTypes.func
+    handleLogout: PropTypes.func,
+    NickName: PropTypes.string
 };
 
 export default NavHeader;

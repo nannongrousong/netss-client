@@ -162,7 +162,7 @@ class Index extends Component {
     }
 
     render() {
-        const { navMenu, navTab, activeRoute } = this.props;
+        const { navMenu, navTab, activeRoute, authInfo } = this.props;
         const { collapsed, showModifyPwdModal } = this.state;
 
         return (
@@ -177,6 +177,7 @@ class Index extends Component {
 
                     <Layout>
                         <NavHeader
+                            {...authInfo}
                             collapsed={collapsed}
                             handleCollapse={this.handleCollapse}
                             handleUserCenter={this.handleUserCenter}
@@ -225,14 +226,16 @@ Index.propTypes = {
     closeNavTab: PropTypes.func,
     closeOtherNavTab: PropTypes.func,
     closeAllNavTab: PropTypes.func,
-    setAuthInfo: PropTypes.func
+    setAuthInfo: PropTypes.func,
+    authInfo: PropTypes.object
 };
 
 Index = connect(
     (state) => ({
         navMenu: state.homeNav.navMenu,
         navTab: state.homeNav.navTab,
-        activeRoute: state.homeNav.activeRoute
+        activeRoute: state.homeNav.activeRoute,
+        authInfo: state.authInfo
     }),
     {
         initNavMenu,

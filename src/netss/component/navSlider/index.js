@@ -15,7 +15,7 @@ const NavSlider = ({ collapsed, navMenu, handleMenuClick, handleCollapse, active
         {
             <div className={styles.logo}>
                 <img src={logoImg} />
-                <span className={collapsed ? 'd-none' : ''}>周薪薪</span>
+                <span className={collapsed ? 'd-none' : ''}>NetSS</span>
             </div>
         }
 
